@@ -1,4 +1,5 @@
 # Quasar App (threejs_quasar)
+# Do not forget to add public dir. and run npm install
 
 A Quasar Framework app
 
@@ -24,3 +25,5 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
+
