@@ -271,7 +271,7 @@ export default {
           },
           function ( err ) {
 		        console.error( 'An error happened' );
-	}
+	        }
         );
       }
 
