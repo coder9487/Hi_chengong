@@ -31,7 +31,7 @@ export default {
       let sea, Lowersea;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let mixer_fish,mixer_aiming,mixer_shooting;
-      let animation;
+      let animationOBJ;
       let clips;
       // let prevTime;
       function createScene() {
@@ -248,18 +248,18 @@ export default {
             obj.scale.multiplyScalar(5);
             obj.visible = false;
             mixer_shooting = new THREE.AnimationMixer(obj);
-            animation = mixer_shooting.clipAction(obj.animations[0]);
-            animation.setLoop(THREE.LoopOnce);
-            animation.clampWhenFinished = true;
-            animation.timeScale = 0.8;
+            animationOBJ = mixer_shooting.clipAction(obj.animations[0]);
+            animationOBJ.setLoop(THREE.LoopOnce);
+            animationOBJ.clampWhenFinished = true;
+            animationOBJ.timeScale = 0.8;
             scene.add(obj);
-            animation.fadeOut(0.5);
+            animationOBJ.fadeOut(0.5);
             document.addEventListener("click", function () {
               if ( j % 2 == 0) {
-                animation.play();
+                animationOBJ.play();
                 obj.visible = true;
               } else if (j % 2 == 1) {
-                animation.stop();
+                animationOBJ.stop();
                 obj.visible = false;
               }
             });
