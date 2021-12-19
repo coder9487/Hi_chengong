@@ -25,7 +25,7 @@ export default {
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
-      
+      let animationOBJ;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const objects = [];
       let mixer;
@@ -207,7 +207,7 @@ export default {
             objects.push(obj);
             scene.add(obj);
             mixer = new THREE.AnimationMixer(obj);
-            animation = mixer.clipAction(obj.animations[0]);
+            animationOBJ = mixer.clipAction(obj.animations[0]);
           },
           // called when loading is in progresses
           function (xhr) {
@@ -248,10 +248,10 @@ export default {
         );
         let intersects = raycaster.intersectObjects(objects);
         if (intersects.length) {
-          animation.play();
+          animationOBJ.play();
           mixer.update(0.016);
         } else {
-          animation.stop();
+          animationOBJ.stop();
         }
       }
       createScene();
