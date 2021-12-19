@@ -2,17 +2,6 @@
   <div>
     <canvas id="three"></canvas>
   </div>
-  <div id="blocker">
-    <div id="instructions">
-      <p style="font-size: 36px">點擊畫面開始體驗</p>
-      <p>
-        Move: WASD<br />
-        Up: SPACE<br />
-        Down: SHIFT<br />
-        Look: MOUSE MOVE
-      </p>
-    </div>
-  </div>
 </template>
 
 <script>
