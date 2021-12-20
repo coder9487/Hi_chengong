@@ -251,7 +251,7 @@ export default {
           animationOBJ.play();
           mixer.update(0.016);
         } else {
-          animationOBJ.stop();
+          // animationOBJ.stop();
         }
       }
       createScene();

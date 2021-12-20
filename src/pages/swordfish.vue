@@ -2,17 +2,6 @@
   <div>
     <canvas id="three"></canvas>
   </div>
-  <div id="blocker">
-    <div id="instructions">
-      <p style="font-size: 36px">點擊畫面開始體驗</p>
-      <p>
-        Move: WASD<br />
-        Up: SPACE<br />
-        Down: SHIFT<br />
-        Look: MOUSE MOVE
-      </p>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -259,7 +248,7 @@ export default {
                 animationOBJ.play();
                 obj.visible = true;
               } else if (j % 2 == 1) {
-                animationOBJ.stop();
+                // animationOBJ.stop();
                 obj.visible = false;
               }
             });
@@ -289,9 +278,9 @@ export default {
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-        mixer_fish.update(0.016);
-        mixer_aiming.update(0.016);
-        mixer_shooting.update(0.016);
+        // mixer_fish.update(0.016);
+        // mixer_aiming.update(0.016);
+        // mixer_shooting.update(0.016);
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
       }
