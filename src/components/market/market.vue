@@ -27,6 +27,9 @@ export default {
       let sea, Lowersea;
       let animationOBJ;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      let model_loaded = false;
+      let fish_marked_wall_loaded = false;
+      let unbox = false;
       const objects = [];
       let mixer;
       function createScene() {
@@ -189,12 +192,14 @@ export default {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             controls.colliders = obj;
-            // objects.push(obj);
             scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            if (xhr.loaded / 137766575 == 1){
+            fish_marked_wall_loaded = true;
+            }
           }
         );
         loader.load(
@@ -211,7 +216,10 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log((xhr.loaded / 456874) * 100 + "% loaded");
+            if (xhr.loaded / 456874 == 1){
+              unbox = true
+            }
           }
         );
       }
@@ -223,6 +231,7 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
+
       let x = 0;
       document.addEventListener("click", function () {
         if (x % 2 == 0) {
@@ -233,13 +242,12 @@ export default {
         x = x + 1;
       });
       function animate() {
+        if (fish_marked_wall_loaded && unbox) model_loaded = true;
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-
         if (controls.enabled) controls.update();
-
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
         let raycaster = new THREE.Raycaster(
@@ -247,11 +255,11 @@ export default {
           controls.getDirection(vector).clone()
         );
         let intersects = raycaster.intersectObjects(objects);
-        if (intersects.length) {
+        if (intersects.length > 0 && model_loaded == true) {
           animationOBJ.play();
           mixer.update(0.016);
-        } else {
-          // animationOBJ.stop();
+        } else if (intersects.length == 0 && model_loaded == true){
+          animationOBJ.stop();
         }
       }
       createScene();
@@ -274,27 +282,4 @@ export default {
   left: 0;
   top: 0;
 }
-/* #blocker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-#instructions {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-image: url(../../public/images/trans_scene.png); */
-/* background-repeat: no-repeat;
-  background-size: cover;
-  text-align: center;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-} */
 </style>
