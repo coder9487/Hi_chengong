@@ -29,7 +29,7 @@ export default {
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let model_loaded = false;
       let fish_marked_wall_loaded = false;
-      let unbox = false;
+      let icon = false;
       const objects = [];
       let mixer;
       function createScene() {
@@ -222,7 +222,7 @@ export default {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
             console.log(xhr.loaded)
             if (xhr.loaded / 29346 == 1){
-              unbox = true
+              icon = true
             }
           }
         );
@@ -246,7 +246,7 @@ export default {
         x = x + 1;
       });
       function animate() {
-        if (fish_marked_wall_loaded && unbox) model_loaded = true;
+        if (fish_marked_wall_loaded && icon) model_loaded = true;
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
