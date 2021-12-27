@@ -13,25 +13,29 @@ export default {
   mounted() {
     this.initThree();
   },
-  data(){
+  data() {
     return {
-      animation:{},
-    }
-
+      animation: {},
+    };
   },
   methods: {
-    
     initThree() {
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
-      let animationOBJ;
+
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let model_loaded = false;
       let fish_marked_wall_loaded = false;
-      let icon = false;
-      const objects = [];
-      let mixer;
+      let mixer1;
+      let mixer2;
+      let animationOBJ1;
+      let animationOBJ2;
+      let icon1 = false;
+      let icon2 = false;
+      const objects1 = [];
+      const objects2 = [];
+
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -191,14 +195,16 @@ export default {
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
+            obj.alphaTest = 0.7;
+            obj.opacity = 0.5;
             controls.colliders = obj;
             scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            if (xhr.loaded / 137766575 == 1){
-            fish_marked_wall_loaded = true;
+            if (xhr.loaded / 137766575 == 1) {
+              fish_marked_wall_loaded = true;
             }
           }
         );
@@ -209,20 +215,42 @@ export default {
           function (obj) {
             // obj.scale.set(2, 2, 2);
             obj.position.set(-5, 1.5, 0);
-            objects.push(obj);
+            objects1.push(obj);
             scene.add(obj);
-            mixer = new THREE.AnimationMixer(obj);
-            // mixer.clampWhenFinished = true;
-            animationOBJ = mixer.clipAction(obj.animations[0]);
-            animationOBJ.setLoop(THREE.LoopOnce);
-            animationOBJ.clampWhenFinished = true;
+            mixer1 = new THREE.AnimationMixer(obj);
+            animationOBJ1 = mixer1.clipAction(obj.animations[0]);
+            animationOBJ1.setLoop(THREE.LoopOnce);
+            animationOBJ1.clampWhenFinished = true;
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            console.log(xhr.loaded)
-            if (xhr.loaded / 29346 == 1){
-              icon = true
+            console.log(xhr.loaded);
+            if (xhr.loaded / 29346 == 1) {
+              icon1 = true;
+            }
+          }
+        );
+        loader.load(
+          // resource URL
+          "../models/icon_test.json",
+          // called when resource is loaded
+          function (obj) {
+            obj.scale.set(10, 10, 10);
+            obj.position.set(-5, 1.5, 3);
+            objects2.push(obj);
+            scene.add(obj);
+            mixer2 = new THREE.AnimationMixer(obj);
+            animationOBJ2 = mixer2.clipAction(obj.animations[0]);
+            animationOBJ2.setLoop(THREE.LoopOnce);
+            animationOBJ2.clampWhenFinished = true;
+          },
+          // called when loading is in progresses
+          function (xhr) {
+            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
+            console.log(xhr.loaded);
+            if (xhr.loaded / 29346 == 1) {
+              icon2 = true;
             }
           }
         );
@@ -246,7 +274,7 @@ export default {
         x = x + 1;
       });
       function animate() {
-        if (fish_marked_wall_loaded && icon) model_loaded = true;
+        if (fish_marked_wall_loaded && icon1 && icon2) model_loaded = true;
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
@@ -258,12 +286,21 @@ export default {
           controls.getObject().position,
           controls.getDirection(vector).clone()
         );
-        let intersects = raycaster.intersectObjects(objects);
-        if (intersects.length > 0 && model_loaded == true) {
-          animationOBJ.play();
-          mixer.update(0.016);
-        } else if (intersects.length == 0 && model_loaded == true){
-          animationOBJ.stop();
+
+        let intersects1 = raycaster.intersectObjects(objects1);
+        if (intersects1.length > 0 && model_loaded == true) {
+          animationOBJ1.play();
+          mixer1.update(0.016);
+        } else if (intersects1.length == 0 && model_loaded == true) {
+          animationOBJ1.stop();
+        }
+
+        let intersects2 = raycaster.intersectObjects(objects2);
+        if (intersects2.length > 0 && model_loaded == true) {
+          animationOBJ2.play();
+          mixer2.update(0.016);
+        } else if (intersects2.length == 0 && model_loaded == true) {
+          animationOBJ2.stop();
         }
       }
       createScene();
