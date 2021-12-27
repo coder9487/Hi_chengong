@@ -204,7 +204,7 @@ export default {
         );
         loader.load(
           // resource URL
-          "../models/unbox.json",
+          "../models/icon_test.json",
           // called when resource is loaded
           function (obj) {
             // obj.scale.set(2, 2, 2);
@@ -212,12 +212,16 @@ export default {
             objects.push(obj);
             scene.add(obj);
             mixer = new THREE.AnimationMixer(obj);
+            // mixer.clampWhenFinished = true;
             animationOBJ = mixer.clipAction(obj.animations[0]);
+            animationOBJ.setLoop(THREE.LoopOnce);
+            animationOBJ.clampWhenFinished = true;
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log((xhr.loaded / 456874) * 100 + "% loaded");
-            if (xhr.loaded / 456874 == 1){
+            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
+            console.log(xhr.loaded)
+            if (xhr.loaded / 29346 == 1){
               unbox = true
             }
           }
