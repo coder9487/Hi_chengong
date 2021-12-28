@@ -218,15 +218,15 @@ export default {
             objects1.push(obj);
             scene.add(obj);
             mixer1 = new THREE.AnimationMixer(obj);
-            animationOBJ1 = mixer1.clipAction(obj.animations[0]);
-            animationOBJ1.setLoop(THREE.LoopOnce);
+            animationOBJ1 = mixer1.clipAction(obj.animations[1]);
+            animationOBJ1.timeScale = 10000;
             animationOBJ1.clampWhenFinished = true;
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
             console.log(xhr.loaded);
-            if (xhr.loaded / 29346 == 1) {
+            if (xhr.loaded / 31750 == 1) {
               icon1 = true;
             }
           }
@@ -241,15 +241,15 @@ export default {
             objects2.push(obj);
             scene.add(obj);
             mixer2 = new THREE.AnimationMixer(obj);
-            animationOBJ2 = mixer2.clipAction(obj.animations[0]);
-            animationOBJ2.setLoop(THREE.LoopOnce);
+            animationOBJ2 = mixer2.clipAction(obj.animations[1]);
+            animationOBJ2.timeScale = 10000;
             animationOBJ2.clampWhenFinished = true;
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
             console.log(xhr.loaded);
-            if (xhr.loaded / 29346 == 1) {
+            if (xhr.loaded / 31750 == 1) {
               icon2 = true;
             }
           }
@@ -279,6 +279,7 @@ export default {
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
+        console.log(model_loaded)
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
@@ -297,6 +298,7 @@ export default {
 
         let intersects2 = raycaster.intersectObjects(objects2);
         if (intersects2.length > 0 && model_loaded == true) {
+          console.log(123)
           animationOBJ2.play();
           mixer2.update(0.016);
         } else if (intersects2.length == 0 && model_loaded == true) {
