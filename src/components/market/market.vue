@@ -27,6 +27,7 @@ export default {
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let model_loaded = false;
       let fish_marked_wall_loaded = false;
+      let round = false;
       let mixer1;
       let mixer2;
       let animationOBJ1;
@@ -223,7 +224,7 @@ export default {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
             console.log(xhr.loaded);
             if (xhr.loaded / 287949 == 1) {
-              fish_marked_wall_loaded = true;
+              round = true;
             }
           }
         );
@@ -293,12 +294,11 @@ export default {
         x = x + 1;
       });
       function animate() {
-        if (fish_marked_wall_loaded && icon1 && icon2) model_loaded = true;
+        if (fish_marked_wall_loaded && icon1 && icon2 && round) model_loaded = true;
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-        console.log(model_loaded);
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
@@ -317,7 +317,6 @@ export default {
 
         let intersects2 = raycaster.intersectObjects(objects2);
         if (intersects2.length > 0 && model_loaded == true) {
-          console.log(123)
           animationOBJ2.play();
           mixer2.update(0.016);
         } else if (intersects2.length == 0 && model_loaded == true) {
