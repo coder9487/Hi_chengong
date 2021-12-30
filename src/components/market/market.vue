@@ -190,20 +190,39 @@ export default {
         // load a resource
         loader.load(
           // resource URL
-          "../models/fish_market_wall.json",
+          "../models/market.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
-            obj.alphaTest = 0.7;
-            obj.opacity = 0.5;
             controls.colliders = obj;
             scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            if (xhr.loaded / 137766575 == 1) {
+            // console.log(xhr.loaded);
+            if (xhr.loaded / 131787169 == 1) {
+              fish_marked_wall_loaded = true;
+            }
+          }
+        );
+        loader.load(
+          // resource URL
+          "../models/round.json",
+          // called when resource is loaded
+          function (obj) {
+            obj.scale.set(10, 10, 10);
+            obj.position.set(0, 0, 0);
+        
+            // controls.colliders = obj;
+            scene.add(obj);
+          },
+          // called when loading is in progresses
+          function (xhr) {
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            console.log(xhr.loaded);
+            if (xhr.loaded / 287949 == 1) {
               fish_marked_wall_loaded = true;
             }
           }
@@ -213,7 +232,7 @@ export default {
           "../models/icon_test.json",
           // called when resource is loaded
           function (obj) {
-            // obj.scale.set(2, 2, 2);
+            obj.scale.set(8, 8, 8);
             obj.position.set(-5, 1.5, 0);
             objects1.push(obj);
             scene.add(obj);
@@ -236,7 +255,7 @@ export default {
           "../models/icon_test.json",
           // called when resource is loaded
           function (obj) {
-            obj.scale.set(10, 10, 10);
+            obj.scale.set(8, 8, 8);
             obj.position.set(-5, 1.5, 3);
             objects2.push(obj);
             scene.add(obj);
@@ -248,7 +267,7 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            console.log(xhr.loaded);
+            // console.log(xhr.loaded);
             if (xhr.loaded / 31750 == 1) {
               icon2 = true;
             }
@@ -279,7 +298,7 @@ export default {
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-        console.log(model_loaded)
+        console.log(model_loaded);
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
