@@ -38,23 +38,85 @@
       </q-card>
     </div>
   </div>
-  <div class = "control_pannle">
-    <q-btn round  color="orange" icon="expand_more" />
-    <q-btn round  color="orange" icon="expand_less" />
-    <q-btn round  @click="right_rotate(0)" color="orange" icon="chevron_right" />
-    <q-btn round  @click="right_rotate(1)" color="orange" icon="chevron_left" />
+  <div
+    class="control_pannle"
+    v-if="this.textIndex > 1"
+    v-touch-pan.prevent.mouse="handlePan"
+  >
+    <!-- <q-btn
+      id="forward_button"
+      round
+      @click="go_forward()"
+      color="orange"
+      icon="expand_less"
+    />
+
+    <q-btn
+      id="left_button"
+      round
+      v-touch-hold:100.mouse="debug_message('left')"
+      color="orange"
+      icon="chevron_left"
+    />
+    <q-btn
+      id="right_button"
+      round
+      v-touch-hold:100.mouse="debug_message('right')"
+      color="orange"
+      icon="chevron_right"
+    /> -->
   </div>
 </template>
 <script>
-
-
+import { ref } from "vue";
 
 export default {
-  setup() {},
+  setup() {
+    const info = ref(null);
+    const panning = ref(false);
+
+    return {
+      info,
+      panning,
+      handlePan({ evt, ...newInfo }) {
+        info.value = newInfo;
+
+        // native Javascript event
+        console.log(newInfo.offset.x);
+        if(panning.value)
+        {
+        if (newInfo.offset.x > 0) {
+          //go right
+        } else if (newInfo.offset.x < 10) {
+          //go left
+        }
+        if (newInfo.offset.y > 10) {
+          //go forward
+        }
+        }
+        else{
+
+        }
+
+
+        if (newInfo.isFirst) {
+          panning.value = true;
+        } else if (newInfo.isFinal) {
+          panning.value = false;
+        }
+      },
+    };
+  },
   data() {
     return {
       talkContent: ["./images/UI/text_1.svg", "./images/UI/text_2.svg"],
       textIndex: 0,
+      direction: {
+        forward: false,
+        backword: false,
+        right: false,
+        left: false,
+      },
     };
   },
   methods: {
@@ -68,13 +130,29 @@ export default {
     textContentAccess(index) {
       return this.talkContent[index];
     },
-    right_rotate(flag){
-      if(flag)
+
+    right_rotate() {
       this.$store.commit("setRotationRightTrue");
-    else{
+      this.$store.commit("setRotationLeftFalse");
+    },
+    left_rotate() {
+      this.$store.commit("setRotationLeftTrue");
       this.$store.commit("setRotationRightFalse");
-    }   
-   }
+    },
+    go_forward() {
+      this.$store.commit("setForwardTrue");
+    },
+    go_stop(){
+      this.$store.commit("setForwardFalse");
+    },
+    clearAll() {
+      this.$store.commit("setRotationRightFalse");
+      this.$store.commit("setRotationLeftFalse");
+      this.$store.commit("setForwardFalse");
+    },
+    debug_message(msg) {
+      console.log("message:", msg);
+    },
   },
 };
 </script>
@@ -126,11 +204,13 @@ export default {
   width: 20%;
 }
 
-
-.control_pannle{
+.control_pannle {
   position: fixed;
   right: 5%;
   bottom: 5%;
   z-index: 40;
+  width: 20%;
+  height: 20%;
+  background: fuchsia;
 }
 </style>

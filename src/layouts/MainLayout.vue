@@ -1,7 +1,7 @@
 <template>
   <q-layout id="root_layout" view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white" height-hint="98" v-if="0">
-      <q-toolbar >
+    <q-header elevated class="bg-primary text-white" height-hint="98" v-if="1">
+      <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
@@ -16,7 +16,7 @@
         <q-route-tab to="/pisirian" label="pisirian" />
         <q-route-tab to="/lantern" label="lantern" />
         <q-route-tab to="/swordfish" label="swordfish" />
-        <q-route-tab to="/comic" label="comic" />
+        <q-route-tab to="/market-page" label="market-page" />
       </q-tabs>
     </q-header>
 
@@ -24,13 +24,13 @@
       <router-view />
     </q-page-container>
     <div class="systemIcon_group">
-      <q-icon class="text-dark systemIcon" size="lg">
+      <q-icon class="text-dark systemIcon" :size="systemIconSize">
         <img src="icons/meum_icon.png" />
       </q-icon>
-      <q-icon class="text-dark systemIcon" size="lg">
+      <q-icon class="text-dark systemIcon" :size="systemIconSize">
         <img src="icons/question_icon.png" />
       </q-icon>
-      <q-icon class="text-dark systemIcon" size="lg">
+      <q-icon class="text-dark systemIcon" :size="systemIconSize">
         <img src="icons/volume.png" />
       </q-icon>
     </div>
@@ -39,8 +39,9 @@
 <script>
 export default {
   methods: {
-    isItReallyMobile() {
-      return this.$q.screen.width === 1080 && this.$q.platform.is.mobile;
+    systemIconSize() {
+      if (this.$q.platform.is.mobile) return "xs";
+      else return "lg";
     },
   },
 };
@@ -53,10 +54,14 @@ export default {
 .systemIcon_group {
   position: clear;
   float: left;
-  z-index: 10;
   bottom: 50px;
   margin-bottom: 50px;
 }
+
+.systemIcon_group * {
+  z-index: 20;
+}
+
 .systemIcon_group .systemIcon {
   margin-bottom: 20px;
 }
