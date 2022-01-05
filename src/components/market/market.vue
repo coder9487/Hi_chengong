@@ -225,7 +225,7 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            console.log(xhr.loaded);
+            //console.log(xhr.loaded);
             if (xhr.loaded / 31750 == 1) {
               icon1 = true;
             }
@@ -248,7 +248,7 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            console.log(xhr.loaded);
+            //console.log(xhr.loaded);
             if (xhr.loaded / 31750 == 1) {
               icon2 = true;
             }
@@ -269,7 +269,7 @@ export default {
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-        console.log(model_loaded)
+        //console.log(model_loaded)
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
@@ -288,7 +288,7 @@ export default {
 
         let intersects2 = raycaster.intersectObjects(objects2);
         if (intersects2.length > 0 && model_loaded == true) {
-          console.log(123)
+         // console.log(123)
           animationOBJ2.play();
           mixer2.update(0.016);
         } else if (intersects2.length == 0 && model_loaded == true) {

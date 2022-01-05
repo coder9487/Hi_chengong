@@ -1,5 +1,5 @@
-<template>
-  <div id="navigator_group">
+<template ref="nav">
+  <div id="navigator_group" >
     <img
       src="images/npc.png"
       class="navigator_image"
@@ -82,24 +82,30 @@ export default {
         info.value = newInfo;
 
         // native Javascript event
-        console.log(newInfo.offset.x);
-        if(panning.value)
-        {
-        if (newInfo.offset.x > 0) {
-          //go right
-        } else if (newInfo.offset.x < 10) {
-          //go left
+        // console.log("newInfo.offset.y:",newInfo.offset.y);
+        if (panning.value) {
+          if (newInfo.offset.x > 0) {
+            //go right
+            console.log(this.$ref.nav.go_forward())
+            //this.right_rotate();
+          } else if (newInfo.offset.x < 10) {
+            //go left
+            //this.left_rotate();
+            
+          }
+          if (newInfo.offset.y < -10) {
+            //go forward
+            
+            //this.go_forward();
+          }
         }
-        if (newInfo.offset.y > 10) {
-          //go forward
+        if (newInfo.isFinal) {
+          //this.clearAll();
+          console.log("STOP");
         }
-        }
-        else{
-
-        }
-
 
         if (newInfo.isFirst) {
+          console.log("Start");
           panning.value = true;
         } else if (newInfo.isFinal) {
           panning.value = false;
@@ -142,7 +148,7 @@ export default {
     go_forward() {
       this.$store.commit("setForwardTrue");
     },
-    go_stop(){
+    go_stop() {
       this.$store.commit("setForwardFalse");
     },
     clearAll() {
