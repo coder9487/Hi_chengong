@@ -275,13 +275,6 @@ export default {
         controls.applyCollision = false;
         controls.positionEasing = true;
       }
-      document.addEventListener("click", function () {
-        if (aim == true){
-          camera.position.set(20,5,20)
-        }else {
-
-        }
-      });
 
       function animate() {
         // const time = performance.now();
@@ -302,8 +295,6 @@ export default {
           console.log("aiming");
           aim = false;
         }
-        // if (fish_load && spear_aiming_loaded && spear_shooting_loaded) model_loaded = true; // see if all is loaded
-
         if (mixer_fish != null && mixer_aiming != null && mixer_shooting != null) {
           mixer_fish.update(0.001);
           mixer_aiming.update(0.016);

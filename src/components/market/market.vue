@@ -263,16 +263,6 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
-
-      let x = 0;
-      document.addEventListener("click", function () {
-        if (x % 2 == 0) {
-          store.commit("setRotationRightTrue");
-        } else {
-          store.commit("setRotationRightFalse");
-        }
-        x = x + 1;
-      });
       function animate() {
         if (fish_marked_wall_loaded && icon1 && icon2) model_loaded = true;
         renderer.render(scene, camera);
