@@ -46,9 +46,9 @@ export default {
           0.01,
           1000
         );
-        camera.position.x = -3;
-        camera.position.y = 8;
-        camera.position.z = -3;
+        camera.position.x = 40;
+        camera.position.y = 9; //8
+        camera.position.z = -2;
         camera.lookAt(5, 6.5, 5);
 
         const axesHelper = new THREE.AxesHelper(5);
@@ -177,8 +177,8 @@ export default {
           "../models/0925scene.json",
           // called when resource is loaded
           function (obj) {
-            // obj.scale.set(100, 100, 100);
-            obj.position.set(0, 5, 0);
+            obj.scale.set(10, 10, 10);
+            obj.position.set(0, -20, 0);
             controls.colliders = obj;
             scene.add(obj);
           },

@@ -70,7 +70,7 @@ export default {
         camera.lookAt(-5, 1.5, 0);
 
         const axesHelper = new THREE.AxesHelper(5);
-        scene.add(axesHelper);
+        // scene.add(axesHelper);
         scene.background = new THREE.CubeTextureLoader()
           .setPath("../")
           .load([
@@ -215,6 +215,7 @@ export default {
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
+            // obj.alphaTest = 0.5;
         
             // controls.colliders = obj;
             scene.add(obj);
@@ -223,7 +224,7 @@ export default {
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
             console.log(xhr.loaded);
-            if (xhr.loaded / 287949 == 1) {
+            if (xhr.loaded / 167645 == 1) {
               round = true;
             }
           }
@@ -234,7 +235,7 @@ export default {
           // called when resource is loaded
           function (obj) {
             obj.scale.set(8, 8, 8);
-            obj.position.set(-5, 1.5, 0);
+            obj.position.set(0, 1.5, 0);
             objects1.push(obj);
             scene.add(obj);
             mixer1 = new THREE.AnimationMixer(obj);
@@ -274,6 +275,7 @@ export default {
             }
           }
         );
+        
       }
 
       function createControls() {
