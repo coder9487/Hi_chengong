@@ -23,18 +23,21 @@ export default {
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
-
+      let changeSceneIndex = false;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let model_loaded = false;
       let fish_marked_wall_loaded = false;
+      let end_button_loaded = false;
       let mixer1;
       let mixer2;
       let animationOBJ1;
       let animationOBJ2;
       let icon1 = false;
       let icon2 = false;
+      let changeSceneIcon = false;
       const objects1 = [];
       const objects2 = [];
+      const objectChangeSceneIcon = [];
 
       function createScene() {
         scene = new THREE.Scene();
@@ -225,7 +228,6 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            console.log(xhr.loaded);
             if (xhr.loaded / 31750 == 1) {
               icon1 = true;
             }
@@ -248,10 +250,33 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            console.log(xhr.loaded);
             if (xhr.loaded / 31750 == 1) {
               icon2 = true;
             }
+          }
+        );
+        loader.load(
+          // resource URL
+          "../models/end_button.json",
+          // called when resource is loaded
+          function (obj) {
+            obj.scale.set(5, 5, 5);
+            obj.position.set(-30, 5, -20);
+            objectChangeSceneIcon.push(obj);
+            scene.add(obj);
+
+            document.addEventListener("click", function () {
+              if (changeSceneIndex) {
+                console.log("changing scene") // this is where you want to change the scene to marketTable
+                store.commit("setChangeSceneIndexTrue"); // remember to set false when finish ChangeScene
+                console.log(store.state.ChangeSceneIndex);
+              }
+            });
+          },
+          // called when loading is in progresses
+          function (xhr) {
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            if (xhr.loaded / 1347056 == 1) end_button_loaded = true;
           }
         );
       }
@@ -264,12 +289,15 @@ export default {
         controls.positionEasing = true;
       }
       function animate() {
-        if (fish_marked_wall_loaded && icon1 && icon2) model_loaded = true;
+
+        
+
+        if (fish_marked_wall_loaded && icon1 && icon2 && end_button_loaded) model_loaded = true;
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-        console.log(model_loaded)
+        // console.log(model_loaded)
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
@@ -288,11 +316,17 @@ export default {
 
         let intersects2 = raycaster.intersectObjects(objects2);
         if (intersects2.length > 0 && model_loaded == true) {
-          console.log(123)
           animationOBJ2.play();
           mixer2.update(0.016);
         } else if (intersects2.length == 0 && model_loaded == true) {
           animationOBJ2.stop();
+        }
+
+        let intersectsEndButton = raycaster.intersectObjects(objectChangeSceneIcon);
+        if (intersectsEndButton.length > 0 && model_loaded == true) {
+          changeSceneIndex = true;
+        } else if (intersects2.length == 0 && model_loaded == true) {
+          changeSceneIndex = false;
         }
       }
       createScene();
