@@ -20,9 +20,12 @@ export default {
       let sea, Lowersea;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let mixer_fish,mixer_aiming,mixer_shooting;
-      let animationOBJ;
-      let clips;
-      // let prevTime;
+      let animation_aiming,animation_shooting,animation_fish;
+
+      let spear_aiming_loaded = false;
+      let spear_shooting_loaded = false;
+      let fish_load = false;
+
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -183,15 +186,14 @@ export default {
           function (obj) {
             // obj.scale.set(100, 100, 100);
             obj.position.set(0, 0, 0);
-            // controls.colliders = obj;
             scene.add(obj);
             mixer_fish = new THREE.AnimationMixer(obj);
-            clips = obj.animations[0];
-            mixer_fish.clipAction(clips).play();
+            animation_fish = mixer_fish.clipAction(obj.animations[0]).play();
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            if (xhr.loaded / 3541040 == 1) fish_load = true;
           }
         );
 
@@ -206,7 +208,7 @@ export default {
             // Add the loaded object to the scene
             obj.scale.multiplyScalar(6);
             mixer_aiming = new THREE.AnimationMixer(obj);
-            mixer_aiming.clipAction(obj.animations[0]).play();
+            animation_aiming = mixer_aiming.clipAction(obj.animations[0]).play();
             scene.add(obj);
             document.addEventListener("click", function () {
               j++;
@@ -219,8 +221,8 @@ export default {
           },
           // onProgress callback
           function (xhr) {
-            // document.getElementById('loading').innerHTML = (xhr.loaded / xhr.total * 100).toFixed(1) + '% loading';
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            if (xhr.loaded / 3609819 == 1) spear_aiming_loaded = true;
           },
           function ( err ) {
 		        console.error( 'An error happened' );
@@ -237,26 +239,26 @@ export default {
             obj.scale.multiplyScalar(5);
             obj.visible = false;
             mixer_shooting = new THREE.AnimationMixer(obj);
-            animationOBJ = mixer_shooting.clipAction(obj.animations[0]);
-            animationOBJ.setLoop(THREE.LoopOnce);
-            animationOBJ.clampWhenFinished = true;
-            animationOBJ.timeScale = 0.8;
+            animation_shooting = mixer_shooting.clipAction(obj.animations[0]);
+            animation_shooting.setLoop(THREE.LoopOnce);
+            animation_shooting.clampWhenFinished = true;
+            animation_shooting.timeScale = 0.8;
             scene.add(obj);
-            animationOBJ.fadeOut(0.5);
+            animation_shooting.fadeOut(0.5);
             document.addEventListener("click", function () {
               if ( j % 2 == 0) {
-                animationOBJ.play();
+                animation_shooting.play();
                 obj.visible = true;
               } else if (j % 2 == 1) {
-                // animationOBJ.stop();
+                animation_shooting.stop();
                 obj.visible = false;
               }
             });
           },
           // onProgress callback
           function (xhr) {
-            // document.getElementById('loading').innerHTML = (xhr.loaded / xhr.total * 100).toFixed(1) + '% loading';
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            if (xhr.loaded / 3581460 == 1) spear_shooting_loaded = true;
           },
           function ( err ) {
 		        console.error( 'An error happened' );
@@ -278,11 +280,17 @@ export default {
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-        // mixer_fish.update(0.016);
-        // mixer_aiming.update(0.016);
-        // mixer_shooting.update(0.016);
+
+        // if (fish_load && spear_aiming_loaded && spear_shooting_loaded) model_loaded = true; // see if all is loaded
+
+        if (mixer_fish != null && mixer_aiming != null && mixer_shooting != null) {
+          mixer_fish.update(0.016);
+          mixer_aiming.update(0.016);
+          mixer_shooting.update(0.016);
+        }
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
+
       }
       createScene();
       createLight();
@@ -304,27 +312,4 @@ export default {
   left: 0;
   top: 0;
 }
-/* #blocker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-#instructions {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-image: url(../../public/images/trans_scene.png); */
-/* background-repeat: no-repeat;
-  background-size: cover;
-  text-align: center;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-} */
 </style>

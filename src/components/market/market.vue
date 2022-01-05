@@ -13,22 +13,29 @@ export default {
   mounted() {
     this.initThree();
   },
-  data(){
+  data() {
     return {
-      animation:{},
-    }
-
+      animation: {},
+    };
   },
   methods: {
-    
     initThree() {
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
-      let animationOBJ;
+
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      const objects = [];
-      let mixer;
+      let model_loaded = false;
+      let fish_marked_wall_loaded = false;
+      let mixer1;
+      let mixer2;
+      let animationOBJ1;
+      let animationOBJ2;
+      let icon1 = false;
+      let icon2 = false;
+      const objects1 = [];
+      const objects2 = [];
+
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -188,30 +195,63 @@ export default {
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
+            obj.alphaTest = 0.7;
+            obj.opacity = 0.5;
             controls.colliders = obj;
-            // objects.push(obj);
             scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            if (xhr.loaded / 137766575 == 1) {
+              fish_marked_wall_loaded = true;
+            }
           }
         );
         loader.load(
           // resource URL
-          "../models/unbox.json",
+          "../models/icon_test.json",
           // called when resource is loaded
           function (obj) {
             // obj.scale.set(2, 2, 2);
             obj.position.set(-5, 1.5, 0);
-            objects.push(obj);
+            objects1.push(obj);
             scene.add(obj);
-            mixer = new THREE.AnimationMixer(obj);
-            animationOBJ = mixer.clipAction(obj.animations[0]);
+            mixer1 = new THREE.AnimationMixer(obj);
+            animationOBJ1 = mixer1.clipAction(obj.animations[1]);
+            animationOBJ1.timeScale = 10000;
+            animationOBJ1.clampWhenFinished = true;
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
+            console.log(xhr.loaded);
+            if (xhr.loaded / 31750 == 1) {
+              icon1 = true;
+            }
+          }
+        );
+        loader.load(
+          // resource URL
+          "../models/icon_test.json",
+          // called when resource is loaded
+          function (obj) {
+            obj.scale.set(10, 10, 10);
+            obj.position.set(-5, 1.5, 3);
+            objects2.push(obj);
+            scene.add(obj);
+            mixer2 = new THREE.AnimationMixer(obj);
+            animationOBJ2 = mixer2.clipAction(obj.animations[1]);
+            animationOBJ2.timeScale = 10000;
+            animationOBJ2.clampWhenFinished = true;
+          },
+          // called when loading is in progresses
+          function (xhr) {
+            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
+            console.log(xhr.loaded);
+            if (xhr.loaded / 31750 == 1) {
+              icon2 = true;
+            }
           }
         );
       }
@@ -223,6 +263,7 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
+
       let x = 0;
       document.addEventListener("click", function () {
         if (x % 2 == 0) {
@@ -233,25 +274,35 @@ export default {
         x = x + 1;
       });
       function animate() {
+        if (fish_marked_wall_loaded && icon1 && icon2) model_loaded = true;
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-
+        console.log(model_loaded)
         if (controls.enabled) controls.update();
-
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
         let raycaster = new THREE.Raycaster(
           controls.getObject().position,
           controls.getDirection(vector).clone()
         );
-        let intersects = raycaster.intersectObjects(objects);
-        if (intersects.length) {
-          animationOBJ.play();
-          mixer.update(0.016);
-        } else {
-          // animationOBJ.stop();
+
+        let intersects1 = raycaster.intersectObjects(objects1);
+        if (intersects1.length > 0 && model_loaded == true) {
+          animationOBJ1.play();
+          mixer1.update(0.016);
+        } else if (intersects1.length == 0 && model_loaded == true) {
+          animationOBJ1.stop();
+        }
+
+        let intersects2 = raycaster.intersectObjects(objects2);
+        if (intersects2.length > 0 && model_loaded == true) {
+          console.log(123)
+          animationOBJ2.play();
+          mixer2.update(0.016);
+        } else if (intersects2.length == 0 && model_loaded == true) {
+          animationOBJ2.stop();
         }
       }
       createScene();
@@ -274,27 +325,4 @@ export default {
   left: 0;
   top: 0;
 }
-/* #blocker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-#instructions {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-image: url(../../public/images/trans_scene.png); */
-/* background-repeat: no-repeat;
-  background-size: cover;
-  text-align: center;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-} */
 </style>
