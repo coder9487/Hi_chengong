@@ -64,10 +64,10 @@ export default {
           0.01,
           1000
         );
-        camera.position.x = -1;
-        camera.position.y = 1;
-        camera.position.z = 0;
-        camera.lookAt(-5, 1.5, 0);
+        camera.position.x = 10; //-1
+        camera.position.y = 1; //1
+        camera.position.z = -5; //0
+        camera.lookAt(-5, 1.5, 0); //  ,1.5,0
 
         const axesHelper = new THREE.AxesHelper(5);
         // scene.add(axesHelper);
@@ -197,13 +197,19 @@ export default {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             controls.colliders = obj;
+            
+            objects1.push(obj);
             scene.add(obj);
+            mixer1 = new THREE.AnimationMixer(obj);
+            animationOBJ1 = mixer1.clipAction(obj.animations[1]);
+            animationOBJ1.timeScale = 10000;
+            animationOBJ1.clampWhenFinished = true;
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            // console.log(xhr.loaded);
-            if (xhr.loaded / 131787169 == 1) {
+            console.log(xhr.loaded);
+            if (xhr.loaded / 109163115 == 1) {
               fish_marked_wall_loaded = true;
             }
           }
@@ -218,7 +224,7 @@ export default {
             // obj.alphaTest = 0.5;
         
             // controls.colliders = obj;
-            scene.add(obj);
+            // scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
@@ -236,12 +242,9 @@ export default {
           function (obj) {
             obj.scale.set(8, 8, 8);
             obj.position.set(0, 1.5, 0);
-            objects1.push(obj);
+            
             scene.add(obj);
-            mixer1 = new THREE.AnimationMixer(obj);
-            animationOBJ1 = mixer1.clipAction(obj.animations[1]);
-            animationOBJ1.timeScale = 10000;
-            animationOBJ1.clampWhenFinished = true;
+            
           },
           // called when loading is in progresses
           function (xhr) {
