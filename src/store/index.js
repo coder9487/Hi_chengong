@@ -11,7 +11,7 @@ export default createStore({
     display1: false,
     display2: false,
     display3: false,
-
+    ChangeSceneIndex: false,
   },
   mutations: {
 ////////////////////////////////////////  mobile movement
@@ -58,6 +58,13 @@ export default createStore({
     setTrue2(state){
       state.display2 = false
     },
+/////////////////////////////////////////
+    setChangeSceneIndexTrue(state){
+      state.ChangeSceneIndex = true
+    },
+    setChangeSceneIndexfalse(state){
+      state.ChangeSceneIndex = false
+    }
   },
   actions: {
   },

@@ -20,8 +20,9 @@ export default {
       let sea, Lowersea;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let mixer_fish,mixer_aiming,mixer_shooting;
+      let objects = [];
       let animation_aiming,animation_shooting,animation_fish;
-
+      let aim = false;
       let spear_aiming_loaded = false;
       let spear_shooting_loaded = false;
       let fish_load = false;
@@ -184,8 +185,9 @@ export default {
           "models/sailfish_swim_test.json",
           // called when resource is loaded
           function (obj) {
-            // obj.scale.set(100, 100, 100);
+            obj.scale.set(4, 4, 4);
             obj.position.set(0, 0, 0);
+            objects.push(obj);
             scene.add(obj);
             mixer_fish = new THREE.AnimationMixer(obj);
             animation_fish = mixer_fish.clipAction(obj.animations[0]).play();
@@ -280,13 +282,23 @@ export default {
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-
-        // if (fish_load && spear_aiming_loaded && spear_shooting_loaded) model_loaded = true; // see if all is loaded
-
+        let vector = new THREE.Vector3();
+        let raycaster = new THREE.Raycaster(
+          controls.getObject().position,
+          controls.getDirection(vector).clone()
+        );
+        let intersects = raycaster.intersectObjects(objects);
+        if (intersects.length > 0){
+          console.log("aimed")
+          aim = true
+        }else {
+          console.log("aiming");
+          aim = false;
+        }
         if (mixer_fish != null && mixer_aiming != null && mixer_shooting != null) {
-          mixer_fish.update(0.016);
+          mixer_fish.update(0.001);
           mixer_aiming.update(0.016);
-          mixer_shooting.update(0.016);
+          mixer_shooting.update(0.032);
         }
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
