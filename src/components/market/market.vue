@@ -316,7 +316,7 @@ export default {
       }
       function animate() {
     
-        if (fish_marked_wall_loaded && icon1 && icon2 && && round && end_button_loaded) model_loaded = true;
+        if (fish_marked_wall_loaded && icon1 && icon2 && round && end_button_loaded) model_loaded = true;
 
         renderer.render(scene, camera);
         sea.moveWaves();
