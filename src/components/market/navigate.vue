@@ -1,5 +1,5 @@
-<template ref="nav">
-  <div id="navigator_group" >
+<template>
+  <div id="navigator_group">
     <img
       src="images/npc.png"
       class="navigator_image"
@@ -38,33 +38,12 @@
       </q-card>
     </div>
   </div>
-  <div
-    class="control_pannle"
-    v-if="this.textIndex > 1"
-    v-touch-pan.prevent.mouse="handlePan"
-  >
-    <!-- <q-btn
-      id="forward_button"
-      round
-      @click="go_forward()"
-      color="orange"
-      icon="expand_less"
-    />
-
-    <q-btn
-      id="left_button"
-      round
-      v-touch-hold:100.mouse="debug_message('left')"
-      color="orange"
-      icon="chevron_left"
-    />
-    <q-btn
-      id="right_button"
-      round
-      v-touch-hold:100.mouse="debug_message('right')"
-      color="orange"
-      icon="chevron_right"
-    /> -->
+  <div v-if="$q.platform.is.mobilexl">
+    <div
+      class="control_pannle"
+      v-if="this.textIndex > 1"
+      v-touch-pan.prevent.mouse="handlePan"
+    ></div>
   </div>
 </template>
 <script>
@@ -86,16 +65,14 @@ export default {
         if (panning.value) {
           if (newInfo.offset.x > 0) {
             //go right
-            console.log(this.$ref.nav.go_forward())
+            console.log(this.$ref.nav.go_forward());
             //this.right_rotate();
           } else if (newInfo.offset.x < 10) {
             //go left
             //this.left_rotate();
-            
           }
           if (newInfo.offset.y < -10) {
             //go forward
-            
             //this.go_forward();
           }
         }
@@ -170,7 +147,7 @@ export default {
 }
 
 .navigator_image {
-  width: 13%;
+  width: auto;
   height: 38%;
   z-index: 50;
   right: 6%;

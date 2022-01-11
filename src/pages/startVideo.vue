@@ -11,7 +11,7 @@ export default {
 methods:{
   videoEnd()
   {
-    this.$router.push('/market-page')
+    this.$router.push('/ComicBook')
   }
 }
 };

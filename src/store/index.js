@@ -12,6 +12,7 @@ export default createStore({
     display2: false,
     display3: false,
     ChangeSceneIndex: false,
+    markedtOnProgress: false,
   },
   mutations: {
 ////////////////////////////////////////  mobile movement
@@ -64,7 +65,11 @@ export default createStore({
     },
     setChangeSceneIndexfalse(state){
       state.ChangeSceneIndex = false
-    }
+    },
+/////////////////////////////////////////
+    setMarketLoadedTrue(state){
+      state.markedtOnProgress = true
+    },
   },
   actions: {
   },

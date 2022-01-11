@@ -15,6 +15,11 @@ export default {
   mounted() {
     this.initThree();
   },
+  data() {
+    return {
+      gobalObj :{},
+    };
+  },
   methods: {
     initThree() {
       let scene, camera, renderer, canvas;
@@ -168,7 +173,7 @@ export default {
         Lowersea.mesh.castShadow = false;
         Lowersea.mesh.receiveShadow = true;
       }
-
+      let mesh;
       function createObject() {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
@@ -179,16 +184,20 @@ export default {
           "../models/1017.json",
           // called when resource is loaded
           function (obj) {
+            var tempOBJ = obj.getObjectByName("Plane004");
+            console.log(tempOBJ)
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 5, 0);
             controls.colliders = obj;
-            scene.add(obj);
+            // scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
             console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
           }
         );
+        let testloader = new THREE.ObjectLoader();
+        // let testmodel = loader.parse("../models/1017.json")
       }
 
       function createControls() {
@@ -214,7 +223,6 @@ export default {
         requestAnimationFrame(animate);
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
-
       }
       createScene();
       createLight();

@@ -5,21 +5,38 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { useQuasar } from "quasar";
+import {FinishLoading} from './loading'
 import * as THREE from "three/build/three.module";
 import { FirstPersonCameraControl } from "three/src/FirstPersonCameraControls";
 import store from "../../store/index";
 export default {
   name: "three",
   mounted() {
-    this.initThree();
+    useQuasar().loading.show({
+      message: "Some important process  is in progress. Hang on...",
+    });
+    
+    this.initThree(useQuasar().loading.hide);
+    // useQuasar().loading.hide();
   },
   data() {
     return {
       animation: {},
+      
     };
   },
+  watch: {
+    finish_load: {
+      function() {
+      if(this.finish_load )
+        useQuasar().loading.hide();
+      },
+    },
+  },
   methods: {
-    initThree() {
+    initThree(callbacks) {
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
@@ -205,64 +222,59 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            //            that(xhr.loaded / 137766575);
+            console.log((xhr.loaded / 137766575) * 100 + "% loaded");
             if (xhr.loaded / 137766575 == 1) {
               fish_marked_wall_loaded = true;
             }
           }
         );
-        loader.load(
-          // resource URL
-          "../models/icon_test.json",
-          // called when resource is loaded
-          function (obj) {
-            // obj.scale.set(2, 2, 2);
-            obj.position.set(-5, 1.5, 0);
-            objects1.push(obj);
-            scene.add(obj);
-            mixer1 = new THREE.AnimationMixer(obj);
-            animationOBJ1 = mixer1.clipAction(obj.animations[1]);
-            animationOBJ1.timeScale = 10000;
-            animationOBJ1.clampWhenFinished = true;
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-<<<<<<< HEAD
-            //console.log(xhr.loaded);
-=======
->>>>>>> 8ee794fdae8058abc842313d153fb5bd9ef59c53
-            if (xhr.loaded / 31750 == 1) {
-              icon1 = true;
-            }
-          }
-        );
-        loader.load(
-          // resource URL
-          "../models/icon_test.json",
-          // called when resource is loaded
-          function (obj) {
-            obj.scale.set(10, 10, 10);
-            obj.position.set(-5, 1.5, 3);
-            objects2.push(obj);
-            scene.add(obj);
-            mixer2 = new THREE.AnimationMixer(obj);
-            animationOBJ2 = mixer2.clipAction(obj.animations[1]);
-            animationOBJ2.timeScale = 10000;
-            animationOBJ2.clampWhenFinished = true;
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-<<<<<<< HEAD
-            //console.log(xhr.loaded);
-=======
->>>>>>> 8ee794fdae8058abc842313d153fb5bd9ef59c53
-            if (xhr.loaded / 31750 == 1) {
-              icon2 = true;
-            }
-          }
-        );
+        // loader.load(
+        //   // resource URL
+        //   "../models/icon_test.json",
+        //   // called when resource is loaded
+        //   function (obj) {
+        //     // obj.scale.set(2, 2, 2);
+        //     obj.position.set(-5, 1.5, 0);
+        //     objects1.push(obj);
+        //     scene.add(obj);
+        //     mixer1 = new THREE.AnimationMixer(obj);
+        //     animationOBJ1 = mixer1.clipAction(obj.animations[1]);
+        //     animationOBJ1.timeScale = 10000;
+        //     animationOBJ1.clampWhenFinished = true;
+        //   },
+        //   // called when loading is in progresses
+        //   function (xhr) {
+        //     // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
+        //     //console.log(xhr.loaded);
+        //     if (xhr.loaded / 31750 == 1) {
+        //       icon1 = true;
+        //     }
+        //   }
+        // );
+        // loader.load(
+        //   // resource URL
+        //   "../models/icon_test.json",
+        //   // called when resource is loaded
+        //   function (obj) {
+        //     obj.scale.set(10, 10, 10);
+        //     obj.position.set(-5, 1.5, 3);
+        //     objects2.push(obj);
+        //     scene.add(obj);
+        //     mixer2 = new THREE.AnimationMixer(obj);
+        //     animationOBJ2 = mixer2.clipAction(obj.animations[1]);
+        //     animationOBJ2.timeScale = 10000;
+        //     animationOBJ2.clampWhenFinished = true;
+        //   },
+        //   // called when loading is in progresses
+        //   function (xhr) {
+        //     // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
+        //     //console.log(xhr.loaded);
+        //     if (xhr.loaded / 31750 == 1) {
+        //       icon2 = true;
+        //     }
+        //   }
+        // );
         loader.load(
           // resource URL
           "../models/end_button.json",
@@ -275,16 +287,19 @@ export default {
 
             document.addEventListener("click", function () {
               if (changeSceneIndex) {
-                console.log("changing scene") // this is where you want to change the scene to marketTable
+                console.log("changing scene"); // this is where you want to change the scene to marketTable
                 store.commit("setChangeSceneIndexTrue"); // remember to set false when finish ChangeScene
                 console.log(store.state.ChangeSceneIndex);
+               
               }
             });
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            if (xhr.loaded / 1347056 == 1) end_button_loaded = true;
+            console.log((xhr.loaded / 1347056) * 100 + "% loaded");
+            if (xhr.loaded / 1347056 == 1) {
+              end_button_loaded = true;
+            }
           }
         );
       }
@@ -297,19 +312,17 @@ export default {
         controls.positionEasing = true;
       }
       function animate() {
-
-        
-
-        if (fish_marked_wall_loaded && icon1 && icon2 && end_button_loaded) model_loaded = true;
+        // if (fish_marked_wall_loaded && icon1 && icon2 && end_button_loaded)
+        if (fish_marked_wall_loaded && end_button_loaded) {
+          model_loaded = true;
+          store.commit("setMarketLoadedTrue");
+          callbacks()
+        }
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-<<<<<<< HEAD
         //console.log(model_loaded)
-=======
-        // console.log(model_loaded)
->>>>>>> 8ee794fdae8058abc842313d153fb5bd9ef59c53
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
@@ -318,32 +331,31 @@ export default {
           controls.getDirection(vector).clone()
         );
 
-        let intersects1 = raycaster.intersectObjects(objects1);
-        if (intersects1.length > 0 && model_loaded == true) {
-          animationOBJ1.play();
-          mixer1.update(0.016);
-        } else if (intersects1.length == 0 && model_loaded == true) {
-          animationOBJ1.stop();
-        }
+        // let intersects1 = raycaster.intersectObjects(objects1);
+        // if (intersects1.length > 0 && model_loaded == true) {
+        //   animationOBJ1.play();
+        //   mixer1.update(0.016);
+        // } else if (intersects1.length == 0 && model_loaded == true) {
+        //   animationOBJ1.stop();
+        // }
 
-        let intersects2 = raycaster.intersectObjects(objects2);
-        if (intersects2.length > 0 && model_loaded == true) {
-<<<<<<< HEAD
-         // console.log(123)
-=======
->>>>>>> 8ee794fdae8058abc842313d153fb5bd9ef59c53
-          animationOBJ2.play();
-          mixer2.update(0.016);
-        } else if (intersects2.length == 0 && model_loaded == true) {
-          animationOBJ2.stop();
-        }
+        // let intersects2 = raycaster.intersectObjects(objects2);
+        // if (intersects2.length > 0 && model_loaded == true) {
+        //   // console.log(123)
+        //   animationOBJ2.play();
+        //   mixer2.update(0.016);
+        // } else if (intersects2.length == 0 && model_loaded == true) {
+        //   animationOBJ2.stop();
+        // }
 
-        let intersectsEndButton = raycaster.intersectObjects(objectChangeSceneIcon);
-        if (intersectsEndButton.length > 0 && model_loaded == true) {
-          changeSceneIndex = true;
-        } else if (intersects2.length == 0 && model_loaded == true) {
-          changeSceneIndex = false;
-        }
+        // let intersectsEndButton = raycaster.intersectObjects(
+        //   objectChangeSceneIcon
+        // );
+        // if (intersectsEndButton.length > 0 && model_loaded == true) {
+        //   changeSceneIndex = true;
+        // } else if (intersects2.length == 0 && model_loaded == true) {
+        //   changeSceneIndex = false;
+        // }
       }
       createScene();
       createLight();
@@ -351,6 +363,7 @@ export default {
       createObject();
       createSea();
       createLowerSea();
+      //callbacks()
       animate();
     },
   },
