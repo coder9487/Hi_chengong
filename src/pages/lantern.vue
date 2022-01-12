@@ -184,12 +184,10 @@ export default {
           "../models/1017.json",
           // called when resource is loaded
           function (obj) {
-            var tempOBJ = obj.getObjectByName("Plane004");
-            console.log(tempOBJ)
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 5, 0);
             controls.colliders = obj;
-            // scene.add(obj);
+            scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
@@ -197,8 +195,6 @@ export default {
             // console.log((xhr.loaded / 25990068) * 100 + "% loaded");
           }
         );
-        let testloader = new THREE.ObjectLoader();
-        // let testmodel = loader.parse("../models/1017.json")
       }
 
       function createControls() {
@@ -208,15 +204,7 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
-      let x = 0;
-      document.addEventListener("click", function () {
-        if (x % 2 == 0) {
-          store.commit("setLookdownTrue");
-        } else {
-          store.commit("setLookdownFalse");
-        }
-        x = x + 1;
-      });
+
       function animate() {
         renderer.render(scene, camera);
         sea.moveWaves();
