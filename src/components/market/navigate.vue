@@ -56,8 +56,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import { store } from '../../store'
-
+//import { store } from '../../store'
 
 
 
@@ -106,7 +105,7 @@ export default {
   },
   computed: {
     ChangeScene(){
-      return store.state.ChangeSceneIndex 
+      return this.$store.state.toMarketTableSceneIndex 
     },
     // grandpa(){
     //   return store.state.display2
@@ -114,9 +113,9 @@ export default {
 
   },
   watch:{
-    // ChangeScene:function(){
-    //   alert("In fishman")
-    // }
+    ChangeScene:function(){
+      this.$router.push("DiningTable")
+    }
   },
   data() {
     return {
