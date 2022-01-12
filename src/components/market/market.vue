@@ -15,7 +15,7 @@ export default {
   name: "three",
   mounted() {
     useQuasar().loading.show({
-      message: "Some important process  is in progress. Hang on...",
+      message: "Loading ",
     });
 
     this.initThree(useQuasar().loading.hide);

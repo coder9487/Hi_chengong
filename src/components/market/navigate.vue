@@ -105,16 +105,16 @@ export default {
     };
   },
   computed: {
-    // fishman(){
-    //   return store.state.display1 
-    // },
+    ChangeScene(){
+      return store.state.ChangeSceneIndex 
+    },
     // grandpa(){
     //   return store.state.display2
     // }
 
   },
   watch:{
-    fishman:function(){
+    ChangeScene:function(){
       alert("In fishman")
     }
   },
