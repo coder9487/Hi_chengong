@@ -14,6 +14,7 @@
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
     "flipbook-vue": "^0.10.4",
+    "lottie-web": "^5.8.1",
     "package.json": "^2.0.1",
     "quasar": "^2.0.0",
     "three": "^0.134.0",

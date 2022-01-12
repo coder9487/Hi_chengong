@@ -17,9 +17,8 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-/* .start_btn{
-  position: relative;
-} */
+
+
 q-btn {
   margin-top: 30%;
   margin-left: 40%;

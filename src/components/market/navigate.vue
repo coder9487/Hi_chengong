@@ -1,5 +1,8 @@
 <template>
   <div id="navigator_group">
+    <q-icon class="text-dark systemIcon" size="sm" @click="BackComicBook">
+      <img src="icons/meum_icon.png" />
+    </q-icon>
     <img
       src="images/npc.png"
       class="navigator_image"
@@ -12,10 +15,10 @@
         <q-card-section>
           <img class="text_size" :src="textContentAccess(0)" />
           <q-btn
-            id="chatContentButton"
+            class="chatContentButton"
             flat
             round
-            :size="$q.platform.is.mobilexl ? sm : xl"
+            size="lg"
             icon="play_circle"
             @click="changeText()"
           />
@@ -24,13 +27,18 @@
 
       <q-card id="chat_card_2" class="chat_card" v-if="this.textIndex == 1">
         <q-card-section>
-          <img class="chat_icon" src="images/UI/text_2_icon.svg" alt="" />
-          <img :src="textContentAccess(1)" class="text_size" />
+          <!-- <img
+            class="chat_icon"
+            id="chat_icon_2"
+            src="images/UI/text_2_icon.svg"
+            alt=""
+          /> -->
+          <img :src="textContentAccess(1)" class="text_size" id="chat_text_2" />
           <q-btn
-            id="chatContentButton_2"
+            class="chatContentButton"
             flat
             round
-            :size="$q.platform.is.mobilexl ? sm : xl"
+            size="lg"
             icon="clear"
             @click="changeText()"
           />
@@ -92,7 +100,7 @@ export default {
   },
   data() {
     return {
-      talkContent: ["./images/UI/text_1.svg", "./images/UI/text_2.svg"],
+      talkContent: ["./images/UI/text_1.svg", "./images/UI/text_2.svg",""],
       textIndex: 0,
       direction: {
         forward: false,
@@ -103,6 +111,10 @@ export default {
     };
   },
   methods: {
+    BackComicBook()
+    {
+      this.$router.push("/ComicBook")
+    },
     changeText() {
       this.textIndex++;
       //if (this.textIndex + 1 > this.talkContent.length) this.textIndex = 0;
@@ -114,25 +126,26 @@ export default {
       return this.talkContent[index];
     },
 
-    right_rotate() {
-      this.$store.commit("setRotationRightTrue");
-      this.$store.commit("setRotationLeftFalse");
-    },
-    left_rotate() {
-      this.$store.commit("setRotationLeftTrue");
-      this.$store.commit("setRotationRightFalse");
-    },
-    go_forward() {
-      this.$store.commit("setForwardTrue");
-    },
-    go_stop() {
-      this.$store.commit("setForwardFalse");
-    },
-    clearAll() {
-      this.$store.commit("setRotationRightFalse");
-      this.$store.commit("setRotationLeftFalse");
-      this.$store.commit("setForwardFalse");
-    },
+    // right_rotate() {
+    //   this.$store.commit("setRotationRightTrue");
+    //   this.$store.commit("setRotationLeftFalse");
+    // },
+    // left_rotate() {
+    //   this.$store.commit("setRotationLeftTrue");
+    //   this.$store.commit("setRotationRightFalse");
+    // },
+    // go_forward() {
+    //   this.$store.commit("setForwardTrue");
+    // },
+    // go_stop() {
+    //   this.$store.commit("setForwardFalse");
+    // },
+    // clearAll() {
+    //   this.$store.commit("setRotationRightFalse");
+    //   this.$store.commit("setRotationLeftFalse");
+    //   this.$store.commit("setForwardFalse");
+    // },
+
     debug_message(msg) {
       console.log("message:", msg);
     },
@@ -165,26 +178,29 @@ export default {
 }
 .chat_card {
   border-radius: 20px;
+  display: inline-block;
 }
-#chatContentButton {
-  left: 80%;
+.chatContentButton {
+  margin-top: -50px;
+  margin-left: 80%;
 }
+
 #chat_card_2 {
   float: left;
   margin-left: 20px;
   margin-top: 10%;
 }
-#chatContentButton_2 {
-  position: relative;
-  left: 80%;
-  margin-bottom: 20%;
+
+#chat_text_2 {
+  width: 65%;
+  height: auto;
 }
 .text_size {
   width: 80%;
   margin-top: 5%;
 }
 .chat_icon {
-  width: 20%;
+  width: 15%;
 }
 
 .control_pannle {
@@ -195,5 +211,20 @@ export default {
   width: 20%;
   height: 20%;
   background: fuchsia;
+}
+
+#systemIcon_group {
+  display: block;
+  position: fixed;
+  justify-content: center;
+  bottom: 5%;
+  left: 3%;
+}
+
+.systemIcon {
+  z-index: 50;
+  position: fixed;
+  bottom: 5%;
+  left: 3%;
 }
 </style>

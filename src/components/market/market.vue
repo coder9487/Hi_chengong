@@ -7,9 +7,9 @@
 <script>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
-import {FinishLoading} from './loading'
 import * as THREE from "three/build/three.module";
 import { FirstPersonCameraControl } from "three/src/FirstPersonCameraControls";
+import { lottie } from 'lottie-web'
 import store from "../../store/index";
 export default {
   name: "three",
@@ -17,24 +17,16 @@ export default {
     useQuasar().loading.show({
       message: "Some important process  is in progress. Hang on...",
     });
-    
+
     this.initThree(useQuasar().loading.hide);
     // useQuasar().loading.hide();
   },
   data() {
     return {
       animation: {},
-      
     };
   },
-  watch: {
-    finish_load: {
-      function() {
-      if(this.finish_load )
-        useQuasar().loading.hide();
-      },
-    },
-  },
+  watch: {},
   methods: {
     initThree(callbacks) {
       let scene, camera, renderer, canvas;
@@ -290,7 +282,6 @@ export default {
                 console.log("changing scene"); // this is where you want to change the scene to marketTable
                 store.commit("setChangeSceneIndexTrue"); // remember to set false when finish ChangeScene
                 console.log(store.state.ChangeSceneIndex);
-               
               }
             });
           },
@@ -316,7 +307,7 @@ export default {
         if (fish_marked_wall_loaded && end_button_loaded) {
           model_loaded = true;
           store.commit("setMarketLoadedTrue");
-          callbacks()
+          callbacks();
         }
         renderer.render(scene, camera);
         sea.moveWaves();

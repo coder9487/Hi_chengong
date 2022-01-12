@@ -193,7 +193,8 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            console.log(xhr.loaded)
+            // console.log((xhr.loaded / 25990068) * 100 + "% loaded");
           }
         );
         let testloader = new THREE.ObjectLoader();
@@ -244,27 +245,6 @@ export default {
   left: 0;
   top: 0;
 }
-/* #blocker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
 
-#instructions {
-  width: 100%;
-  height: 100%;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-image: url(../../public/images/trans_scene.png); */
-/* background-repeat: no-repeat;
-  background-size: cover;
-  text-align: center;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-} */
 </style>

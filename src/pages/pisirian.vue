@@ -46,9 +46,9 @@ export default {
           0.01,
           1000
         );
-        camera.position.x = -3;
-        camera.position.y = 8;
-        camera.position.z = -3;
+        camera.position.x = 40;
+        camera.position.y = 9; //8
+        camera.position.z = -2;
         camera.lookAt(5, 6.5, 5);
 
         const axesHelper = new THREE.AxesHelper(5);
@@ -177,8 +177,8 @@ export default {
           "../models/0925scene.json",
           // called when resource is loaded
           function (obj) {
-            // obj.scale.set(100, 100, 100);
-            obj.position.set(0, 5, 0);
+            obj.scale.set(10, 10, 10);
+            obj.position.set(0, -20, 0);
             controls.colliders = obj;
             lod.addLevel(obj);
             scene.add(lod);
@@ -186,7 +186,8 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log(xhr.loaded)
+            console.log((xhr.loaded / 59227599) * 100 + "% loaded");
           }
         );
       }
@@ -227,27 +228,4 @@ export default {
   left: 0;
   top: 0;
 }
-/* #blocker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-#instructions {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-image: url(../../public/images/trans_scene.png); */
-/* background-repeat: no-repeat;
-  background-size: cover;
-  text-align: center;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-} */
 </style>
