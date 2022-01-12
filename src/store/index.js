@@ -11,7 +11,7 @@ export default createStore({
     display1: false,
     display2: false,
     display3: false,
-    ChangeSceneIndex: false,
+    toMarketSceneIndex: false,
     markedtOnProgress: false,
   },
   mutations: {
@@ -60,8 +60,8 @@ export default createStore({
       state.display2 = false
     },
 /////////////////////////////////////////
-    setChangeSceneIndexTrue(state){
-      state.ChangeSceneIndex = true
+    settoMarketSceneIndexTrue(state){
+      state.toMarketSceneIndex = true
     },
     setChangeSceneIndexfalse(state){
       state.ChangeSceneIndex = false

@@ -43,11 +43,11 @@ export default {
       let animationOBJ2;
       let icon1 = false;
       let icon2 = false;
-      let changeSceneIcon = false;
+      let toMarketSceneIndex = false;
       let boat01,boat02;
       const objects1 = [];
       const objects2 = [];
-      const objectChangeSceneIcon = [];
+      const toMarket = [];
 
       function createScene() {
         scene = new THREE.Scene();
@@ -344,14 +344,14 @@ export default {
           function (obj) {
             obj.scale.set(5, 5, 5);
             obj.position.set(-30, 5, -20);
-            objectChangeSceneIcon.push(obj);
+            toMarket.push(obj);
             scene.add(obj);
 
             document.addEventListener("click", function () {
-              if (changeSceneIndex) {
+              if (toMarketSceneIndex) {
                 console.log("changing scene"); ////jump to marketTable
-                store.commit("setChangeSceneIndexTrue"); 
-                console.log(store.state.ChangeSceneIndex);
+                store.commit("settoMarketSceneIndexTrue"); 
+                console.log(store.state.toMarketSceneIndex);
               }
             });
           },
@@ -412,12 +412,12 @@ export default {
         }
 
         let intersectsEndButton = raycaster.intersectObjects(
-          objectChangeSceneIcon
+          toMarket
         );
         if (intersectsEndButton.length > 0 && model_loaded == true) {
-          changeSceneIndex = true;
+          toMarketSceneIndex = true;
         } else if (intersects2.length == 0 && model_loaded == true) {
-          changeSceneIndex = false;
+          toMarketSceneIndex = false;
         }
         // console.log(model_loaded)
         if(model_loaded){
