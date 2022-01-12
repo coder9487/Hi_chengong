@@ -3,37 +3,13 @@
     <q-icon class="text-dark systemIcon" size="sm" @click="BackComicBook">
       <img src="icons/meum_icon.png" />
     </q-icon>
-    <img
-      src="images/npc.png"
-      class="navigator_image"
-      alt=""
-      v-if="ShowNPC()"
-    />
+    <img src="images/npc.png" class="navigator_image" alt="" v-if="ShowNPC()" />
 
     <div class="navigator_chatbox">
-      <q-card id="chat_card_1" class="chat_card" v-if="this.textIndex == 0">
+      <q-card id="chat_card_2" class="chat_card" v-if="this.textIndex == 0">
         <q-card-section>
-          <img class="text_size" :src="textContentAccess(0)" />
-          <q-btn
-            class="chatContentButton"
-            flat
-            round
-            size="lg"
-            icon="play_circle"
-            @click="changeText()"
-          />
-        </q-card-section>
-      </q-card>
-
-      <q-card id="chat_card_2" class="chat_card" v-if="this.textIndex == 1">
-        <q-card-section>
-          <!-- <img
-            class="chat_icon"
-            id="chat_icon_2"
-            src="images/UI/text_2_icon.svg"
-            alt=""
-          /> -->
-          <img :src="textContentAccess(1)" class="text_size" id="chat_text_2" />
+          <img src="/images/UI/text_6_icon.png" class="text_size chat_icon" />
+          <img src="/images/UI/text_6.svg" class="text_size" id="chat_text_2" />
           <q-btn
             class="chatContentButton"
             flat
@@ -56,11 +32,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import { store } from '../../store'
-
-
-
-
+import { store } from "../../store";
 
 export default {
   setup() {
@@ -101,26 +73,29 @@ export default {
           panning.value = false;
         }
       },
-
     };
   },
   computed: {
     // fishman(){
-    //   return store.state.display1 
+    //   return store.state.display1
     // },
     // grandpa(){
     //   return store.state.display2
     // }
-
   },
-  watch:{
-    fishman:function(){
-      alert("In fishman")
-    }
+  watch: {
+    fishman: function () {
+      alert("In fishman");
+    },
   },
   data() {
     return {
-      talkContent: ["./images/UI/text_1.svg", "./images/UI/text_2.svg","","/images/UI/text_2.svg"],
+      talkContent: [
+        "./images/UI/text_1.svg",
+        "./images/UI/text_2.svg",
+        "",
+        "/images/UI/text_2.svg",
+      ],
       textIndex: 0,
       direction: {
         forward: false,
@@ -131,9 +106,8 @@ export default {
     };
   },
   methods: {
-    BackComicBook()
-    {
-      this.$router.push("/ComicBook")
+    BackComicBook() {
+      this.$router.push("/ComicBook");
     },
     changeText() {
       this.textIndex++;
@@ -145,9 +119,8 @@ export default {
     textContentAccess(index) {
       return this.talkContent[index];
     },
-    ShowNPC(){
-      if(this.textIndex != 2)
-        return true
+    ShowNPC() {
+      if (this.textIndex == 0) return true;
     },
 
     // right_rotate() {
@@ -225,6 +198,8 @@ export default {
 }
 .chat_icon {
   width: 15%;
+  margin-bottom: 30px;
+  margin-right: 30px;
 }
 
 .control_pannle {
