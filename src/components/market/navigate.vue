@@ -114,9 +114,9 @@ export default {
 
   },
   watch:{
-    ChangeScene:function(){
-      alert("In fishman")
-    }
+    // ChangeScene:function(){
+    //   alert("In fishman")
+    // }
   },
   data() {
     return {

@@ -7,8 +7,8 @@
 <script>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
-import * as THREE from "three/build/three.module";
-import { FirstPersonCameraControl } from "three/src/FirstPersonCameraControls";
+import * as THREE from "three/build/three.module.js";
+import { FirstPersonCameraControl } from "three/src/FirstPersonCameraControls.js";
 import { lottie } from 'lottie-web'
 import store from "../../store/index";
 export default {
