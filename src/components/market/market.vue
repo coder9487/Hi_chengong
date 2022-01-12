@@ -48,7 +48,7 @@ export default {
       const objects1 = [];
       const objects2 = [];
       const toMarket = [];
-
+      let readyForOBJanimation = false;
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -375,14 +375,27 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
+
+      let doOnce = false;
+      function delayForAnimate() {
+        if (!doOnce) {
+          doOnce = true;
+          // do the stuff
+          setTimeout(() => {
+            readyForOBJanimation = true
+          }, 5000);
+        }
+      }
+
       function animate() {
         if (fish_marked_wall_loaded && icon1 && icon2 && end_button_loaded){
         // if (fish_marked_wall_loaded && end_button_loaded) {
           model_loaded = true;
           store.commit("setMarketLoadedTrue");
           callbacks();
+          delayForAnimate()
         }
-        renderer.render(scene, camera);
+        if (readyForOBJanimation) renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
@@ -420,13 +433,14 @@ export default {
           toMarketSceneIndex = false;
         }
         // console.log(model_loaded)
-        if(model_loaded){
-          // console.log(model_loaded)
-          // boat01.position.y = Math.sin(Date.now()/1000)*0.1-0.2;
-          // boat02.position.y = Math.sin(Date.now()/1000)*0.1-0.2;
-          // console.log(boat01.position.y)
 
+        if (readyForOBJanimation){
+          // console.log(model_loaded)
+          boat01.position.y = Math.sin(Date.now()/2000)*0.05-0.2;
+          boat02.position.y = Math.sin(Date.now()/2000)*0.05-0.2;
+          // console.log(boat01.position.y)
         }
+        
       }
       createScene();
       createLight();
