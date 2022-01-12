@@ -350,8 +350,8 @@ export default {
             document.addEventListener("click", function () {
               if (toMarketSceneIndex) {
                 console.log("changing scene"); ////jump to marketTable
-                store.commit("settoMarketSceneIndexTrue"); 
-                console.log(store.state.toMarketSceneIndex);
+                store.commit("settoMarketTableSceneIndexTrue"); 
+                // console.log(store.state.toMarketTableSceneIndex);  
               }
             });
           },
