@@ -36,6 +36,7 @@ export default {
       let icon1 = false;
       let icon2 = false;
       let changeSceneIcon = false;
+      let boat01,boat02;
       const objects1 = [];
       const objects2 = [];
       const objectChangeSceneIcon = [];
@@ -57,6 +58,7 @@ export default {
 
         renderer.gammaFactor = 2.2;
         renderer.gammaOutput = true;
+
         window.addEventListener("resize", onWindowResize);
         function onWindowResize() {
           camera.aspect = window.innerWidth / window.innerHeight;
@@ -196,25 +198,27 @@ export default {
         // load a resource
         loader.load(
           // resource URL
-          "../models/market.json",
+          "../models/market2.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             controls.colliders = obj;
-            
+            boat01 = obj.getObjectByName("boat01")
+            boat02 = obj.getObjectByName("boat02")
+            // console.log(obj)
             objects1.push(obj);
             scene.add(obj);
-            mixer1 = new THREE.AnimationMixer(obj);
-            animationOBJ1 = mixer1.clipAction(obj.animations[1]);
-            animationOBJ1.timeScale = 10000;
-            animationOBJ1.clampWhenFinished = true;
+            // mixer1 = new THREE.AnimationMixer(obj);
+            // animationOBJ1 = mixer1.clipAction(obj.animations[1]);
+            // animationOBJ1.timeScale = 10000;
+            // animationOBJ1.clampWhenFinished = true;
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            console.log(xhr.loaded);
-            if (xhr.loaded / 109163115 == 1) {
+            // console.log(xhr.loaded);
+            if (xhr.loaded / 115040681 == 1) {
               fish_marked_wall_loaded = true;
             }
           }
@@ -234,15 +238,15 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            console.log(xhr.loaded);
-            if (xhr.loaded / 167645 == 1) {
+            // console.log(xhr.loaded);
+            if (xhr.loaded / 145454 == 1) {
               round = true;
             }
           }
         );
         loader.load(
           // resource URL
-          "../models/icon_test.json",
+          "../models/car.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(8, 8, 8);
@@ -253,8 +257,8 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            if (xhr.loaded / 31750 == 1) {
+            // console.log(xhr.loaded); // 29346
+            if (xhr.loaded / 819743 == 1) {
               icon1 = true;
             }
           }
@@ -276,6 +280,7 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
+            // console.log(xhr.loaded)
             if (xhr.loaded / 31750 == 1) {
               icon2 = true;
             }
@@ -303,6 +308,7 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log(xhr.loaded)
             if (xhr.loaded / 1347056 == 1) end_button_loaded = true;
           }
         );
@@ -325,9 +331,6 @@ export default {
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
 
-        //console.log(model_loaded)
-        // console.log(model_loaded)
-
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
         let vector = new THREE.Vector3();
@@ -337,12 +340,12 @@ export default {
         );
 
         let intersects1 = raycaster.intersectObjects(objects1);
-        if (intersects1.length > 0 && model_loaded == true) {
-          animationOBJ1.play();
-          mixer1.update(0.016);
-        } else if (intersects1.length == 0 && model_loaded == true) {
-          animationOBJ1.stop();
-        }
+        // if (intersects1.length > 0 && model_loaded == true) {
+        //   animationOBJ1.play();
+        //   mixer1.update(0.016);
+        // } else if (intersects1.length == 0 && model_loaded == true) {
+        //   animationOBJ1.stop();
+        // }
 
         let intersects2 = raycaster.intersectObjects(objects2);
         if (intersects2.length > 0 && model_loaded == true) {
@@ -360,6 +363,16 @@ export default {
           changeSceneIndex = true;
         } else if (intersects2.length == 0 && model_loaded == true) {
           changeSceneIndex = false;
+        }
+        // console.log(model_loaded)
+        if(model_loaded){
+          // console.log(model_loaded)
+          boat01.position.y = Math.sin(Date.now()/1000)*0.1-0.2;
+          boat02.position.y = Math.sin(Date.now()/1000)*0.1-0.2;
+          console.log(boat01.position.y)
+
+          // console.log(boat01.position)
+          // boat02.position.y += 0.02;
         }
       }
       createScene();
