@@ -322,31 +322,31 @@ export default {
           controls.getDirection(vector).clone()
         );
 
-        // let intersects1 = raycaster.intersectObjects(objects1);
-        // if (intersects1.length > 0 && model_loaded == true) {
-        //   animationOBJ1.play();
-        //   mixer1.update(0.016);
-        // } else if (intersects1.length == 0 && model_loaded == true) {
-        //   animationOBJ1.stop();
-        // }
+        let intersects1 = raycaster.intersectObjects(objects1);
+        if (intersects1.length > 0 && model_loaded == true) {
+          animationOBJ1.play();
+          mixer1.update(0.016);
+        } else if (intersects1.length == 0 && model_loaded == true) {
+          animationOBJ1.stop();
+        }
 
-        // let intersects2 = raycaster.intersectObjects(objects2);
-        // if (intersects2.length > 0 && model_loaded == true) {
-        //   // console.log(123)
-        //   animationOBJ2.play();
-        //   mixer2.update(0.016);
-        // } else if (intersects2.length == 0 && model_loaded == true) {
-        //   animationOBJ2.stop();
-        // }
+        let intersects2 = raycaster.intersectObjects(objects2);
+        if (intersects2.length > 0 && model_loaded == true) {
+          // console.log(123)
+          animationOBJ2.play();
+          mixer2.update(0.016);
+        } else if (intersects2.length == 0 && model_loaded == true) {
+          animationOBJ2.stop();
+        }
 
-        // let intersectsEndButton = raycaster.intersectObjects(
-        //   objectChangeSceneIcon
-        // );
-        // if (intersectsEndButton.length > 0 && model_loaded == true) {
-        //   changeSceneIndex = true;
-        // } else if (intersects2.length == 0 && model_loaded == true) {
-        //   changeSceneIndex = false;
-        // }
+        let intersectsEndButton = raycaster.intersectObjects(
+          objectChangeSceneIcon
+        );
+        if (intersectsEndButton.length > 0 && model_loaded == true) {
+          changeSceneIndex = true;
+        } else if (intersects2.length == 0 && model_loaded == true) {
+          changeSceneIndex = false;
+        }
       }
       createScene();
       createLight();
