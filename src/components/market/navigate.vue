@@ -7,7 +7,7 @@
       src="images/npc.png"
       class="navigator_image"
       alt=""
-      v-if="this.textIndex <= 1"
+      v-if="ShowNPC()"
     />
 
     <div class="navigator_chatbox">
@@ -56,6 +56,11 @@
 </template>
 <script>
 import { ref } from "vue";
+import { store } from '../../store'
+
+
+
+
 
 export default {
   setup() {
@@ -96,11 +101,26 @@ export default {
           panning.value = false;
         }
       },
+
     };
+  },
+  computed: {
+    // fishman(){
+    //   return store.state.display1 
+    // },
+    // grandpa(){
+    //   return store.state.display2
+    // }
+
+  },
+  watch:{
+    fishman:function(){
+      alert("In fishman")
+    }
   },
   data() {
     return {
-      talkContent: ["./images/UI/text_1.svg", "./images/UI/text_2.svg",""],
+      talkContent: ["./images/UI/text_1.svg", "./images/UI/text_2.svg","","/images/UI/text_2.svg"],
       textIndex: 0,
       direction: {
         forward: false,
@@ -124,6 +144,10 @@ export default {
     },
     textContentAccess(index) {
       return this.talkContent[index];
+    },
+    ShowNPC(){
+      if(this.textIndex != 2)
+        return true
     },
 
     // right_rotate() {
