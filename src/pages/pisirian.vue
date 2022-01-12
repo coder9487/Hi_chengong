@@ -170,7 +170,7 @@ export default {
       function createObject() {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
-
+        const lod = new THREE.LOD();
         // load a resource
         loader.load(
           // resource URL
@@ -180,7 +180,9 @@ export default {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, -20, 0);
             controls.colliders = obj;
-            scene.add(obj);
+            lod.addLevel(obj);
+            scene.add(lod);
+            scene.add(obj)
           },
           // called when loading is in progresses
           function (xhr) {

@@ -15,6 +15,11 @@ export default {
   mounted() {
     this.initThree();
   },
+  data() {
+    return {
+      gobalObj :{},
+    };
+  },
   methods: {
     initThree() {
       let scene, camera, renderer, canvas;
@@ -168,7 +173,7 @@ export default {
         Lowersea.mesh.castShadow = false;
         Lowersea.mesh.receiveShadow = true;
       }
-
+      let mesh;
       function createObject() {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
@@ -199,15 +204,7 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
-      let x = 0;
-      document.addEventListener("click", function () {
-        if (x % 2 == 0) {
-          store.commit("setLookdownTrue");
-        } else {
-          store.commit("setLookdownFalse");
-        }
-        x = x + 1;
-      });
+
       function animate() {
         renderer.render(scene, camera);
         sea.moveWaves();
@@ -215,7 +212,6 @@ export default {
         requestAnimationFrame(animate);
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
-
       }
       createScene();
       createLight();
@@ -237,5 +233,6 @@ export default {
   left: 0;
   top: 0;
 }
+
 
 </style>
