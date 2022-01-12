@@ -19,6 +19,20 @@ export default {
       let controls;
       let sea, Lowersea;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      let coneIntro1;
+      let coneIntro2;
+      let coneIntro3;
+      let coneIntro4;
+      let coneIntro5;
+      let coneIntro6;
+      let marketTable_loaded = false;
+      let model_loaded = false;
+      const objects1 = [];
+      const objects2 = [];
+      const objects3 = [];
+      const objects4 = [];
+      const objects5 = [];
+      const objects6 = [];
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -182,9 +196,39 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            // console.log(xhr.loaded)
+            if(xhr.loaded / 93763876 == 1) marketTable_loaded = true;
+            // console.log((xhr.loaded / 93763876) * 100 + "% loaded");
           }
         );
+        var geometryIntro1 = new THREE.ConeBufferGeometry( 0.5, 0.5, 4 ); 
+        var materialIntro1 = new THREE.MeshLambertMaterial( {color: 0x67DAD5} ); 
+        coneIntro1 = new THREE.Mesh( geometryIntro1, materialIntro1 ); 
+        coneIntro1.position.set(-20, 5, -20)
+        coneIntro1.rotation.x = Math.PI;
+        coneIntro2 = coneIntro1.clone();
+        coneIntro3 = coneIntro1.clone();
+        coneIntro4 = coneIntro1.clone();
+        coneIntro5 = coneIntro1.clone();
+        coneIntro6 = coneIntro1.clone();
+        coneIntro1.position.set(-9, 3, -20)
+        coneIntro2.position.set(-6, 3, -20)
+        coneIntro3.position.set(-3, 3, -20)
+        coneIntro4.position.set(0, 3, -20)
+        coneIntro5.position.set(-3, 3, -20)
+        coneIntro6.position.set(-6, 3, -20)
+        objects1.push(coneIntro1)
+        objects2.push(coneIntro2)
+        objects3.push(coneIntro3)
+        objects4.push(coneIntro4)
+        objects5.push(coneIntro5)
+        objects6.push(coneIntro6)
+        scene.add( coneIntro1 );
+        scene.add( coneIntro2 );
+        scene.add( coneIntro3 );
+        scene.add( coneIntro4 );
+        scene.add( coneIntro5 );
+        scene.add( coneIntro6 );
 
       }
 
@@ -196,12 +240,67 @@ export default {
         controls.positionEasing = true;
       }
       function animate() {
-        renderer.render(scene, camera);
+        if(marketTable_loaded) model_loaded = true;
+        if(model_loaded) renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
         // if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
+
+        let vector = new THREE.Vector3();
+        let raycaster = new THREE.Raycaster(
+          controls.getObject().position,
+          controls.getDirection(vector).clone()
+        );
+        let intersects1 = raycaster.intersectObjects(
+          objects1
+        );
+        if (intersects1.length > 0  && model_loaded == true) {
+          coneIntro1.material.color.set(0xffffff)
+        } else if (intersects1.length == 0 && model_loaded == true) {
+          coneIntro1.material.color.set(0x67DAD5)
+        }
+        let intersects2 = raycaster.intersectObjects(
+          objects2
+        );
+        if (intersects2.length > 0  && model_loaded == true) {
+          coneIntro2.material.color.set(0xffffff)
+        } else if (intersects2.length == 0 && model_loaded == true) {
+          coneIntro2.material.color.set(0x67DAD5)
+        }
+        let intersects3 = raycaster.intersectObjects(
+          objects3
+        );
+        if (intersects3.length > 0  && model_loaded == true) {
+          coneIntro3.material.color.set(0xffffff)
+        } else if (intersects3.length == 0 && model_loaded == true) {
+          coneIntro3.material.color.set(0x67DAD5)
+        }
+        let intersects4 = raycaster.intersectObjects(
+          objects4
+        );
+        if (intersects4.length > 0  && model_loaded == true) {
+          coneIntro4.material.color.set(0xffffff)
+        } else if (intersects4.length == 0 && model_loaded == true) {
+          coneIntro4.material.color.set(0x67DAD5)
+        }
+        let intersects5 = raycaster.intersectObjects(
+          objects5
+        );
+        if (intersects5.length > 0  && model_loaded == true) {
+          coneIntro5.material.color.set(0xffffff)
+        } else if (intersects5.length == 0 && model_loaded == true) {
+          coneIntro5.material.color.set(0x67DAD5)
+        }
+        let intersects6 = raycaster.intersectObjects(
+          objects6
+        );
+        if (intersects6.length > 0  && model_loaded == true) {
+          coneIntro6.material.color.set(0xffffff)
+        } else if (intersects6.length == 0 && model_loaded == true) {
+          coneIntro6.material.color.set(0x67DAD5)
+        }
       }
       createScene();
       createLight();

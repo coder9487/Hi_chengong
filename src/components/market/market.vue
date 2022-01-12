@@ -36,19 +36,24 @@ export default {
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let model_loaded = false;
       let fish_marked_wall_loaded = false;
-      let end_button_loaded = false;
-      let mixer1;
-      let mixer2;
-      let animationOBJ1;
-      let animationOBJ2;
-      let icon1 = false;
-      let icon2 = false;
+
+      let car = false;
+      let round = false;
       let toMarketSceneIndex = false;
       let boat01,boat02;
       const objects1 = [];
       const objects2 = [];
+      const objects3 = [];
+      const objects4 = [];
       const toMarket = [];
       let readyForOBJanimation = false;
+
+      var coneCommut1;
+      var coneCommut2;
+      var coneCommut3;
+      var coneCommut4;
+      var materialAns1;
+      var OctahedronChangeScene;
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -151,7 +156,7 @@ export default {
         ) {
           this.waves.push({
             ang: Math.random() * Math.PI * 2,
-            amp: ampValue - 0.1,
+            amp: ampValue - 0.2,
             speed: 0.016 + Math.random() * 0.048,
           });
         }
@@ -216,14 +221,13 @@ export default {
             controls.colliders = obj;
             boat01 = obj.getObjectByName("boat01")
             boat02 = obj.getObjectByName("boat02")
-            objects1.push(obj);
             scene.add(obj);
 
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log(xhr.loaded)
-            console.log((xhr.loaded / 115040681) * 100 + "% loaded");
+            // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
             if (xhr.loaded / 115040681 == 1) {
               fish_marked_wall_loaded = true;
             }
@@ -236,7 +240,6 @@ export default {
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
-            // obj.alphaTest = 0.5;
             // scene.add(obj);
           },
           // called when loading is in progresses
@@ -255,7 +258,6 @@ export default {
           function (obj) {
             obj.scale.set(8, 8, 8);
             obj.position.set(0, 1.5, 0);
-            
             scene.add(obj);
             
           },
@@ -263,111 +265,52 @@ export default {
           function (xhr) {
             // console.log(xhr.loaded); // 29346
             if (xhr.loaded / 819743 == 1) {
-              icon1 = true;
-            }
-          }
-        );
-        loader.load(
-          // resource URL
-          "../models/icon_test.json",
-          // called when resource is loaded
-          function (obj) {
-            obj.scale.set(8, 8, 8);
-            obj.position.set(-5, 1.5, 3);
-            objects2.push(obj);
-            scene.add(obj);
-            mixer2 = new THREE.AnimationMixer(obj);
-            animationOBJ2 = mixer2.clipAction(obj.animations[1]);
-            animationOBJ2.timeScale = 10000;
-            animationOBJ2.clampWhenFinished = true;
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            // console.log(xhr.loaded)
-            if (xhr.loaded / 31750 == 1) {
-              icon2 = true;
+              car = true;
             }
           }
         );
 
-        loader.load(
-          // resource URL
-          "../models/icon_test.json",
-          // called when resource is loaded
-          function (obj) {
-            // obj.scale.set(2, 2, 2);
-            obj.position.set(-5, 1.5, 0);
-            objects1.push(obj);
-            scene.add(obj);
-            mixer1 = new THREE.AnimationMixer(obj);
-            animationOBJ1 = mixer1.clipAction(obj.animations[1]);
-            animationOBJ1.timeScale = 10000;
-            animationOBJ1.clampWhenFinished = true;
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            //console.log(xhr.loaded);
-            if (xhr.loaded / 31750 == 1) {
-              icon1 = true;
-            }
-          }
-        );
-        loader.load(
-          // resource URL
-          "../models/icon_test.json",
-          // called when resource is loaded
-          function (obj) {
-            obj.scale.set(10, 10, 10);
-            obj.position.set(-5, 1.5, 3);
-            objects2.push(obj);
-            scene.add(obj);
-            mixer2 = new THREE.AnimationMixer(obj);
-            animationOBJ2 = mixer2.clipAction(obj.animations[1]);
-            animationOBJ2.timeScale = 10000;
-            animationOBJ2.clampWhenFinished = true;
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log((xhr.loaded / 456874) * 100 + "% loaded"); // 29346
-            //console.log(xhr.loaded);
-            if (xhr.loaded / 31750 == 1) {
-              icon2 = true;
-            }
-          }
-        );
-        loader.load(
-          // resource URL
-          "../models/end_button.json",
-          // called when resource is loaded
-          function (obj) {
-            obj.scale.set(5, 5, 5);
-            obj.position.set(-30, 5, -20);
-            toMarket.push(obj);
-            scene.add(obj);
 
-            document.addEventListener("click", function () {
-              if (toMarketSceneIndex) {
-                console.log("changing scene"); ////jump to marketTable
-                store.commit("settoMarketTableSceneIndexTrue"); 
-                // console.log(store.state.toMarketTableSceneIndex);  
-              }
+        ///coneComuut
+        var geometryCommut1 = new THREE.ConeBufferGeometry( 0.5, 0.5, 4 ); 
+        var materialCommut1 = new THREE.MeshLambertMaterial( {color: 0x17B3BE} ); 
+        var coneCommut1 = new THREE.Mesh( geometryCommut1, materialCommut1 ); 
+        coneCommut1.position.set(-20, 5, -20)
+        coneCommut1.rotation.x = Math.PI ;
+        coneCommut2 = coneCommut1.clone();
+        coneCommut3 = coneCommut1.clone();
+        coneCommut4 = coneCommut1.clone();
+        coneCommut1.position.set(-9, 3, -20)
+        coneCommut2.position.set(-6, 3, -20)
+        coneCommut3.position.set(-3, 3, -20)
+        coneCommut4.position.set(0, 3, -20)
+        scene.add( coneCommut1 );
+        scene.add( coneCommut2 );
+        scene.add( coneCommut3 );
+        scene.add( coneCommut4 );
+        ///
+        ///coneAns
+        var geometryAns1 = new THREE.ConeBufferGeometry( 0.5, 0.5, 4 ); 
+        var materialAns1 = new THREE.MeshLambertMaterial( {color: 0xFEA30B} ); 
+        materialAns1 = new THREE.Mesh( geometryAns1, materialAns1 ); 
+        materialAns1.position.set(3, 3, -20)
+        materialAns1.rotation.x = Math.PI ;
+        scene.add(materialAns1)
+        ///
+        ///octahedron
+        let count = 0;
+        var geometryChangeScene = new THREE.OctahedronGeometry(0.3);
+        var materialChangeScene = new THREE.MeshLambertMaterial({color: 0x4EE4A5});
+        OctahedronChangeScene = new THREE.Mesh(geometryChangeScene, materialChangeScene);
+        OctahedronChangeScene.position.set( -48.36,1.7,-1.01);
+        toMarket.push(OctahedronChangeScene);
+        scene.add(OctahedronChangeScene);
+        document.addEventListener("click", function () {
+             if(toMarketSceneIndex) count++;
+             if(toMarketSceneIndex && count > 1) store.commit("settoMarketTableSceneIndexTrue")
             });
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            // console.log(xhr.loaded)
-            // if (xhr.loaded / 1347056 == 1) end_button_loaded = true;
-            console.log((xhr.loaded / 1347056) * 100 + "% loaded");
-            if (xhr.loaded / 1347056 == 1) {
-              end_button_loaded = true;
-            }
-          }
-        );
       }
-
+      ////
       function createControls() {
         controls = new FirstPersonCameraControl(camera, document.body);
         controls.enabled = true;
@@ -383,13 +326,12 @@ export default {
           // do the stuff
           setTimeout(() => {
             readyForOBJanimation = true
-          }, 5000);
+          }, 3000);
         }
       }
 
       function animate() {
-        if (fish_marked_wall_loaded && icon1 && icon2 && end_button_loaded){
-        // if (fish_marked_wall_loaded && end_button_loaded) {
+        if (fish_marked_wall_loaded && car && round ){
           model_loaded = true;
           store.commit("setMarketLoadedTrue");
           callbacks();
@@ -407,38 +349,43 @@ export default {
           controls.getObject().position,
           controls.getDirection(vector).clone()
         );
-
-        let intersects1 = raycaster.intersectObjects(objects1);
-        if (intersects1.length > 0 && model_loaded == true) {
-          animationOBJ1.play();
-          mixer1.update(0.016);
-        } else if (intersects1.length == 0 && model_loaded == true) {
-          animationOBJ1.stop();
+        // console.log(controls.getObject().position)
+        // console.log(OctahedronChangeScene.position)
+        let disOctahedron = Math.cbrt(Math.pow(controls.getObject().position.x-OctahedronChangeScene.position.x,2)+Math.pow(controls.getObject().position.y-OctahedronChangeScene.position.y,2)+Math.pow(controls.getObject().position.z-OctahedronChangeScene.position.z,2))
+        let dis = false;
+        if(disOctahedron < 2) {
+          OctahedronChangeScene.rotation.y += 0.05;
+          dis = true;
         }
+        // let intersects1 = raycaster.intersectObjects(objects1);
+        // if (intersects1.length > 0 && model_loaded == true) {
+        //   animationOBJ1.play();
+        //   mixer1.update(0.016);
+        // } else if (intersects1.length == 0 && model_loaded == true) {
+        //   animationOBJ1.stop();
+        // }
 
-        let intersects2 = raycaster.intersectObjects(objects2);
-        if (intersects2.length > 0 && model_loaded == true) {
-          animationOBJ2.play();
-          mixer2.update(0.016);
-        } else if (intersects2.length == 0 && model_loaded == true) {
-          animationOBJ2.stop();
-        }
-
-        let intersectsEndButton = raycaster.intersectObjects(
+        // let intersects2 = raycaster.intersectObjects(objects2);
+        // if (intersects2.length > 0 && model_loaded == true) {
+        //   animationOBJ2.play();
+        //   mixer2.update(0.016);
+        // } else if (intersects2.length == 0 && model_loaded == true) {
+        //   animationOBJ2.stop();
+        // }
+        let intersectstoMarketTable = raycaster.intersectObjects(
           toMarket
         );
-        if (intersectsEndButton.length > 0 && model_loaded == true) {
+        if (intersectstoMarketTable.length > 0 && dis && model_loaded == true) {
           toMarketSceneIndex = true;
-        } else if (intersects2.length == 0 && model_loaded == true) {
+          OctahedronChangeScene.material.color.set(0xffffff)
+        } else if (intersectstoMarketTable.length == 0 && dis && model_loaded == true) {
           toMarketSceneIndex = false;
+          OctahedronChangeScene.material.color.set(0x4EE4A5)
         }
-        // console.log(model_loaded)
-
+            
         if (readyForOBJanimation){
-          // console.log(model_loaded)
-          boat01.position.y = Math.sin(Date.now()/2000)*0.05-0.2;
-          boat02.position.y = Math.sin(Date.now()/2000)*0.05-0.2;
-          // console.log(boat01.position.y)
+          boat01.position.y = Math.sin(Date.now()/500)*0.05-0.3;
+          boat02.position.y = Math.sin(Date.now()/500)*0.05-0.3;
         }
         
       }
