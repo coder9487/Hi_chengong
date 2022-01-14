@@ -61,8 +61,8 @@ export default defineComponent({
 .img-slider {
   overflow: hidden;
   position: relative;
-  height: 900px;
-  width: 1400px;
+  height: 936px;
+  width: 1766px;
 }
 
 .img-slider img {
@@ -71,8 +71,8 @@ export default defineComponent({
   left: 100px;
   bottom: 0;
   right: 100px;
-  height: 900px;
-  width: 1400px;
+  height: 936px;
+  width: 1766px;
 }
 
 .slide-leave-active,
