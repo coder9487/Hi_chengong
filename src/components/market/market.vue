@@ -32,7 +32,6 @@ export default {
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
-      let changeSceneIndex = false;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let model_loaded = false;
       let fish_marked_wall_loaded = false;
@@ -204,7 +203,7 @@ export default {
         Lowersea.mesh.castShadow = false;
         Lowersea.mesh.receiveShadow = true;
       }
-
+let temp = 1;
       function createObject() {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
@@ -228,9 +227,18 @@ export default {
           function (xhr) {
             // console.log(xhr.loaded)
             // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
-            if (xhr.loaded / 115040681 == 1) {
-              fish_marked_wall_loaded = true;
+            let marketOnProgress = parseInt((xhr.loaded / 115040681)*100)
+
+            // console.log(PremarketOnProgress)
+            if( marketOnProgress != temp ){
+              store.commit("marketOnProgressCount")
+              temp = temp + 1;
+              console.log("marketPercentage: ", store.state.marketPercentage,"%")
             }
+            if (store.state.marketPercentage  == 100) {
+              fish_marked_wall_loaded = true;  
+            }
+
           }
         );
         loader.load(
@@ -272,28 +280,27 @@ export default {
 
 
         ///coneComuut
-        var geometryCommut1 = new THREE.ConeBufferGeometry( 0.5, 0.5, 4 ); 
+        var geometryCommut1 = new THREE.ConeBufferGeometry( 0.3, 0.3, 4 ); 
         var materialCommut1 = new THREE.MeshLambertMaterial( {color: 0x17B3BE} ); 
         var coneCommut1 = new THREE.Mesh( geometryCommut1, materialCommut1 ); 
-        coneCommut1.position.set(-20, 5, -20)
         coneCommut1.rotation.x = Math.PI ;
         coneCommut2 = coneCommut1.clone();
         coneCommut3 = coneCommut1.clone();
         coneCommut4 = coneCommut1.clone();
-        coneCommut1.position.set(-9, 3, -20)
-        coneCommut2.position.set(-6, 3, -20)
-        coneCommut3.position.set(-3, 3, -20)
-        coneCommut4.position.set(0, 3, -20)
+        coneCommut1.position.set(5, 1.7+0.3, 3.6)
+        coneCommut2.position.set(-1.8, 1.7+0.3, 4.1)
+        coneCommut3.position.set(-1, 1.7+0.3, 4.2)
+        coneCommut4.position.set(-20, 1.7+0.3, 3.3)
         scene.add( coneCommut1 );
         scene.add( coneCommut2 );
         scene.add( coneCommut3 );
         scene.add( coneCommut4 );
         ///
         ///coneAns
-        var geometryAns1 = new THREE.ConeBufferGeometry( 0.5, 0.5, 4 ); 
+        var geometryAns1 = new THREE.ConeBufferGeometry( 0.3, 0.3, 4 ); 
         var materialAns1 = new THREE.MeshLambertMaterial( {color: 0xFEA30B} ); 
         materialAns1 = new THREE.Mesh( geometryAns1, materialAns1 ); 
-        materialAns1.position.set(3, 3, -20)
+        materialAns1.position.set(-4.07197666168212*10,0.169902980327606*10+0.3,-0.622704148292541*10)
         materialAns1.rotation.x = Math.PI ;
         scene.add(materialAns1)
         ///

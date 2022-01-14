@@ -8,11 +8,15 @@ export default createStore({
     Left: false,
     Lookup: false,
     Lookdown: false,
+    ///
     display1: false,
     display2: false,
     display3: false,
+    ///
+    marketPercentage: 1,
+    marketTablePercentage: 1,
     toMarketTableSceneIndex: false,
-    markedtOnProgress: false,
+    marketLoaded: false,
   },
   mutations: {
 ////////////////////////////////////////  mobile movement
@@ -63,9 +67,16 @@ export default createStore({
     settoMarketTableSceneIndexTrue(state){
       state.toMarketTableSceneIndex = true
     },
-/////////////////////////////////////////
+
     setMarketLoadedTrue(state){
-      state.markedtOnProgress = true
+      state.marketLoaded = true
+    },
+/////////////////////////////////////////
+    marketOnProgressCount(state){
+      state.marketPercentage ++ 
+    },
+    marketTableOnProgressCount(state){
+      state.marketTablePercentage ++ 
     },
   },
   actions: {

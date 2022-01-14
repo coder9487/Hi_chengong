@@ -102,7 +102,7 @@ export default {
         textWaves.wrapS = THREE.RepeatWrapping;
         textWaves.wrapT = THREE.RepeatWrapping;
         textWaves.offset = new THREE.Vector2(textOffsetX, textOffsetY);
-        textWaves.repeat.set(80, 80);
+        textWaves.repeat.set(160, 160);
 
         let matWaves = new THREE.MeshPhongMaterial({
           //color:0x307ddd,
@@ -126,7 +126,7 @@ export default {
         ) {
           this.waves.push({
             ang: Math.random() * Math.PI * 2,
-            amp: ampValue - 0.1,
+            amp: ampValue + 0.1,
             speed: 0.016 + Math.random() * 0.048,
           });
         }
@@ -302,7 +302,7 @@ export default {
         }
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
-
+        sea.mesh.position.x += 0.1;
       }
       createScene();
       createLight();
