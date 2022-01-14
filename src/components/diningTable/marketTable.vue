@@ -15,6 +15,7 @@ export default {
   },
   methods: {
     initThree() {
+      store.commit("marketTableOnProgressReset")
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
@@ -205,7 +206,7 @@ export default {
               temp = temp+1;
               console.log("marketTablePercentage: ", store.state.marketTablePercentage,"%")
             }
-            if (store.state.marketTablePercentage  == 100) {
+            if (xhr.loaded / 93763876  == 1) {   
               marketTable_loaded = true;  
             }
           }

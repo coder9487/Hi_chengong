@@ -75,8 +75,14 @@ export default createStore({
     marketOnProgressCount(state){
       state.marketPercentage ++ 
     },
+    marketOnProgressReset(state){
+      state.marketPercentage = 1
+    },
     marketTableOnProgressCount(state){
       state.marketTablePercentage ++ 
+    },
+    marketTableOnProgressReset(state){
+      state.marketTablePercentage = 1   
     },
   },
   actions: {

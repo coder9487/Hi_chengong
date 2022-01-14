@@ -21,7 +21,7 @@ export default {
     this.initThree(useQuasar().loading.hide);
     // useQuasar().loading.hide();
   },
-  data() {
+  data() {   
     return {
       animation: {},
     };
@@ -29,6 +29,8 @@ export default {
   watch: {},
   methods: {
     initThree(callbacks) {
+      store.commit("marketOnProgressReset")
+      store.commit("marketTableOnProgressReset")
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
@@ -235,10 +237,9 @@ let temp = 1;
               temp = temp + 1;
               console.log("marketPercentage: ", store.state.marketPercentage,"%")
             }
-            if (store.state.marketPercentage  == 100) {
+            if (xhr.loaded / 115040681  == 1) {
               fish_marked_wall_loaded = true;  
             }
-
           }
         );
         loader.load(
