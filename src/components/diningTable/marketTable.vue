@@ -7,7 +7,7 @@
 <script>
 import * as THREE from "../../../node_modules/three/build/three.module.js";
 import { FirstPersonCameraControl } from "../../../node_modules/three/src/FirstPersonCameraControls.js";
-// import store from "../store/index";
+import store from "../../store/index";
 export default {
   name: "three",
   mounted() {
@@ -185,6 +185,7 @@ export default {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
         // load a resource
+        let temp = 1;
         loader.load(
           // resource URL
           "../models/market_table.json",
@@ -197,26 +198,33 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log(xhr.loaded)
-            if(xhr.loaded / 93763876 == 1) marketTable_loaded = true;
-            // console.log((xhr.loaded / 93763876) * 100 + "% loaded");
+            let marketTableOnProgress = parseInt((xhr.loaded / 93763876)*100)
+            // console.log(PremarketOnProgress)
+            if( marketTableOnProgress != temp ){
+              store.commit("marketTableOnProgressCount")
+              temp = temp+1;
+              console.log("marketTablePercentage: ", store.state.marketTablePercentage,"%")
+            }
+            if (store.state.marketTablePercentage  == 100) {
+              marketTable_loaded = true;  
+            }
           }
         );
-        var geometryIntro1 = new THREE.ConeBufferGeometry( 0.5, 0.5, 4 ); 
+        var geometryIntro1 = new THREE.ConeBufferGeometry( 0.04, 0.04, 4 ); 
         var materialIntro1 = new THREE.MeshLambertMaterial( {color: 0x67DAD5} ); 
         coneIntro1 = new THREE.Mesh( geometryIntro1, materialIntro1 ); 
-        coneIntro1.position.set(-20, 5, -20)
         coneIntro1.rotation.x = Math.PI;
         coneIntro2 = coneIntro1.clone();
         coneIntro3 = coneIntro1.clone();
         coneIntro4 = coneIntro1.clone();
         coneIntro5 = coneIntro1.clone();
         coneIntro6 = coneIntro1.clone();
-        coneIntro1.position.set(-9, 3, -20)
-        coneIntro2.position.set(-6, 3, -20)
-        coneIntro3.position.set(-3, 3, -20)
-        coneIntro4.position.set(0, 3, -20)
-        coneIntro5.position.set(-3, 3, -20)
-        coneIntro6.position.set(-6, 3, -20)
+        coneIntro1.position.set(-4.80968475341796*10, 0.102379404008388*10-0.1, -0.0722323656082153*10)///海豬腳
+        coneIntro2.position.set(-4.86205768585205*10, 0.102379404008388*10-0.1, -0.106271788477897*10)///肚臍橙
+        coneIntro3.position.set(-4.83438825607299*10, 0.0999452471733093*10-0.1, -0.0740058720111846*10)///生魚片
+        coneIntro4.position.set(-4.83099460601806*10, 0.111665286123752*10-0.1, -0.104491479694843*10)///柴魚味噌湯
+        coneIntro5.position.set(-4.86796474456787*10+0.08, 0.0991516187787056*10-0.1, -0.0747929289937019*10)///鬼頭刀魚排
+        coneIntro6.position.set(-4.80510187149047*10, 0.102379404008388*10-0.1, -0.10084480792284*10)///碗粿
         objects1.push(coneIntro1)
         objects2.push(coneIntro2)
         objects3.push(coneIntro3)
