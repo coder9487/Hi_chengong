@@ -30,7 +30,6 @@ export default {
   methods: {
     initThree(callbacks) {
       store.commit("marketOnProgressReset")
-      store.commit("marketTableOnProgressReset")
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
