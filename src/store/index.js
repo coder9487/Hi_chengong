@@ -9,16 +9,39 @@ export default createStore({
     Lookup: false,
     Lookdown: false,
     ///
-    display1: false,
-    display2: false,
-    display3: false,
-    ///
     marketPercentage: 1,
     marketTablePercentage: 1,
-    toMarketTableSceneIndex: false,
     marketLoaded: false,
+    questionMarketDisplay: false,
+    questionMarketTableDisplay: false,
+    FishMongerDisplay: [
+      { id: '0', display: false,}
+    ],
+    FoodDisplay: [
+      { id: '0', display: false,}
+    ]
   },
   mutations: {
+    ///
+    FishMongerChangeState(state, person ) {
+      state.FishMongerDisplay.splice(0,1,person)
+    },
+    FoodChangeState(state, cate ) {
+      state.FoodDisplay.splice(0,1,cate)
+    },
+    ///
+    setQuestionMarketDisplayTrue(state){
+      state.questionMarketDisplay = true
+    },
+    setQuestionMarketDisplayFalse(state){
+      state.questionMarketDisplay = false
+    },
+    setQuestionMarketTableDisplayTrue(state){
+      state.questionMarketTableDisplay = true
+    },
+    setQuestionMarketTableDisplayFalse(state){
+      state.questionMarketTableDisplay = false
+    },
 ////////////////////////////////////////  mobile movement
     setForwardTrue(state){  // Go
       state.Forward = true
@@ -50,24 +73,20 @@ export default createStore({
     setLookdownFalse(state){ // stop look down
       state.Lookdown = false
     },
-///////////////////////////////////////////
-    setFalse1(state) {
-      state.display1 = false
+    //////////////////////////////////
+    setDisplayFishMonger1False(state) {
+      state.displayfishmonger1 = false
     },
-    setTrue1(state){
-      state.display1 = true
+    setDisplayFishMonger2False(state){
+      state.displayfishmonger2 = false
     },
-    setFalse2(state){
-      state.display2 = false
+    setDisplayFishMonger3False(state){
+      state.displayfishmonger3 = false
     },
-    setTrue2(state){
-      state.display2 = false
+    setDisplayFishMonger4False(state){
+      state.displayfishmonger4 = false
     },
 /////////////////////////////////////////
-    settoMarketTableSceneIndexTrue(state){
-      state.toMarketTableSceneIndex = true
-    },
-
     setMarketLoadedTrue(state){
       state.marketLoaded = true
     },

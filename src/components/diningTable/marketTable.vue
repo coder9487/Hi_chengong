@@ -28,6 +28,8 @@ export default {
       let coneIntro6;
       let marketTable_loaded = false;
       let model_loaded = false;
+      let displayFood = 0;
+
       const objects1 = [];
       const objects2 = [];
       const objects3 = [];
@@ -213,7 +215,7 @@ export default {
         );
         var geometryIntro1 = new THREE.ConeBufferGeometry( 0.04, 0.04, 4 ); 
         var materialIntro1 = new THREE.MeshLambertMaterial( {color: 0x67DAD5} ); 
-        coneIntro1 = new THREE.Mesh( geometryIntro1, materialIntro1 ); 
+        coneIntro1 = new THREE.Mesh( geometryIntro1, materialIntro1 );   
         coneIntro1.rotation.x = Math.PI;
         coneIntro2 = coneIntro1.clone();
         coneIntro3 = coneIntro1.clone();
@@ -262,55 +264,61 @@ export default {
           controls.getObject().position,
           controls.getDirection(vector).clone()
         );
-        let intersects1 = raycaster.intersectObjects(
-          objects1
-        );
-        if (intersects1.length > 0  && model_loaded == true) {
-          coneIntro1.material.color.set(0xffffff)
-        } else if (intersects1.length == 0 && model_loaded == true) {
-          coneIntro1.material.color.set(0x67DAD5)
+        let intersects1 = raycaster.intersectObjects(objects1);
+        let intersects2 = raycaster.intersectObjects(objects2);
+        let intersects3 = raycaster.intersectObjects(objects3);
+        let intersects4 = raycaster.intersectObjects(objects4);
+        let intersects5 = raycaster.intersectObjects(objects5);
+        let intersects6 = raycaster.intersectObjects(objects6);
+        if(model_loaded){
+          if (intersects1.length > 0 ) {
+            coneIntro1.rotation.y += 0.05;
+            displayFood = 1 // 海豬腳
+            // console.log("海豬腳")
+          } else if (intersects1.length == 0 ) {
+          }
+          if (intersects2.length > 0 ) {
+            displayFood = 2 //肚臍橙
+            coneIntro2.rotation.y += 0.05;
+            // console.log("肚臍橙")
+          } else if (intersects2.length == 0) {
+          }
+          if (intersects3.length > 0  ) {
+            coneIntro3.rotation.y += 0.05;
+            displayFood = 3 //生魚片
+            // console.log("生魚片")
+          } else if (intersects3.length == 0 ) {
+          }
+          if (intersects4.length > 0  ) {
+            coneIntro4.rotation.y += 0.05;
+            displayFood = 4 //味噌湯
+            // console.log("味噌湯")
+          } else if (intersects4.length == 0) {
+          }
+          if (intersects5.length > 0 ) {
+            coneIntro5.rotation.y += 0.05;
+            displayFood = 5 //鬼頭刀魚排
+            // console.log("鬼頭刀魚排")
+          } else if (intersects5.length == 0 ) {
+          }
+          if (intersects6.length > 0 ) {
+            coneIntro6.rotation.y += 0.05;
+            // console.log("碗粿")
+            displayFood = 6 //碗粿
+          } else if (intersects6.length == 0 ) {
+          }
         }
-        let intersects2 = raycaster.intersectObjects(
-          objects2
-        );
-        if (intersects2.length > 0  && model_loaded == true) {
-          coneIntro2.material.color.set(0xffffff)
-        } else if (intersects2.length == 0 && model_loaded == true) {
-          coneIntro2.material.color.set(0x67DAD5)
-        }
-        let intersects3 = raycaster.intersectObjects(
-          objects3
-        );
-        if (intersects3.length > 0  && model_loaded == true) {
-          coneIntro3.material.color.set(0xffffff)
-        } else if (intersects3.length == 0 && model_loaded == true) {
-          coneIntro3.material.color.set(0x67DAD5)
-        }
-        let intersects4 = raycaster.intersectObjects(
-          objects4
-        );
-        if (intersects4.length > 0  && model_loaded == true) {
-          coneIntro4.material.color.set(0xffffff)
-        } else if (intersects4.length == 0 && model_loaded == true) {
-          coneIntro4.material.color.set(0x67DAD5)
-        }
-        let intersects5 = raycaster.intersectObjects(
-          objects5
-        );
-        if (intersects5.length > 0  && model_loaded == true) {
-          coneIntro5.material.color.set(0xffffff)
-        } else if (intersects5.length == 0 && model_loaded == true) {
-          coneIntro5.material.color.set(0x67DAD5)
-        }
-        let intersects6 = raycaster.intersectObjects(
-          objects6
-        );
-        if (intersects6.length > 0  && model_loaded == true) {
-          coneIntro6.material.color.set(0xffffff)
-        } else if (intersects6.length == 0 && model_loaded == true) {
-          coneIntro6.material.color.set(0x67DAD5)
-        }
+        // console.log(store.state.FoodDisplay[0]["id"],store.state.FoodDisplay[0]["display"])
+        // console.log(displayFood)
       }
+          document.addEventListener("dblclick", function () {
+             if (displayFood == 1) store.commit("FoodChangeState",{id:'1',display:true})//海豬腳
+             if (displayFood == 2) store.commit("FoodChangeState",{id:'2',display:true})//肚臍橙
+             if (displayFood == 3) store.commit("FoodChangeState",{id:'3',display:true})//生魚片
+             if (displayFood == 4) store.commit("FoodChangeState",{id:'4',display:true})//味噌湯
+             if (displayFood == 5) store.commit("FoodChangeState",{id:'5',display:true})//鬼頭刀魚排
+             if (displayFood == 6) store.commit("FoodChangeState",{id:'6',display:true})//碗粿
+            });  
       createScene();
       createLight();
       createControls();
