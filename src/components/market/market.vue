@@ -229,7 +229,7 @@ export default {
             let marketOnProgress = parseInt((xhr.loaded / 115040681)*100)
 
             // console.log(PremarketOnProgress)
-            if( marketOnProgress != temp ){
+            if( marketOnProgress != temp && store.state.marketPercentage <= 100 ){
               store.commit("marketOnProgressCount")
               temp = temp + 1;
               console.log("marketPercentage: ", store.state.marketPercentage,"%")
