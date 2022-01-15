@@ -29,6 +29,7 @@ export default {
   watch: {},
   methods: {
     initThree(callbacks) {
+      ///DiningTable
       store.commit("marketOnProgressReset")
       let scene, camera, renderer, canvas;
       let controls;
@@ -36,24 +37,22 @@ export default {
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       let model_loaded = false;
       let fish_marked_wall_loaded = false;
-
       let car = false;
       let round = false;
-      let toMarketSceneIndex = false;
       let boat01,boat02;
-      const objects1 = [];
-      const objects2 = [];
-      const objects3 = [];
-      const objects4 = [];
-      const toMarket = [];
+      const fishmonger1 = [];
+      const fishmonger2 = [];
+      const fishmonger3 = [];
+      const fishmonger4 = [];
       let readyForOBJanimation = false;
 
-      var coneCommut1;
-      var coneCommut2;
-      var coneCommut3;
-      var coneCommut4;
-      var materialAns1;
-      var OctahedronChangeScene;
+      let coneCommut1;
+      let coneCommut2;
+      let coneCommut3;
+      let coneCommut4;
+      let OctahedronChangeScene;
+      let displayFishMonger;
+
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -204,7 +203,7 @@ export default {
         Lowersea.mesh.castShadow = false;
         Lowersea.mesh.receiveShadow = true;
       }
-let temp = 1;
+      let temp = 1;
       function createObject() {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
@@ -222,7 +221,6 @@ let temp = 1;
             boat01 = obj.getObjectByName("boat01")
             boat02 = obj.getObjectByName("boat02")
             scene.add(obj);
-
           },
           // called when loading is in progresses
           function (xhr) {
@@ -278,44 +276,32 @@ let temp = 1;
           }
         );
 
-
-        ///coneComuut
+        ///coneCommut
         var geometryCommut1 = new THREE.ConeBufferGeometry( 0.3, 0.3, 4 ); 
         var materialCommut1 = new THREE.MeshLambertMaterial( {color: 0x17B3BE} ); 
-        var coneCommut1 = new THREE.Mesh( geometryCommut1, materialCommut1 ); 
+        coneCommut1 = new THREE.Mesh( geometryCommut1, materialCommut1 ); 
         coneCommut1.rotation.x = Math.PI ;
         coneCommut2 = coneCommut1.clone();
         coneCommut3 = coneCommut1.clone();
         coneCommut4 = coneCommut1.clone();
         coneCommut1.position.set(5, 1.7+0.3, 3.6)
-        coneCommut2.position.set(-1.8, 1.7+0.3, 4.1)
+        coneCommut2.position.set(-3, 1.7+0.3, 4.1)
         coneCommut3.position.set(-1, 1.7+0.3, 4.2)
         coneCommut4.position.set(-20, 1.7+0.3, 3.3)
+        fishmonger1.push(coneCommut1)
+        fishmonger2.push(coneCommut2)
+        fishmonger3.push(coneCommut3)
+        fishmonger4.push(coneCommut4)
         scene.add( coneCommut1 );
         scene.add( coneCommut2 );
         scene.add( coneCommut3 );
         scene.add( coneCommut4 );
-        ///
-        ///coneAns
-        var geometryAns1 = new THREE.ConeBufferGeometry( 0.3, 0.3, 4 ); 
-        var materialAns1 = new THREE.MeshLambertMaterial( {color: 0xFEA30B} ); 
-        materialAns1 = new THREE.Mesh( geometryAns1, materialAns1 ); 
-        materialAns1.position.set(-4.07197666168212*10,0.169902980327606*10+0.3,-0.622704148292541*10)
-        materialAns1.rotation.x = Math.PI ;
-        scene.add(materialAns1)
-        ///
-        ///octahedron
-        let count = 0;
+        ///to calculate ans position
         var geometryChangeScene = new THREE.OctahedronGeometry(0.3);
         var materialChangeScene = new THREE.MeshLambertMaterial({color: 0x4EE4A5});
         OctahedronChangeScene = new THREE.Mesh(geometryChangeScene, materialChangeScene);
-        OctahedronChangeScene.position.set( -48.36,1.7,-1.01);
-        toMarket.push(OctahedronChangeScene);
-        scene.add(OctahedronChangeScene);
-        document.addEventListener("click", function () {
-             if(toMarketSceneIndex) count++;
-             if(toMarketSceneIndex && count > 1) store.commit("settoMarketTableSceneIndexTrue")
-            });
+        OctahedronChangeScene.position.set( -3.2897138595581*10,0.128223806619644*10,-0.402698934078216*10);
+        // scene.add(OctahedronChangeScene);
       }
       ////
       function createControls() {
@@ -330,7 +316,6 @@ let temp = 1;
       function delayForAnimate() {
         if (!doOnce) {
           doOnce = true;
-          // do the stuff
           setTimeout(() => {
             readyForOBJanimation = true
           }, 3000);
@@ -356,46 +341,49 @@ let temp = 1;
           controls.getObject().position,
           controls.getDirection(vector).clone()
         );
-        // console.log(controls.getObject().position)
-        // console.log(OctahedronChangeScene.position)
-        let disOctahedron = Math.cbrt(Math.pow(controls.getObject().position.x-OctahedronChangeScene.position.x,2)+Math.pow(controls.getObject().position.y-OctahedronChangeScene.position.y,2)+Math.pow(controls.getObject().position.z-OctahedronChangeScene.position.z,2))
-        let dis = false;
-        if(disOctahedron < 2) {
-          OctahedronChangeScene.rotation.y += 0.05;
-          dis = true;
+        let disOctahedron = Math.cbrt(Math.pow(controls.getObject().position.x
+            -OctahedronChangeScene.position.x,2)+Math.pow(controls.getObject().position.y
+            -OctahedronChangeScene.position.y,2)+Math.pow(controls.getObject().position.z
+            -OctahedronChangeScene.position.z,2))
+        if(disOctahedron < 1.5) {
+          store.commit("setQuestionMarketDisplayTrue")
         }
-        // let intersects1 = raycaster.intersectObjects(objects1);
-        // if (intersects1.length > 0 && model_loaded == true) {
-        //   animationOBJ1.play();
-        //   mixer1.update(0.016);
-        // } else if (intersects1.length == 0 && model_loaded == true) {
-        //   animationOBJ1.stop();
-        // }
-
-        // let intersects2 = raycaster.intersectObjects(objects2);
-        // if (intersects2.length > 0 && model_loaded == true) {
-        //   animationOBJ2.play();
-        //   mixer2.update(0.016);
-        // } else if (intersects2.length == 0 && model_loaded == true) {
-        //   animationOBJ2.stop();
-        // }
-        let intersectstoMarketTable = raycaster.intersectObjects(
-          toMarket
-        );
-        if (intersectstoMarketTable.length > 0 && dis && model_loaded == true) {
-          toMarketSceneIndex = true;
-          OctahedronChangeScene.material.color.set(0xffffff)
-        } else if (intersectstoMarketTable.length == 0 && dis && model_loaded == true) {
-          toMarketSceneIndex = false;
-          OctahedronChangeScene.material.color.set(0x4EE4A5)
-        }
-            
+        let intersectsFishMonger1 = raycaster.intersectObjects(fishmonger1);
+        let intersectsFishMonger2 = raycaster.intersectObjects(fishmonger2);
+        let intersectsFishMonger3 = raycaster.intersectObjects(fishmonger3);
+        let intersectsFishMonger4 = raycaster.intersectObjects(fishmonger4);
+        if (intersectsFishMonger1.length > 0 ) {
+              coneCommut1.rotation.y += 0.05;
+              displayFishMonger = 1;
+          } else{
+            }
+        if (intersectsFishMonger2.length > 0 ) {
+              coneCommut2.rotation.y += 0.05;
+              displayFishMonger = 2;
+          }else{
+            }
+        if (intersectsFishMonger3.length > 0 ) {
+              coneCommut3.rotation.y += 0.05;
+              displayFishMonger = 3;
+          }else{
+            }
+        if (intersectsFishMonger4.length > 0 ) {
+              coneCommut4.rotation.y += 0.05;
+              displayFishMonger = 4;
+          }else{
+            }
         if (readyForOBJanimation){
           boat01.position.y = Math.sin(Date.now()/500)*0.05-0.3;
           boat02.position.y = Math.sin(Date.now()/500)*0.05-0.3;
+          // console.log(store.state.FishMongerDisplay[0]["id"],store.state.FishMongerDisplay[0]["display"])
         }
-        
-      }
+      }        
+          document.addEventListener("dblclick", function () {
+             if (displayFishMonger == 1) store.commit("FishMongerChangeState",{id:'1',display: true})
+             if (displayFishMonger == 2) store.commit("FishMongerChangeState",{id:'2',display: true})
+             if (displayFishMonger == 3) store.commit("FishMongerChangeState",{id:'3',display: true})
+             if (displayFishMonger == 4) store.commit("FishMongerChangeState",{id:'4',display: true})
+            });  
       createScene();
       createLight();
       createControls();
