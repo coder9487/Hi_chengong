@@ -1,5 +1,5 @@
 <template>
-  <div id="navigator_group" v-if="0">
+  <div id="navigator_group" v-if="1">
     <q-icon class="text-dark systemIcon" size="sm" @click="BackComicBook">
       <img src="icons/meum_icon.png" />
     </q-icon>
@@ -42,15 +42,15 @@
       src="images/npc_fishmonger.png"
       class="introductor_image"
       alt=""
-      v-if="1"
+      v-if="ShowFishMonger"
     />
 
     <div class="introductor_chatbox">
-      <div class="introduceBox" v-if="1">
+      <div class="introduceBox" v-if="ShowFishMonger">
         <img src="images/UI/fishmonger_text.png" class="introduceChatBox" />
         <div class="btn_group">
-          <img src="images/UI/Group_51.svg"/>
-           <img src="images/UI/Group_50.svg"/>
+          <img src="images/UI/Group_51.svg" @click="fishMongerHandler()" />
+          <img src="images/UI/Group_50.svg" @click="fishMongerHandler()" />
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@
   <div v-if="$q.platform.is.mobilexl">
     <div
       class="control_pannle"
-      v-if="this.textIndex > 1"
+      v-if="0"
       v-touch-pan.prevent.mouse="handlePan"
     ></div>
   </div>
@@ -71,6 +71,44 @@ export default {
   setup() {
     const info = ref(null);
     const panning = ref(false);
+    let fishMonger_array = [];
+
+    class FishMonger {
+      photoindex = 0;
+      showEnable = 0;
+      number = 0;
+      lenght_of_array = 0;
+
+      constructor(textArrayLength, number) {
+        this.lenght_of_array = textArrayLength;
+        this.number = number;
+      }
+      imagePath(number) {
+        return `images/monger${number}/${number}-${photoindex + 1}.png`;
+      }
+      isShowEnable() {
+        if (this.showEnable)
+          if (this.photoindex <= this.lenght_of_array - 1) {
+            return true;
+          } else {
+            this.showEnable = false;
+            return false;
+          }
+      }
+      ToggleEnable() {
+        this.showEnable = 1;
+      }
+      nextImage() {
+        this.photoindex++;
+      }
+    }
+
+    let parameterArray = [3, 4, 3, 6];
+
+    for (let i = 0; i <= 3; i++) {
+      let fish = new FishMonger(parameterArray[i], i + 1);
+      fishMonger_array.push(fish);
+    }
 
     return {
       info,
@@ -112,17 +150,31 @@ export default {
     ChangeScene() {
       return this.$store.state.toMarketTableSceneIndex;
     },
-    // grandpa(){
-    //   return store.state.display2
-    // }
+    PopupChat() {
+      let stateObject = [];
+
+      stateObject.push(this.$store.state.FishMongerDisplay[0]["id"]);
+      stateObject.push(this.$store.state.FishMongerDisplay[0]["display"]);
+
+      return stateObject;
+    },
   },
   watch: {
     ChangeScene: function () {
       this.$router.push("DiningTable");
     },
+    PopupChat: function () {
+      //alert("detect fishMonger");
+      let object = this.PopupChat;
+
+      this.ShowFishMonger = object[0];
+      console.log(this.ShowFishMonger);
+      //this.$store.commit("FishMongerChangeState",{id:object,display:'false'})
+    },
   },
   data() {
     return {
+      ShowFishMonger: 0,
       talkContent: {
         startchat: ["./images/UI/text_1.svg", "./images/UI/text_2.svg"],
         grandpa: [],
@@ -146,26 +198,9 @@ export default {
       if (charactor == "startchat")
         if (this.textIndex.startchat < 2) return true;
     },
-
-    // right_rotate() {
-    //   this.$store.commit("setRotationRightTrue");
-    //   this.$store.commit("setRotationLeftFalse");
-    // },
-    // left_rotate() {
-    //   this.$store.commit("setRotationLeftTrue");
-    //   this.$store.commit("setRotationRightFalse");
-    // },
-    // go_forward() {
-    //   this.$store.commit("setForwardTrue");
-    // },
-    // go_stop() {
-    //   this.$store.commit("setForwardFalse");
-    // },
-    // clearAll() {
-    //   this.$store.commit("setRotationRightFalse");
-    //   this.$store.commit("setRotationLeftFalse");
-    //   this.$store.commit("setForwardFalse");
-    // },
+    fishMongerHandler() {
+      this.ShowFishMonger = 0;
+    },
 
     debug_message(msg) {
       console.log("message:", msg);
@@ -218,11 +253,11 @@ export default {
   margin-top: -50px;
   margin-left: 80%;
 }
-.introduceBox{
-  margin-top:0%;
+.introduceBox {
+  margin-top: 0%;
   display: grid;
   width: 100vw;
-  height:100vh;
+  height: 100vh;
   // background-color: darkgray;
   opacity: 1;
 }
@@ -274,21 +309,19 @@ export default {
   bottom: 5%;
   left: 3%;
 }
-.btn_group{
-    margin-top: -15%;
-    display: flex;
-    margin-left: 17%;
-
+.btn_group {
+  margin-top: -15%;
+  display: flex;
+  margin-left: 17%;
 }
-.btn_group *{
-float: left;
-// border-radius: 50px;
-margin-left: 15%;
-// background-color:orange;
-z-index: 51;
-// height:50px;
-width:30%;
-// text-align: center
-
+.btn_group * {
+  float: left;
+  // border-radius: 50px;
+  margin-left: 15%;
+  // background-color:orange;
+  z-index: 51;
+  // height:50px;
+  width: 30%;
+  // text-align: center
 }
 </style>
