@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import * as THREE from "../../../node_modules/three/build/three.module.js";
-import { FirstPersonCameraControl } from "../../../node_modules/three/src/FirstPersonCameraControls.js";
+import * as THREE from "three/build/three.module.js";
+import { FirstPersonCameraControl } from "../FirstPersonCameraControls.js";
 import store from "../../store/index";
 export default {
   name: "three",
@@ -194,6 +194,7 @@ export default {
           "../models/market_table.json",
           // called when resource is loaded
           function (obj) {
+            console.log(obj)
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);

@@ -8,7 +8,7 @@
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 import * as THREE from "three/build/three.module.js";
-import { FirstPersonCameraControl } from "./FirstPersonCameraControls.js";
+import { FirstPersonCameraControl } from "../FirstPersonCameraControls.js";
 import { lottie } from 'lottie-web'
 import store from "../../store/index";
 export default {
@@ -213,6 +213,7 @@ export default {
           "../models/market2.json",
           // called when resource is loaded
           function (obj) {
+            console.log(obj)
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             obj.alphaTest = 0.7;
@@ -220,11 +221,12 @@ export default {
             controls.colliders = obj;
             boat01 = obj.getObjectByName("boat01")
             boat02 = obj.getObjectByName("boat02")
+            console.log(boat01)
             scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log(xhr.loaded)
+            // console.log(xhr.loaded)
             // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
             let marketOnProgress = parseInt((xhr.loaded / 126596399)*100)
 
