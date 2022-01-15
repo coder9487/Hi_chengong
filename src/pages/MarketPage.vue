@@ -1,6 +1,6 @@
 <template>
   <div class="fullViewPage">
-    <MarketView v-if="1" id="MarketView"></MarketView>
+    <MarketView  id="MarketView"></MarketView>
     <Navigate id="Navigate"></Navigate>
   </div>
 </template>
@@ -21,22 +21,7 @@ export default defineComponent({
   },
   setup() {
 
-    //store.state.markedtOnProgress
 
-    //   let interval = null;
-    //   console.log('timer working')
-    //   setTimeout(function () {
-    //     interval = setInterval(function () {
-    //       // Your code here
-
-    //       if (store.state.markedtOnProgress == true)
-    //       {
-    //         clearInterval(interval);
-    //         useQuasar().loading.hide()
-    //       }
-    //     }, 500);
-
-    //   }, 50);
   },
   watch: {},
   data() {
