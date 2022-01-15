@@ -1,49 +1,58 @@
 <template>
-  <div id="navigator_group">
+  <div id="navigator_group" v-if="0">
     <q-icon class="text-dark systemIcon" size="sm" @click="BackComicBook">
       <img src="icons/meum_icon.png" />
     </q-icon>
+
     <img
       src="images/npc.png"
       class="navigator_image"
       alt=""
-      v-if="ShowNPC()"
+      v-if="ShowNPC('startchat')"
     />
 
     <div class="navigator_chatbox">
-      <q-card id="chat_card_1" class="chat_card" v-if="this.textIndex == 0">
+      <q-card
+        id="notificaionBox_1"
+        class="notificaionBox"
+        v-if="ShowNPC('startchat')"
+      >
         <q-card-section>
-          <img class="text_size" :src="textContentAccess(0)" />
+          <img
+            class="text_size"
+            :src="talkContent.startchat[this.textIndex.startchat]"
+          />
           <q-btn
             class="chatContentButton"
             flat
             round
-            size="lg"
-            icon="play_circle"
-            @click="changeText()"
+            size="xl"
+            icon="img:icons/nextBtn.svg"
+            @click="this.textIndex.startchat++"
           />
         </q-card-section>
       </q-card>
+    </div>
+  </div>
 
-      <q-card id="chat_card_2" class="chat_card" v-if="this.textIndex == 1">
-        <q-card-section>
-          <!-- <img
-            class="chat_icon"
-            id="chat_icon_2"
-            src="images/UI/text_2_icon.svg"
-            alt=""
-          /> -->
-          <img :src="textContentAccess(1)" class="text_size" id="chat_text_2" />
-          <q-btn
-            class="chatContentButton"
-            flat
-            round
-            size="lg"
-            icon="clear"
-            @click="changeText()"
-          />
-        </q-card-section>
-      </q-card>
+  <!-- ------------------------------------------------------------------ -->
+
+  <div id="introduce_group">
+    <img
+      src="images/npc_fishmonger.png"
+      class="introductor_image"
+      alt=""
+      v-if="1"
+    />
+
+    <div class="introductor_chatbox">
+      <div class="introduceBox" v-if="1">
+        <img src="images/UI/fishmonger_text.png" class="introduceChatBox" />
+        <div class="btn_group">
+          <img src="images/UI/Group_51.svg"/>
+           <img src="images/UI/Group_50.svg"/>
+        </div>
+      </div>
     </div>
   </div>
   <div v-if="$q.platform.is.mobilexl">
@@ -57,9 +66,6 @@
 <script>
 import { ref } from "vue";
 //import { store } from '../../store'
-
-
-
 
 export default {
   setup() {
@@ -100,27 +106,29 @@ export default {
           panning.value = false;
         }
       },
-
     };
   },
   computed: {
-    ChangeScene(){
-      return this.$store.state.toMarketTableSceneIndex 
+    ChangeScene() {
+      return this.$store.state.toMarketTableSceneIndex;
     },
     // grandpa(){
     //   return store.state.display2
     // }
-
   },
-  watch:{
-    ChangeScene:function(){
-      this.$router.push("DiningTable")
-    }
+  watch: {
+    ChangeScene: function () {
+      this.$router.push("DiningTable");
+    },
   },
   data() {
     return {
-      talkContent: ["./images/UI/text_1.svg", "./images/UI/text_2.svg","","/images/UI/text_2.svg"],
-      textIndex: 0,
+      talkContent: {
+        startchat: ["./images/UI/text_1.svg", "./images/UI/text_2.svg"],
+        grandpa: [],
+        fishmonger: [],
+      },
+      textIndex: { startchat: 0, grandpa: 0, fishmonger: 0 },
       direction: {
         forward: false,
         backword: false,
@@ -130,23 +138,13 @@ export default {
     };
   },
   methods: {
-    BackComicBook()
-    {
-      this.$router.push("/ComicBook")
+    BackComicBook() {
+      this.$router.push("/ComicBook");
     },
-    changeText() {
-      this.textIndex++;
-      //if (this.textIndex + 1 > this.talkContent.length) this.textIndex = 0;
-      console.log("return " + this.talkContent[this.textIndex]);
 
-      // return talkContent[textIndex]
-    },
-    textContentAccess(index) {
-      return this.talkContent[index];
-    },
-    ShowNPC(){
-      if(this.textIndex != 2)
-        return true
+    ShowNPC(charactor) {
+      if (charactor == "startchat")
+        if (this.textIndex.startchat < 2) return true;
     },
 
     // right_rotate() {
@@ -181,10 +179,23 @@ export default {
     width: 400px;
   }
 }
+#introduce_group {
+  position: center;
+  display: block;
+  background-color: aqua;
+}
 
 .navigator_image {
   width: auto;
   height: 38%;
+  z-index: 50;
+  right: 6%;
+  bottom: 0;
+  position: fixed;
+}
+.introductor_image {
+  width: auto;
+  height: 66%;
   z-index: 50;
   right: 6%;
   bottom: 0;
@@ -199,7 +210,7 @@ export default {
   size: 15px;
   position: fixed;
 }
-.chat_card {
+.notificaionBox {
   border-radius: 20px;
   display: inline-block;
 }
@@ -207,23 +218,36 @@ export default {
   margin-top: -50px;
   margin-left: 80%;
 }
-
-#chat_card_2 {
-  float: left;
-  margin-left: 20px;
+.introduceBox{
+  margin-top:0%;
+  display: grid;
+  width: 100vw;
+  height:100vh;
+  // background-color: darkgray;
+  opacity: 1;
+}
+.introduceBox * {
+  margin-left: 20%;
   margin-top: 10%;
+  width: 50%;
+  display: fixed;
+  z-index: 60;
+  // background-color: aqua;
 }
 
-#chat_text_2 {
-  width: 65%;
-  height: auto;
+.introduceBox * btn_group {
+  width: 50%;
+  display: inline-flex;
+  margin-top: -10%;
 }
+.introduceBox * btn_group q-btn {
+  width: 200px;
+}
+
 .text_size {
   width: 80%;
   margin-top: 5%;
-}
-.chat_icon {
-  width: 15%;
+  margin-left: 10%;
 }
 
 .control_pannle {
@@ -249,5 +273,22 @@ export default {
   position: fixed;
   bottom: 5%;
   left: 3%;
+}
+.btn_group{
+    margin-top: -15%;
+    display: flex;
+    margin-left: 17%;
+
+}
+.btn_group *{
+float: left;
+// border-radius: 50px;
+margin-left: 15%;
+// background-color:orange;
+z-index: 51;
+// height:50px;
+width:30%;
+// text-align: center
+
 }
 </style>

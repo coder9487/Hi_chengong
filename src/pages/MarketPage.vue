@@ -1,6 +1,6 @@
 <template>
   <div class="fullViewPage">
-    <MarketView id="MarketView"></MarketView>
+    <MarketView v-if="1" id="MarketView"></MarketView>
     <Navigate id="Navigate"></Navigate>
   </div>
 </template>
