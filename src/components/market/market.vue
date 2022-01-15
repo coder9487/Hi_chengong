@@ -8,7 +8,7 @@
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 import * as THREE from "three/build/three.module.js";
-import { FirstPersonCameraControl } from "three/src/FirstPersonCameraControls.js";
+import { FirstPersonCameraControl } from "./FirstPersonCameraControls.js";
 import { lottie } from 'lottie-web'
 import store from "../../store/index";
 export default {
@@ -224,9 +224,9 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log(xhr.loaded)
+            console.log(xhr.loaded)
             // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
-            let marketOnProgress = parseInt((xhr.loaded / 115040681)*100)
+            let marketOnProgress = parseInt((xhr.loaded / 126596399)*100)
 
             // console.log(PremarketOnProgress)
             if( marketOnProgress != temp ){
@@ -234,7 +234,7 @@ export default {
               temp = temp + 1;
               console.log("marketPercentage: ", store.state.marketPercentage,"%")
             }
-            if (xhr.loaded / 115040681  == 1) {
+            if (xhr.loaded / 126596399  == 1) {
               fish_marked_wall_loaded = true;  
             }
           }
