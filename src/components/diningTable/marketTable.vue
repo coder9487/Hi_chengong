@@ -215,7 +215,7 @@ export default {
               temp = temp+1;
               console.log("marketTablePercentage: ", store.state.marketTablePercentage,"%")
             }
-            if (xhr.loaded / 109568617  == 1) {   
+            if (xhr.loaded / 109568636  == 1) {   
               marketTable_loaded = true;
             }
           }
