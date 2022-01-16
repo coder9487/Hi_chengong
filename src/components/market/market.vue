@@ -86,7 +86,7 @@ export default {
         );
         camera.position.x = 13;
         camera.position.y = 1.5;
-        camera.position.z = -2;
+        camera.position.z = -2.5;
         camera.lookAt(-5, 1.5, 0);
 
         // const axesHelper = new THREE.AxesHelper(5);
@@ -308,7 +308,7 @@ export default {
       function createControls() {
         controls = new FirstPersonCameraControl(camera, document.body);
         controls.enabled = true;
-        controls.applyGravity = true;
+        controls.applyGravity = false;
         controls.applyCollision = true;
         controls.positionEasing = true;
       }

@@ -207,15 +207,15 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log(xhr.loaded)
-            let marketTableOnProgress = parseInt((xhr.loaded / 109568617)*100)
+            console.log(xhr.loaded)
+            let marketTableOnProgress = parseInt((xhr.loaded / 109568636)*100)
             // console.log(PremarketOnProgress)
             if( marketTableOnProgress != temp && store.state.marketTablePercentage <= 100){
               store.commit("marketTableOnProgressCount")
-              temp = temp+1;
+              temp = temp + 1;
               console.log("marketTablePercentage: ", store.state.marketTablePercentage,"%")
             }
-            if (xhr.loaded / 109568617  == 1) {   
+            if (xhr.loaded / 109568636  == 1) {   
               marketTable_loaded = true;
             }
           }
