@@ -260,7 +260,6 @@ export default {
         scene.add( coneIntro4 );
         scene.add( coneIntro5 );
         scene.add( coneIntro6 );
-
       }
 
       function createControls() {
