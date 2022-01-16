@@ -172,6 +172,9 @@ export default {
 
       return stateObject;
     },
+    approachGrandpa() {
+      return this.$store.state.questionMarketDisplay;
+    },
   },
   watch: {
     ChangeScene: function () {
@@ -188,12 +191,24 @@ export default {
       this.FishMonger.imagePath();
       console.log(this.intrpducerShowFlag);
     },
+    approachGrandpa: function () {
+      this.textIndex.startchat++;
+
+    }
+    
   },
   data() {
     return {
       ShowFishMonger: 0,
       talkContent: {
-        startchat: ["./images/UI/text_1.svg", "./images/UI/text_2.svg"],
+        startchat: [
+          "./images/UI/hint1-(1).svg",
+          "./images/UI/hint1-(2).svg",
+          "./images/UI/hint1-(3).svg",
+          "./images/UI/hint1-(4).svg",
+          "",
+          "",
+        ],
         grandpa: [],
         fishmonger: [],
       },
@@ -213,7 +228,7 @@ export default {
 
     ShowNPC(charactor) {
       if (charactor == "startchat")
-        if (this.textIndex.startchat < 2) return true;
+        if (this.textIndex.startchat != 4 && this.textIndex.startchat < 6) return true;
     },
     fishMongerHandler() {
       this.ShowFishMonger = 0;

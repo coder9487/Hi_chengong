@@ -32,23 +32,29 @@
   <div class="introduceTextBox">
     <img
       class="introduceText"
-      src="images/diningtable/miso_soup.png"
-      v-if="debug"
+      :src="dishImagePath(showControl.displayIndex)"
+      v-if="showControl.isDisplay"
     />
-    <img class="icon" src="images/diningtable/icon_close.png" v-if="debug" />
+    <img
+      class="icon"
+      src="images/diningtable/icon_close.png"
+      v-if="showControl.isDisplay"
+      @click="showControl.isDisplay = false"
+    />
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { store } from "../../store";
 
 export default {
   setup() {
     const info = ref(null);
     const panning = ref(false);
-
+    let showControl = reactive({ isDisplay: false, displayIndex: 0 });
     return {
-      debug: 1,
+      debug: 0,
+      showControl,
       info,
       panning,
       handlePan({ evt, ...newInfo }) {
@@ -91,20 +97,29 @@ export default {
     // grandpa(){
     //   return store.state.display2
     // }
-    DishToDisPlay()
-    {
-      return this.$store.state.FoodDisplay 
-    }
-
+    DishToDisPlay() {
+      return this.$store.state.FoodDisplay[0];
+    },
   },
   watch: {
     DishToDisPlay: function () {
-     // alert("In fishman");
-     console.log(this.DishToDisPlay)
+      let obj = this.DishToDisPlay;
+      this.showControl.isDisplay = 1;
+      this.showControl.displayIndex=obj.id;
+      //console.log(obj.id);
     },
   },
   data() {
     return {
+      dishImageUrl: [
+        "hai_di_ca",
+        "orange",
+        "sashimi",
+        "miso_soup",
+        "mahi_fish",
+        "wan_que",
+      ], //
+
       talkContent: [
         "./images/UI/text_1.svg",
         "./images/UI/text_2.svg",
@@ -121,6 +136,12 @@ export default {
     };
   },
   methods: {
+    dishImagePath(index) {
+      let returnStr = `images/diningtable/${this.dishImageUrl[index-1]}.png`;
+      console.log(returnStr);
+      return returnStr;
+    },
+
     BackComicBook() {
       this.$router.push("/ComicBook");
     },
@@ -180,23 +201,11 @@ export default {
   width: 80%;
 }
 
-.icon{
+.icon {
   width: 40px;
-  margin-left:-7%;
+  margin-left: -7%;
   margin-bottom: 35%;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 .navigator_image {
   width: auto;
