@@ -45,12 +45,18 @@ export default {
       const fishmonger2 = [];
       const fishmonger3 = [];
       const fishmonger4 = [];
+      let displayFishMonger1 = false;
+      let displayFishMonger2 = false;
+      let displayFishMonger3 = false;
+      let displayFishMonger4 = false;
       let readyForOBJanimation = false;
 
       let coneCommut1;
       let coneCommut2;
       let coneCommut3;
       let coneCommut4;
+
+
       let OctahedronChangeScene;
       let displayFishMonger;
 
@@ -308,7 +314,7 @@ export default {
       function createControls() {
         controls = new FirstPersonCameraControl(camera, document.body);
         controls.enabled = true;
-        controls.applyGravity = false;
+        controls.applyGravity = false; 
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
@@ -355,23 +361,27 @@ export default {
         let intersectsFishMonger4 = raycaster.intersectObjects(fishmonger4);
         if (intersectsFishMonger1.length > 0 ) {
               coneCommut1.rotation.y += 0.05;
-              displayFishMonger = 1;
+              displayFishMonger1 = true;
           } else{
+            displayFishMonger1 = false;
             }
         if (intersectsFishMonger2.length > 0 ) {
               coneCommut2.rotation.y += 0.05;
-              displayFishMonger = 2;
+              displayFishMonger2 = true;
           }else{
+            displayFishMonger2 = false;
             }
         if (intersectsFishMonger3.length > 0 ) {
               coneCommut3.rotation.y += 0.05;
-              displayFishMonger = 3;
+              displayFishMonger3 = true;
           }else{
+            displayFishMonger3 = false;
             }
         if (intersectsFishMonger4.length > 0 ) {
               coneCommut4.rotation.y += 0.05;
-              displayFishMonger = 4;
+              displayFishMonger4 = true;
           }else{
+            displayFishMonger4 = false;
             }
         if (readyForOBJanimation){
           boat01.position.y = Math.sin(Date.now()/500)*0.05-0.3;
@@ -380,10 +390,10 @@ export default {
         }
       }        
           document.addEventListener("dblclick", function () {
-             if (displayFishMonger == 1) store.commit("FishMongerChangeState",{id:'1',display: true})
-             if (displayFishMonger == 2) store.commit("FishMongerChangeState",{id:'2',display: true})
-             if (displayFishMonger == 3) store.commit("FishMongerChangeState",{id:'3',display: true})
-             if (displayFishMonger == 4) store.commit("FishMongerChangeState",{id:'4',display: true})
+             if (displayFishMonger1) store.commit("FishMongerChangeState",{id:'1',display: true})
+             if (displayFishMonger2) store.commit("FishMongerChangeState",{id:'2',display: true})
+             if (displayFishMonger3) store.commit("FishMongerChangeState",{id:'3',display: true})
+             if (displayFishMonger4) store.commit("FishMongerChangeState",{id:'4',display: true})
             });  
       createScene();
       createLight();
