@@ -42,15 +42,22 @@
       src="images/npc_fishmonger.png"
       class="introductor_image"
       alt=""
-      v-if="ShowFishMonger"
+      v-if="intrpducerShowFlag.showEnable"
     />
 
     <div class="introductor_chatbox">
-      <div class="introduceBox" v-if="ShowFishMonger">
-        <img src="images/UI/fishmonger_text.png" class="introduceChatBox" />
+      <div class="introduceBox" v-if="intrpducerShowFlag.showEnable" >
+        <img
+          :src="fishMonger.imagePath(intrpducerShowFlag.showIndex)"
+          class="introduceChatBox"
+          :key="fishMonger.imagePath(intrpducerShowFlag.showIndex)"
+        />
         <div class="btn_group">
-          <img src="images/UI/Group_51.svg" @click="fishMongerHandler()" />
-          <img src="images/UI/Group_50.svg" @click="fishMongerHandler()" />
+          <img src="images/UI/Group_51.svg" @click="fishMonger.nextImage()" />
+          <img
+            src="images/UI/Group_50.svg"
+            @click="fishMonger.clearAndExit()"
+          />
         </div>
       </div>
     </div>
@@ -64,7 +71,7 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 //import { store } from '../../store'
 
 export default {
@@ -72,45 +79,48 @@ export default {
     const info = ref(null);
     const panning = ref(false);
     let fishMonger_array = [];
+    let intrpducerShowFlag = reactive({ showEnable: false, showIndex: 0 });
 
     class FishMonger {
-      photoindex = 0;
-      showEnable = 0;
-      number = 0;
-      lenght_of_array = 0;
+      constructor(indexArray, controlObject) {
+        this.indexArray = indexArray;
+        this.controlObject = controlObject;
+        this.photoindex = 0;
+      }
+      imagePath(fishmonger_seq) {
+        let returnStr = " ";
+        console.log('recieve swq is ',fishmonger_seq)
+        if (this.photoindex <= this.indexArray[fishmonger_seq-1] - 1) {
+          console.log("photoindex", this.photoindex);
+          console.log("total inedx", this.indexArray[fishmonger_seq-1] - 1);
 
-      constructor(textArrayLength, number) {
-        this.lenght_of_array = textArrayLength;
-        this.number = number;
-      }
-      imagePath(number) {
-        return `images/monger${number}/${number}-${photoindex + 1}.png`;
-      }
-      isShowEnable() {
-        if (this.showEnable)
-          if (this.photoindex <= this.lenght_of_array - 1) {
-            return true;
-          } else {
-            this.showEnable = false;
-            return false;
-          }
-      }
-      ToggleEnable() {
-        this.showEnable = 1;
+          returnStr = `images/monger${fishmonger_seq}/${fishmonger_seq}-${
+            this.photoindex + 1
+          }.png`;
+        } else {
+          this.showEnable = false;
+        }
+        console.log("Return image path", returnStr);
+        return returnStr;
       }
       nextImage() {
         this.photoindex++;
+        console.log("AFTER add ", this.photoindex);
+        // this.$forceUpdate();
+      }
+      clearAndExit() {
+        this.photoindex = 0;
+        this.controlObject.showEnable = false;
+        this.controlObject.showIndex = 0;
       }
     }
 
-    let parameterArray = [3, 4, 3, 6];
-
-    for (let i = 0; i <= 3; i++) {
-      let fish = new FishMonger(parameterArray[i], i + 1);
-      fishMonger_array.push(fish);
-    }
+    const parameterArray = [3, 4, 3, 6];
+    let fishMonger = new FishMonger(parameterArray, intrpducerShowFlag);
 
     return {
+      fishMonger,
+      intrpducerShowFlag,
       info,
       panning,
       handlePan({ evt, ...newInfo }) {
@@ -169,7 +179,14 @@ export default {
 
       this.ShowFishMonger = object[0];
       console.log(this.ShowFishMonger);
-      //this.$store.commit("FishMongerChangeState",{id:object,display:'false'})
+
+      // this.fishMonger_array[parseInt(this.ShowFishMonger, 10)].ToggleEnable();
+      this.intrpducerShowFlag.showEnable = true;
+      this.intrpducerShowFlag.showIndex = parseInt(this.ShowFishMonger, 10);
+      // this.$store.commit("FishMongerChangeState", {
+      //   id: object,
+      //   display: "false",
+      // });
     },
   },
   data() {
