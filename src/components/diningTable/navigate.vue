@@ -91,10 +91,16 @@ export default {
     // grandpa(){
     //   return store.state.display2
     // }
+    DishToDisPlay()
+    {
+      return this.$store.state.FoodDisplay 
+    }
+
   },
   watch: {
-    fishman: function () {
-      alert("In fishman");
+    DishToDisPlay: function () {
+     // alert("In fishman");
+     console.log(this.DishToDisPlay)
     },
   },
   data() {

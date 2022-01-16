@@ -7,7 +7,6 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import store from "../store";
 import "../components/market/loading";
 import MarketView from "../components/market/market.vue";
 import Navigate from "../components/market/navigate.vue";
