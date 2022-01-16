@@ -249,7 +249,7 @@ export default {
   width: auto;
   height: 66%;
   z-index: 50;
-  right: 6%;
+  right: 12%;
   bottom: 0;
   position: fixed;
 }
