@@ -37,7 +37,7 @@
 
   <!-- ------------------------------------------------------------------ -->
 
-  <div id="introduce_group">
+  <div id="introduce_group" v-if="1">
     <img
       src="images/npc_fishmonger.png"
       class="introductor_image"
@@ -46,17 +46,17 @@
     />
 
     <div class="introductor_chatbox">
-      <div class="introduceBox" v-if="intrpducerShowFlag.showEnable" >
-        <img
-          :src="fishMonger.imagePath(intrpducerShowFlag.showIndex)"
-          class="introduceChatBox"
-          :key="fishMonger.imagePath(intrpducerShowFlag.showIndex)"
-        />
+      <div class="introduceBox" v-if="intrpducerShowFlag.showEnable">
+        <img :src="intrpducerShowFlag.imageUrl" class="introduceChatBox" />
         <div class="btn_group">
-          <img src="images/UI/Group_51.svg" @click="fishMonger.nextImage()" />
           <img
             src="images/UI/Group_50.svg"
-            @click="fishMonger.clearAndExit()"
+            @click="FishMonger.clearAndExit()"
+          />
+          <img
+            src="images/UI/Group_51.svg"
+            v-if="!intrpducerShowFlag.lastPhoto"
+            @click="FishMonger.nextImage()"
           />
         </div>
       </div>
@@ -78,48 +78,55 @@ export default {
   setup() {
     const info = ref(null);
     const panning = ref(false);
-    let fishMonger_array = [];
-    let intrpducerShowFlag = reactive({ showEnable: false, showIndex: 0 });
+    let intrpducerShowFlag = reactive({
+      showEnable: false,
+      showIndex: 0,
+      imageUrl: "",
+      lastPhoto: false,
+    });
 
-    class FishMonger {
-      constructor(indexArray, controlObject) {
-        this.indexArray = indexArray;
-        this.controlObject = controlObject;
-        this.photoindex = 0;
+    class FishMonger_class {
+      indexArray = [0, 3, 4, 3, 6];
+      // constructor(indexArray, controlObject) {
+      //   this.indexArray = indexArray;
+      //   this.controlObject = controlObject;
+      //   this.photoindex = 0;
+      // }
+      controlObject = null;
+      photoindex = 0;
+      Init(passInobj) {
+        this.controlObject = passInobj;
       }
-      imagePath(fishmonger_seq) {
-        let returnStr = " ";
-        console.log('recieve swq is ',fishmonger_seq)
-        if (this.photoindex <= this.indexArray[fishmonger_seq-1] - 1) {
-          console.log("photoindex", this.photoindex);
-          console.log("total inedx", this.indexArray[fishmonger_seq-1] - 1);
-
-          returnStr = `images/monger${fishmonger_seq}/${fishmonger_seq}-${
-            this.photoindex + 1
-          }.png`;
-        } else {
-          this.showEnable = false;
-        }
-        console.log("Return image path", returnStr);
-        return returnStr;
+      imagePath() {
+        // `images/monger${fishmonger_seq}/${fishmonger_seq}-${ this.photoindex + 1}.png`;
+        this.controlObject.imageUrl = `images/monger${
+          this.controlObject.showIndex
+        }/${this.controlObject.showIndex}-${this.photoindex + 1}.png`;
       }
       nextImage() {
         this.photoindex++;
-        console.log("AFTER add ", this.photoindex);
+        if (
+          this.photoindex ==
+          this.indexArray[this.controlObject.showIndex] - 1
+        ) {
+          this.controlObject.lastPhoto = true;
+        }
+        this.imagePath();
+
         // this.$forceUpdate();
       }
       clearAndExit() {
         this.photoindex = 0;
         this.controlObject.showEnable = false;
         this.controlObject.showIndex = 0;
+        this.controlObject.lastPhoto = false;
       }
     }
-
-    const parameterArray = [3, 4, 3, 6];
-    let fishMonger = new FishMonger(parameterArray, intrpducerShowFlag);
+    let FishMonger = new FishMonger_class();
+    FishMonger.Init(intrpducerShowFlag);
 
     return {
-      fishMonger,
+      FishMonger,
       intrpducerShowFlag,
       info,
       panning,
@@ -138,8 +145,6 @@ export default {
             //this.left_rotate();
           }
           if (newInfo.offset.y < -10) {
-            //go forward
-            //this.go_forward();
           }
         }
         if (newInfo.isFinal) {
@@ -162,7 +167,6 @@ export default {
     },
     PopupChat() {
       let stateObject = [];
-
       stateObject.push(this.$store.state.FishMongerDisplay[0]["id"]);
       stateObject.push(this.$store.state.FishMongerDisplay[0]["display"]);
 
@@ -178,15 +182,11 @@ export default {
       let object = this.PopupChat;
 
       this.ShowFishMonger = object[0];
-      console.log(this.ShowFishMonger);
 
-      // this.fishMonger_array[parseInt(this.ShowFishMonger, 10)].ToggleEnable();
       this.intrpducerShowFlag.showEnable = true;
       this.intrpducerShowFlag.showIndex = parseInt(this.ShowFishMonger, 10);
-      // this.$store.commit("FishMongerChangeState", {
-      //   id: object,
-      //   display: "false",
-      // });
+      this.FishMonger.imagePath();
+      console.log(this.intrpducerShowFlag);
     },
   },
   data() {
