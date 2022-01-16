@@ -1,6 +1,7 @@
 <template>
   <div>
     <canvas id="three"></canvas>
+    <canvas id="circle"></canvas>
   </div>
 </template>
 
@@ -83,13 +84,13 @@ export default {
           0.01,
           1000
         );
-        camera.position.x = -1;
-        camera.position.y = 1;
-        camera.position.z = 0;
+        camera.position.x = 13;
+        camera.position.y = 1.5;
+        camera.position.z = -2;
         camera.lookAt(-5, 1.5, 0);
 
-        const axesHelper = new THREE.AxesHelper(5);
-        scene.add(axesHelper);
+        // const axesHelper = new THREE.AxesHelper(5);
+        // scene.add(axesHelper);
         scene.background = new THREE.CubeTextureLoader()
           .setPath("../")
           .load([
@@ -213,7 +214,6 @@ export default {
           "../models/market2.json",
           // called when resource is loaded
           function (obj) {
-            console.log(obj)
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             obj.alphaTest = 0.7;
@@ -221,14 +221,13 @@ export default {
             controls.colliders = obj;
             boat01 = obj.getObjectByName("boat01")
             boat02 = obj.getObjectByName("boat02")
-            console.log(boat01)
             scene.add(obj);
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log(xhr.loaded)
             // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
-            let marketOnProgress = parseInt((xhr.loaded / 126584512)*100)
+            let marketOnProgress = parseInt((xhr.loaded / 131005377)*100)
 
             // console.log(PremarketOnProgress)
             if( marketOnProgress != temp && store.state.marketPercentage <= 100 ){
@@ -236,7 +235,7 @@ export default {
               temp = temp + 1;
               console.log("marketPercentage: ", store.state.marketPercentage,"%")
             }
-            if (xhr.loaded / 126584512  == 1) {
+            if (xhr.loaded / 131005377  == 1) {
               fish_marked_wall_loaded = true;  
             }
           }
@@ -286,10 +285,10 @@ export default {
         coneCommut2 = coneCommut1.clone();
         coneCommut3 = coneCommut1.clone();
         coneCommut4 = coneCommut1.clone();
-        coneCommut1.position.set(5, 1.7+0.3, 3.6)
-        coneCommut2.position.set(-3, 1.7+0.3, 4.1)
-        coneCommut3.position.set(-1, 1.7+0.3, 4.2)
-        coneCommut4.position.set(-20, 1.7+0.3, 3.3)
+        coneCommut1.position.set(0.499158293008804*10, 0.169902980327606*10+0.3, 0.366711437702178*10)
+        coneCommut2.position.set(-0.183853179216384*10, 0.169902980327606*10+0.3, 0.411831200122833*10)
+        coneCommut3.position.set(-0.972800016403198*10, 0.169902980327606*10+0.3, 0.419523656368255*10)
+        coneCommut4.position.set(-2.06137442588806*10, 0.169902980327606*10+0.3, 0.332737356424331*10)
         fishmonger1.push(coneCommut1)
         fishmonger2.push(coneCommut2)
         fishmonger3.push(coneCommut3)
@@ -406,5 +405,14 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
+}
+#circle {
+  width: 10px;
+  height: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border-radius: 99em;
+  background-color:white ;
 }
 </style>

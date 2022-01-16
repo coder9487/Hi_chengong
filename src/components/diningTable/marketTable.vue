@@ -1,6 +1,7 @@
 <template>
   <div>
     <canvas id="three"></canvas>
+    <canvas id="circle"></canvas>
   </div>
 </template>
 
@@ -29,6 +30,7 @@ export default {
       let marketTable_loaded = false;
       let model_loaded = false;
       let displayFood = 0;
+      let whiteradishslice1,whiteradishslice2;
 
       const objects1 = [];
       const objects2 = [];
@@ -194,22 +196,26 @@ export default {
           "../models/market_table.json",
           // called when resource is loaded
           function (obj) {
-            console.log(obj)
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
+            whiteradishslice1 = obj.getObjectByName("Plane062");
+            whiteradishslice2 = obj.getObjectByName("Plane044");
+
+            whiteradishslice1.visible = false;
+            whiteradishslice2.visible = false;
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log(xhr.loaded)
-            let marketTableOnProgress = parseInt((xhr.loaded / 93763876)*100)
+            let marketTableOnProgress = parseInt((xhr.loaded / 109568617)*100)
             // console.log(PremarketOnProgress)
             if( marketTableOnProgress != temp && store.state.marketTablePercentage <= 100){
               store.commit("marketTableOnProgressCount")
               temp = temp+1;
               console.log("marketTablePercentage: ", store.state.marketTablePercentage,"%")
             }
-            if (xhr.loaded / 93763876  == 1) {   
+            if (xhr.loaded / 109568617  == 1) {   
               marketTable_loaded = true;
             }
           }
@@ -331,7 +337,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 #three {
   width: 100%;
@@ -339,5 +344,14 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
+}
+#circle {
+  width: 10px;
+  height: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border-radius: 99em;
+  background-color:white ;
 }
 </style>
