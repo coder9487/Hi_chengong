@@ -1,5 +1,5 @@
 <template>
-  <div id="navigator_group">
+  <div id="navigator_group" v-if="!debug">
     <q-icon class="text-dark systemIcon" size="sm" @click="BackComicBook">
       <img src="icons/meum_icon.png" />
     </q-icon>
@@ -29,6 +29,14 @@
       v-touch-pan.prevent.mouse="handlePan"
     ></div>
   </div>
+  <div class="introduceTextBox">
+    <img
+      class="introduceText"
+      src="images/diningtable/miso_soup.png"
+      v-if="debug"
+    />
+    <img class="icon" src="images/diningtable/icon_close.png" v-if="debug" />
+  </div>
 </template>
 <script>
 import { ref } from "vue";
@@ -40,6 +48,7 @@ export default {
     const panning = ref(false);
 
     return {
+      debug: 1,
       info,
       panning,
       handlePan({ evt, ...newInfo }) {
@@ -149,12 +158,39 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @media screen and (max-device-width: 768px) {
   .view {
     width: 400px;
   }
 }
+.introduceTextBox {
+  z-index: 50;
+  position: fixed;
+  bottom: 15%;
+  left: 10%;
+}
+.introduceTextBox * {
+  width: 80%;
+}
+
+.icon{
+  width: 40px;
+  margin-left:-7%;
+  margin-bottom: 35%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 .navigator_image {
   width: auto;

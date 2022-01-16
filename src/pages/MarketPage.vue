@@ -1,7 +1,7 @@
 <template>
   <div class="fullViewPage">
     <MarketView  id="MarketView"></MarketView>
-    <Navigate id="Navigate"></Navigate>
+    <Navigate id="Navigate" v-if="1"></Navigate>
   </div>
 </template>
 
