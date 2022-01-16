@@ -29,7 +29,12 @@ export default {
       let coneIntro6;
       let marketTable_loaded = false;
       let model_loaded = false;
-      let displayFood = 0;
+      let displayFood1 = false;
+      let displayFood2 = false;
+      let displayFood3 = false;
+      let displayFood4 = false;
+      let displayFood5 = false;
+      let displayFood6 = false;      
       let whiteradishslice1,whiteradishslice2;
 
       const objects1 = [];
@@ -280,51 +285,57 @@ export default {
         if(model_loaded){
           if (intersects1.length > 0 ) {
             coneIntro1.rotation.y += 0.05;
-            displayFood = 1 // 海豬腳
+            displayFood1 = true; // 海豬腳
             // console.log("海豬腳")
           } else if (intersects1.length == 0 ) {
+            displayFood1 = false;
           }
           if (intersects2.length > 0 ) {
-            displayFood = 2 //肚臍橙
+            displayFood2 = true; //肚臍橙
             coneIntro2.rotation.y += 0.05;
             // console.log("肚臍橙")
           } else if (intersects2.length == 0) {
+            displayFood2 = false;
           }
           if (intersects3.length > 0  ) {
             coneIntro3.rotation.y += 0.05;
-            displayFood = 3 //生魚片
+            displayFood3 = true; //生魚片
             // console.log("生魚片")
           } else if (intersects3.length == 0 ) {
+            displayFood3 = false;
           }
           if (intersects4.length > 0  ) {
             coneIntro4.rotation.y += 0.05;
-            displayFood = 4 //味噌湯
+            displayFood4 = true; //味噌湯
             // console.log("味噌湯")
           } else if (intersects4.length == 0) {
+            displayFood4 = false;
           }
           if (intersects5.length > 0 ) {
             coneIntro5.rotation.y += 0.05;
-            displayFood = 5 //鬼頭刀魚排
+            displayFood5 = true; //鬼頭刀魚排
             // console.log("鬼頭刀魚排")
           } else if (intersects5.length == 0 ) {
+            displayFood5 = false;
           }
           if (intersects6.length > 0 ) {
             coneIntro6.rotation.y += 0.05;
             // console.log("碗粿")
-            displayFood = 6 //碗粿
+            displayFood6 = true; //碗粿
           } else if (intersects6.length == 0 ) {
+            displayFood6 = false;
           }
         }
         // console.log(store.state.FoodDisplay[0]["id"],store.state.FoodDisplay[0]["display"])
         // console.log(displayFood)
       }
           document.addEventListener("dblclick", function () {
-             if (displayFood == 1) store.commit("FoodChangeState",{id:'1',display:true})//海豬腳
-             if (displayFood == 2) store.commit("FoodChangeState",{id:'2',display:true})//肚臍橙
-             if (displayFood == 3) store.commit("FoodChangeState",{id:'3',display:true})//生魚片
-             if (displayFood == 4) store.commit("FoodChangeState",{id:'4',display:true})//味噌湯
-             if (displayFood == 5) store.commit("FoodChangeState",{id:'5',display:true})//鬼頭刀魚排
-             if (displayFood == 6) store.commit("FoodChangeState",{id:'6',display:true})//碗粿
+             if (displayFood1) store.commit("FoodChangeState",{id:'1',display:true})//海豬腳
+             if (displayFood2) store.commit("FoodChangeState",{id:'2',display:true})//肚臍橙
+             if (displayFood3) store.commit("FoodChangeState",{id:'3',display:true})//生魚片
+             if (displayFood4) store.commit("FoodChangeState",{id:'4',display:true})//味噌湯
+             if (displayFood5) store.commit("FoodChangeState",{id:'5',display:true})//鬼頭刀魚排
+             if (displayFood6) store.commit("FoodChangeState",{id:'6',display:true})//碗粿
             });  
       createScene();
       createLight();
