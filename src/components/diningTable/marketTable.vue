@@ -9,13 +9,17 @@
 import * as THREE from "three/build/three.module.js";
 import { FirstPersonCameraControl } from "../FirstPersonCameraControls.js";
 import store from "../../store/index";
+import { useQuasar } from "quasar";
 export default {
   name: "three",
   mounted() {
-    this.initThree();
+        useQuasar().loading.show({
+      message: "Loading ",
+    });
+    this.initThree(useQuasar().loading.hide);
   },
   methods: {
-    initThree() {
+    initThree(callback) {
       store.commit("marketTableOnProgressReset")
       let scene, camera, renderer, canvas;
       let controls;
@@ -222,6 +226,7 @@ export default {
             }
             if (xhr.loaded / 109568636  == 1) {   
               marketTable_loaded = true;
+              callback()
             }
           }
         );

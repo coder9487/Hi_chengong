@@ -68,7 +68,7 @@ export default defineComponent({
 .img-slider img {
   position: absolute;
   top: 0;
-  left: 100px;
+  left: 70px;
   bottom: 0;
   right: 100px;
   height: 936px;

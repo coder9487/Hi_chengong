@@ -203,10 +203,10 @@ export default {
       ShowFishMonger: 0,
       talkContent: {
         startchat: [
+          "./images/UI/hint1-(4).svg",
           "./images/UI/hint1-(1).svg",
           "./images/UI/hint1-(2).svg",
           "./images/UI/hint1-(3).svg",
-          "./images/UI/hint1-(4).svg",
           "",
           "./images/UI/hint1-(5).svg"
         ],
@@ -310,7 +310,7 @@ export default {
 .introduceBox * btn_group {
   width: 50%;
   display: inline-flex;
-  margin-top: -10%;
+  margin-top: -20%;
 }
 .introduceBox * btn_group q-btn {
   width: 200px;
