@@ -192,7 +192,8 @@ export default {
       console.log(this.intrpducerShowFlag);
     },
     approachGrandpa: function () {
-      this.textIndex.startchat++;
+      this.textIndex.startchat = 5;
+      
 
     }
     
@@ -207,7 +208,7 @@ export default {
           "./images/UI/hint1-(3).svg",
           "./images/UI/hint1-(4).svg",
           "",
-          "",
+          "./images/UI/hint1-(5).svg"
         ],
         grandpa: [],
         fishmonger: [],
@@ -227,6 +228,10 @@ export default {
     },
 
     ShowNPC(charactor) {
+      if(this.textIndex.startchat == 6)
+      {
+        this.$router.push("DiningTable");
+      }
       if (charactor == "startchat")
         if (this.textIndex.startchat != 4 && this.textIndex.startchat < 6) return true;
     },
