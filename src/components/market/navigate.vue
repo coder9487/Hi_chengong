@@ -310,7 +310,7 @@ export default {
 .introduceBox * btn_group {
   width: 50%;
   display: inline-flex;
-  margin-top: -20%;
+  margin-top: -35%;
 }
 .introduceBox * btn_group q-btn {
   width: 200px;
@@ -347,18 +347,14 @@ export default {
   left: 3%;
 }
 .btn_group {
-  margin-top: -15%;
+  margin-top: -30%;
   display: flex;
   margin-left: 17%;
 }
 .btn_group * {
-  float: left;
-  // border-radius: 50px;
-  margin-left: 15%;
-  // background-color:orange;
-  z-index: 51;
-  // height:50px;
-  width: 30%;
-  // text-align: center
+float: left;
+    margin-left: 14%;
+    z-index: 51;
+    width: 30%;
 }
 </style>

@@ -62,6 +62,9 @@ export default {
         renderer.shadowMap.enabled = true; // 設定需渲染陰影效果
         renderer.shadowMap.type = 2; // THREE.PCFSoftShadowMap
 
+        renderer.gammaFactor = 2.2;
+        renderer.gammaOutput = true;
+
         window.addEventListener("resize", onWindowResize);
         function onWindowResize() {
           camera.aspect = window.innerWidth / window.innerHeight;
