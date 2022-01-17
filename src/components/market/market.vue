@@ -60,6 +60,9 @@ export default {
       let OctahedronChangeScene;
       let displayFishMonger;
 
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();    
+
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -318,6 +321,14 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
+      function onMouseMove( event ) {
+
+        // calculate mouse position in normalized device coordinates
+        // (-1 to +1) for both components
+
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+      }
 
       let doOnce = false;
       function delayForAnimate() {
@@ -328,7 +339,7 @@ export default {
           }, 3000);
         }
       }
-
+      window.addEventListener( 'mousemove', onMouseMove, false );
       function animate() {
         if (fish_marked_wall_loaded && car && round ){
           model_loaded = true;
@@ -343,11 +354,8 @@ export default {
         //console.log(model_loaded)
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
-        let vector = new THREE.Vector3();
-        let raycaster = new THREE.Raycaster(
-          controls.getObject().position,
-          controls.getDirection(vector).clone()
-        );
+        raycaster.setFromCamera( mouse, camera );
+
         let disOctahedron = Math.cbrt(Math.pow(controls.getObject().position.x
             -OctahedronChangeScene.position.x,2)+Math.pow(controls.getObject().position.y
             -OctahedronChangeScene.position.y,2)+Math.pow(controls.getObject().position.z

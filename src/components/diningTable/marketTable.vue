@@ -47,6 +47,8 @@ export default {
       const objects4 = [];
       const objects5 = [];
       const objects6 = [];
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();    
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -219,7 +221,7 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            console.log(xhr.loaded)
+            // console.log(xhr.loaded)
             let marketTableOnProgress = parseInt((xhr.loaded / 109568636)*100)
             // console.log(PremarketOnProgress)
             if( marketTableOnProgress != temp && store.state.marketTablePercentage <= 100){
@@ -269,6 +271,16 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
+      function onMouseMove( event ) {
+
+        // calculate mouse position in normalized device coordinates
+        // (-1 to +1) for both components
+
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+      }
+      window.addEventListener( 'mousemove', onMouseMove, false );
+
       function animate() {
         if(marketTable_loaded) model_loaded = true;
         if(model_loaded) renderer.render(scene, camera);
@@ -278,11 +290,7 @@ export default {
         // if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
 
-        let vector = new THREE.Vector3();
-        let raycaster = new THREE.Raycaster(
-          controls.getObject().position,
-          controls.getDirection(vector).clone()
-        );
+        raycaster.setFromCamera( mouse, camera );
         let intersects1 = raycaster.intersectObjects(objects1);
         let intersects2 = raycaster.intersectObjects(objects2);
         let intersects3 = raycaster.intersectObjects(objects3);
