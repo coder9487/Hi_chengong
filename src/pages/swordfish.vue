@@ -27,6 +27,10 @@ export default {
       let spear_shooting_loaded = false;
       let fish_load = false;
 
+      let pole;
+
+      const raycaster = new THREE.Raycaster()
+      const mouse = new THREE.Vector2()
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -49,15 +53,15 @@ export default {
           renderer.setSize(window.innerWidth, window.innerHeight);
         }
         camera = new THREE.PerspectiveCamera(
-          50,
+          75,
           window.innerWidth / window.innerHeight,
           0.01,
           1000
         );
-        camera.position.x = 5;
+        camera.position.x = 1.13;
         camera.position.y = 5;
-        camera.position.z = 0;
-        camera.lookAt(0,0,0);
+        camera.position.z = 1.14;
+        camera.lookAt(5,1,5);
 
         const axesHelper = new THREE.AxesHelper(5);
         scene.add(axesHelper);
@@ -162,6 +166,7 @@ export default {
       function createSea() {
         sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
         scene.add(sea.mesh);
+        objects.push(sea.mesh)
         sea.mesh.position.y = 0;
         sea.mesh.castShadow = false;
         sea.mesh.receiveShadow = true;
@@ -187,10 +192,9 @@ export default {
           function (obj) {
             obj.scale.set(4, 4, 4);
             obj.position.set(0, 0, 0);
-            objects.push(obj);
             scene.add(obj);
-            mixer_fish = new THREE.AnimationMixer(obj);
-            animation_fish = mixer_fish.clipAction(obj.animations[0]).play();
+            // mixer_fish = new THREE.AnimationMixer(obj);
+            // animation_fish = mixer_fish.clipAction(obj.animations[0]).play();
           },
           // called when loading is in progresses
           function (xhr) {
@@ -202,22 +206,26 @@ export default {
         let j = 0;
         loader.load(
           // resource URL
-          "models/spear_aiming.json",
+          "models/spear_aiming2.json",
 
           // onLoad callback
           // Here the loaded data is assumed to be an object
           function (obj) {
+            // console.log(obj)
+            pole = obj.children[2];
+            obj.scale.set(10,10,10)
+            obj.position.set(0,0,0)
             // Add the loaded object to the scene
-            obj.scale.multiplyScalar(6);
-            mixer_aiming = new THREE.AnimationMixer(obj);
-            animation_aiming = mixer_aiming.clipAction(obj.animations[0]).play();
+            // obj.scale.multiplyScalar(6);
+            // mixer_aiming = new THREE.AnimationMixer(obj);
+            // animation_aiming = mixer_aiming.clipAction(obj.animations[0]).play();
             scene.add(obj);
             document.addEventListener("click", function () {
               j++;
               if (j % 2 == 1) {
                 obj.visible = true;
               } else {
-                obj.visible = false;
+                // obj.visible = false;
               }
             });
           },
@@ -225,46 +233,26 @@ export default {
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
             if (xhr.loaded / 3609819 == 1) spear_aiming_loaded = true;
-          },
-          function ( err ) {
-		        console.error( 'An error happened' );
-	}
+          }
         );
         loader.load(
           // resource URL
-          "models/spear_shoot.json",
+          "models/boat.json",
 
           // onLoad callback
           // Here the loaded data is assumed to be an object
           function (obj) {
-            // Add the loaded object to the scene
-            obj.scale.multiplyScalar(5);
-            obj.visible = false;
-            mixer_shooting = new THREE.AnimationMixer(obj);
-            animation_shooting = mixer_shooting.clipAction(obj.animations[0]);
-            animation_shooting.setLoop(THREE.LoopOnce);
-            animation_shooting.clampWhenFinished = true;
-            animation_shooting.timeScale = 0.8;
+            // console.log(obj)
+            obj.scale.set(10,10,10)
+            obj.position.set(0,0,0)
             scene.add(obj);
-            animation_shooting.fadeOut(0.5);
-            document.addEventListener("click", function () {
-              if ( j % 2 == 0) {
-                animation_shooting.play();
-                obj.visible = true;
-              } else if (j % 2 == 1) {
-                animation_shooting.stop();
-                obj.visible = false;
-              }
-            });
+
           },
           // onProgress callback
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            if (xhr.loaded / 3581460 == 1) spear_shooting_loaded = true;
-          },
-          function ( err ) {
-		        console.error( 'An error happened' );
-	        }
+            // if (xhr.loaded / (xhr.total) spear_aiming_loaded = true;
+          }
         );
       }
 
@@ -275,34 +263,47 @@ export default {
         controls.applyCollision = false;
         controls.positionEasing = true;
       }
+      function onMouseMove( event ) {
 
+        // calculate mouse position in normalized device coordinates
+        // (-1 to +1) for both components
+
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+      }
+      window.addEventListener( 'mousemove', onMouseMove, false );
       function animate() {
         // const time = performance.now();
         renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
-        let vector = new THREE.Vector3();
-        let raycaster = new THREE.Raycaster(
-          controls.getObject().position,
-          controls.getDirection(vector).clone()
-        );
+        raycaster.setFromCamera(mouse,camera)
         let intersects = raycaster.intersectObjects(objects);
         if (intersects.length > 0){
-          console.log("aimed")
           aim = true
+        console.log(intersects[0].point.x,intersects[0].point.y)
+          
         }else {
-          console.log("aiming");
           aim = false;
+          // console.log("aiming")
         }
-        if (mixer_fish != null && mixer_aiming != null && mixer_shooting != null) {
-          mixer_fish.update(0.001);
-          mixer_aiming.update(0.016);
-          mixer_shooting.update(0.032);
-        }
+
+        // console.log(raycaster.ray.direction)
+        // if (mixer_fish != null && mixer_aiming != null && mixer_shooting != null) {
+          // mixer_fish.update(0.001);
+          // mixer_aiming.update(0.016);
+          // mixer_shooting.update(0.032);
+          pole.position.set(0.1,0.5,0.1)
+          if(mouse.y < 0)pole.lookAt(-intersects[0].point.x*0.1,intersects[0].point.y,-intersects[0].point.z*0.1)
+          // pole.lookAt(10-50,0,10-50)
+          // console.log(camera.position.x,camera.position.y,camera.position.z)
+
+        // }
         if (controls.enabled) controls.update();
-        if (isMobile) controls.mobileMove();
-        sea.mesh.position.x += 0.1;
+        // if (isMobile) controls.mobileMove();
+        sea.mesh.position.x -= 0.02;
+        sea.mesh.position.z -= 0.02;
       }
       createScene();
       createLight();
