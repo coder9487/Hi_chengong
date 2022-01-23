@@ -25,7 +25,7 @@ export default {
       let fish_loaded = false;
       let spear_loaded = false;
       let model_loaded = false;
-      let pole,pole_head,plane,origin,posit,direct;
+      let pole,pole_head,plane,origin,posit,direct,man;
       let readyForOBJanimation = false;
       let fish;
 
@@ -59,10 +59,10 @@ export default {
           0.01,
           1000
         );
-        camera.position.x = -1;
-        camera.position.y = 4;
+        camera.position.x = 5;
+        camera.position.y = 6;
         camera.position.z = 0;
-        camera.lookAt(5,1,0);
+        camera.lookAt(-5,0.5,0);
 
         const axesHelper = new THREE.AxesHelper(5);
         scene.add(axesHelper);
@@ -210,21 +210,21 @@ export default {
 
         loader.load(
           // resource URL
-          "models/spear.json",
+          "models/swordfish.json",
           // onLoad callback
           // Here the loaded data is assumed to be an object
           function (obj) {
-            pole = obj.children[0];
+            pole = obj.getObjectByName("spear");
+            man = obj.getObjectByName("Armature001")
             pole_head = pole.children[0];
             obj.scale.set(10,10,10)
-            pole.position.set(0,0.4,0)
             scene.add(obj);
           },
           // onProgress callback
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
             // console.log(xhr.loaded)
-            if (xhr.loaded / 2483034 == 1) spear_loaded = true;
+            if (xhr.loaded / 3752339 == 1) spear_loaded = true;
           }
         );
         let geo = new THREE.PlaneBufferGeometry(8000, 8000, 1, 1);
@@ -282,14 +282,17 @@ export default {
           let intersects = raycaster.intersectObjects(objects);
           if(intersects.length > 0){
             origin = intersects[0].point;
-            posit = new THREE.Vector3(0,4,0)
+            posit = new THREE.Vector3(1.7277,5.3,-0.4074)
             direct = posit.sub(origin).normalize();
             let raycasterToSky = new THREE.Raycaster(origin,direct);
             let intersectSky = raycasterToSky.intersectObjects(objects2);
             let skyPosition = intersectSky[0].point;
-            if (!poleGo) pole.lookAt(skyPosition.x,skyPosition.y,skyPosition.z);
+            if (!poleGo) {
+              pole.lookAt(skyPosition.x,skyPosition.y,skyPosition.z);
+              man.lookAt(intersects[0].point.y*0.05,4.3,intersects[0].point.z*0.05);
+            }
             if (poleGo) {
-              pole.translateY(-0.00098);
+              pole.translateY(-0.00098*2);
               pole.translateZ(-0.01);
               pole.translateZ(-0.01);
             }
@@ -300,7 +303,7 @@ export default {
             if(dis < 0.4 ){
               alert("You hit!")
             }else if(pohe.y < -2){
-              pole.position.set(0,0.4,0)
+              pole.position.set(0.17277,0.53,-0.04074)
               poleGo = false;
             }
           }
