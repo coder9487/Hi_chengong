@@ -246,7 +246,7 @@ export default {
               temp = temp + 1;
               console.log("marketPercentage: ", store.state.marketPercentage,"%")
             }
-            if (xhr.loaded / 131005377  == 1) {
+            if (xhr.loaded / 131005377  == 1) {//131005377
               fish_marked_wall_loaded = true;  
             }
           }

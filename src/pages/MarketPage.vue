@@ -1,6 +1,9 @@
 <template>
   <div id="loadingGroup">
-    <img src="../../public/loading/loading.png" alt="" />
+    <img src="../../public/loading/loadingPhoto_test.png" alt="">
+    <video autoplay loop>
+      <source src="../../public/loading/wave.mp4" type="video/mp4" />
+    </video>
   </div>
 
   <div class="fullViewPage">
@@ -52,7 +55,7 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
+<style lang="scss" >
 #MarketView {
   z-index: 2;
   position: relative;
@@ -64,8 +67,19 @@ export default defineComponent({
   position: relative;
   opacity: 0;
 }
-#loadingGroup * {
+#loadingGroup  {
+  position: flex;
+  display: blocks;
+}
+#loadingGroup video {
   position: relative;
+  margin-left: 25%;
+  top:300px;
   z-index: 100;
+}
+#loadingGroup img {
+  position: relative;
+  width: 100vw;
+  z-index: 10;
 }
 </style>
