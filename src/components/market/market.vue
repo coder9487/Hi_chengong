@@ -10,16 +10,13 @@ import { ref } from "vue";
 import { useQuasar } from "quasar";
 import * as THREE from "three/build/three.module.js";
 import { FirstPersonCameraControl } from "../FirstPersonCameraControls.js";
-import { lottie } from 'lottie-web'
 import store from "../../store/index";
 export default {
   name: "three",
   mounted() {
-    useQuasar().loading.show({
-      message: "Loading ",
-    });
 
-    this.initThree(useQuasar().loading.hide);
+
+    this.initThree(this.loading_callbacks);
     // useQuasar().loading.hide();
   },
   data() {   
@@ -29,6 +26,10 @@ export default {
   },
   watch: {},
   methods: {
+    loading_callbacks(val){
+      // console.log('Pass into callbacks ',val.loaded)
+      this.$emit('loadingProgress',val.loaded)
+    },
     initThree(callbacks) {
       ///DiningTable
       store.commit("marketOnProgressReset")
@@ -228,6 +229,7 @@ export default {
             obj.alphaTest = 0.7;
             obj.opacity = 0.5;
             controls.colliders = obj;
+            
             boat01 = obj.getObjectByName("boat01")
             boat02 = obj.getObjectByName("boat02")
             scene.add(obj);
@@ -237,7 +239,7 @@ export default {
             // console.log(xhr.loaded)
             // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
             let marketOnProgress = parseInt((xhr.loaded / 131005377)*100)
-
+            callbacks(xhr)
             // console.log(PremarketOnProgress)
             if( marketOnProgress != temp && store.state.marketPercentage <= 100 ){
               store.commit("marketOnProgressCount")
@@ -344,7 +346,7 @@ export default {
         if (fish_marked_wall_loaded && car && round ){
           model_loaded = true;
           store.commit("setMarketLoadedTrue");
-          callbacks();
+         
           delayForAnimate()
         }
         if (readyForOBJanimation) renderer.render(scene, camera);
