@@ -1,7 +1,7 @@
-<template>
+<template id="body">
   <div id="loadingGroup">
-    <img src="../../public/loading/loadingPhoto_test.png" alt="">
-    <video autoplay loop>
+    <img src="../../public/loading/loadingPhoto_test.png" alt="" />
+    <video autoplay loop id="waveVideo">
       <source src="../../public/loading/wave.mp4" type="video/mp4" />
     </video>
   </div>
@@ -35,27 +35,31 @@ export default defineComponent({
     return {
       progressPercent: ref(0),
       showEnable: ref(true),
+      DEBUG: 2,
     };
   },
   computed: {},
   methods: {
     getLoadingProgress(val) {
-      console.log("Loading ", val);
-      if (val == 131005377) {
-        this.showEnable = true;
+      
+      let loadedProgress = (val/131005377).toFixed(2)*100
+      let loadingWave = document.getElementById("waveVideo");
+      loadingWave.style.top = `${-620 - loadedProgress*1.8}`
+      //console.log("Loading progress ", loadingWave.style.top);
+
+      if (val == 131005377 * this.DEBUG) {
         let element = document.getElementsByClassName("fullViewPage");
         element[0].style.opacity = 1;
         let MarketView_element = document.getElementById("MarketView");
         MarketView_element.style.opacity = 1;
         let loading = document.getElementById("loadingGroup");
         loading.style.opacity = 0;
-        
       }
     },
   },
 });
 </script>
-<style lang="scss" >
+<style lang="scss">
 #MarketView {
   z-index: 2;
   position: relative;
@@ -67,19 +71,26 @@ export default defineComponent({
   position: relative;
   opacity: 0;
 }
-#loadingGroup  {
+#loadingGroup {
   position: flex;
   display: blocks;
+
 }
 #loadingGroup video {
   position: relative;
-  margin-left: 25%;
-  top:300px;
-  z-index: 100;
+  margin-left: 30%;
+  top: -600px;
+  width: 40vw;
+  z-index: 9;
 }
 #loadingGroup img {
   position: relative;
   width: 100vw;
   z-index: 10;
+  opacity: 0.95;
+}
+#body {
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 </style>
