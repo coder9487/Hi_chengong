@@ -1,9 +1,16 @@
 <template id="body">
   <div id="loadingGroup">
-    <img src="../../public/loading/loadingPhoto_test.png" alt="" />
-    <video autoplay loop id="waveVideo">
-      <source src="../../public/loading/wave.mp4" type="video/mp4" />
-    </video>
+    <img src="../../public/loading/loadingPhoto_1.png" alt="" />
+    <div id="loadingProgressText">
+      <h3>
+        <b> {{progressPercent}}% </b>
+      </h3>
+    </div>
+    <div id="waveVideo">
+      <video autoplay loop>
+        <source src="../../public/loading/wave.mp4" type="video/mp4" />
+      </video>
+    </div>
   </div>
 
   <div class="fullViewPage">
@@ -35,19 +42,20 @@ export default defineComponent({
     return {
       progressPercent: ref(0),
       showEnable: ref(true),
-      DEBUG: 2,
+      DEBUG: 0,
     };
   },
   computed: {},
   methods: {
     getLoadingProgress(val) {
-      
-      let loadedProgress = (val/131005377).toFixed(2)*100
+      let loadedProgress = ((val / 131005377) * 100).toFixed(2);
+      this.progressPercent = loadedProgress;
       let loadingWave = document.getElementById("waveVideo");
-      loadingWave.style.top = `${-620 - loadedProgress*1.8}`
-      //console.log("Loading progress ", loadingWave.style.top);
+      loadingWave.style.top = `${-800 - loadedProgress * 2}px`;
+      console.log(`Loading px ${-800 - loadedProgress * 2}px`);
+      // alert(document.getElementById("waveVideo").style.top);
 
-      if (val == 131005377 * this.DEBUG) {
+      if (val == 131005377 * (this.DEBUG+1)) {
         let element = document.getElementsByClassName("fullViewPage");
         element[0].style.opacity = 1;
         let MarketView_element = document.getElementById("MarketView");
@@ -74,20 +82,27 @@ export default defineComponent({
 #loadingGroup {
   position: flex;
   display: blocks;
-
 }
-#loadingGroup video {
+#loadingGroup #waveVideo {
   position: relative;
   margin-left: 30%;
-  top: -600px;
-  width: 40vw;
+  top: -800px;
+  width: 10vw;
   z-index: 9;
 }
 #loadingGroup img {
   position: relative;
   width: 100vw;
   z-index: 10;
-  opacity: 0.95;
+  opacity: 1;
+}
+#loadingGroup #loadingProgressText {
+  position: relative;
+  z-index: 11;
+  top: -500px;
+  margin-left: 45.5vw;
+  color:skyblue;
+  opacity: 1;
 }
 #body {
   overflow-y: hidden;
