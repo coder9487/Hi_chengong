@@ -234,7 +234,7 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log(xhr.loaded)
+            console.log(xhr.loaded)
             // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
             let marketOnProgress = parseInt((xhr.loaded / 131005377)*100)
 
@@ -244,7 +244,7 @@ export default {
               temp = temp + 1;
               console.log("marketPercentage: ", store.state.marketPercentage,"%")
             }
-            if (xhr.loaded / 131005377  == 1) {
+            if (xhr.loaded / 111356897  == 1) {
               fish_marked_wall_loaded = true;  
             }
           }
