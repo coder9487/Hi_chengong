@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import store from "../../../src/store/index";
+import store from "../store/index";
 
 export class FirstPersonCameraControl {
     constructor(camera, domElement, rayCastObjects) {

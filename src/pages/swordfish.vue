@@ -7,7 +7,7 @@
 <script>
 import * as THREE from "../../node_modules/three/build/three.module";
 // import { PointerLockControls } from "../../node_modules/three/examples/jsm/controls/PointerLockControls";
-import { FirstPersonCameraControl } from "../../node_modules/three/src/FirstPersonCameraControls.js";
+import { FirstPersonCameraControl } from "../Library/FirstPersonCameraControls";
 export default {
   name: "three",
   mounted() {
