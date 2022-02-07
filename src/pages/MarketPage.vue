@@ -1,6 +1,6 @@
 <template id="body">
   <div id="loadingGroup">
-    <img src="../../public/loading/loadingPhoto_1.png" alt="" />
+    <img src="../../public/loading/loadingPhoto.png" alt="" />
     <div id="loadingProgressText">
       <h3>
         <b> {{progressPercent}}% </b>
@@ -48,14 +48,14 @@ export default defineComponent({
   computed: {},
   methods: {
     getLoadingProgress(val) {
-      let loadedProgress = ((val / 131005377) * 100).toFixed(2);
+      let loadedProgress = ((val / 111356897) * 100).toFixed(2);
       this.progressPercent = loadedProgress;
       let loadingWave = document.getElementById("waveVideo");
       loadingWave.style.top = `${-800 - loadedProgress * 2}px`;
       console.log(`Loading px ${-800 - loadedProgress * 2}px`);
       // alert(document.getElementById("waveVideo").style.top);
 
-      if (val == 131005377 * (this.DEBUG+1)) {
+      if (val == 111356897 * (this.DEBUG+1)) {
         let element = document.getElementsByClassName("fullViewPage");
         element[0].style.opacity = 1;
         let MarketView_element = document.getElementById("MarketView");

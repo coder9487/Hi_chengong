@@ -244,10 +244,11 @@ export default {
             if( marketOnProgress != temp && store.state.marketPercentage <= 100 ){
               store.commit("marketOnProgressCount")
               temp = temp + 1;
-              console.log("marketPercentage: ", store.state.marketPercentage,"%")
+              // console.log("marketPercentage: ", store.state.marketPercentage,"%")
             }
-            if (xhr.loaded / 131005377  == 1) {//131005377
-              fish_marked_wall_loaded = true;  
+            if (xhr.loaded / 111356897  == 1) {//131005377
+              fish_marked_wall_loaded = true;
+              console.log(xhr.loaded) 
             }
           }
         );
