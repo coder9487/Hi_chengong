@@ -1,6 +1,6 @@
 <template id="body">
   <div id="loadingGroup">
-    <img src="../../public/loading/loadingPhoto.png" alt="" />
+    <img src="../../public/loading/loadingPhoto_1.png" alt="" />
     <div id="loadingProgressText">
       <h3>
         <b> {{progressPercent}}% </b>

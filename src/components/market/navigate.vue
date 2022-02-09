@@ -168,8 +168,8 @@ export default {
     },
     PopupChat() {
       let stateObject = [];
-      stateObject.push(this.$store.state.FishMongerDisplay[0]["id"]);
-      stateObject.push(this.$store.state.FishMongerDisplay[0]["display"]);
+      stateObject.push(this.$store.state.marketDisplay[0]["id"]);
+      stateObject.push(this.$store.state.marketDisplay[0]["display"]);
 
       return stateObject;
     },
