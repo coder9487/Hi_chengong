@@ -102,6 +102,7 @@ export default {
         this.controlObject.imageUrl = `images/monger${
           this.controlObject.showIndex
         }/${this.controlObject.showIndex}-${this.photoindex + 1}.png`;
+        
       }
       nextImage() {
         this.photoindex++;
@@ -265,6 +266,11 @@ export default {
   bottom: 0;
   position: fixed;
 }
+.introductor_chatbox{
+  z-index: 52;
+position: fixed;
+top: 0;
+}
 .introductor_image {
   width: auto;
   height: 66%;
@@ -291,7 +297,7 @@ export default {
   margin-left: 80%;
 }
 .introduceBox {
-  margin-top: 0%;
+  margin-top: 10vh;
   display: grid;
   width: 100vw;
   height: 100vh;
@@ -300,9 +306,9 @@ export default {
 }
 .introduceBox * {
   margin-left: 20%;
-  margin-top: 10%;
+  margin-top: 8%;
   width: 50%;
-  display: fixed;
+  display: block;
   z-index: 60;
   // background-color: aqua;
 }
@@ -347,7 +353,7 @@ export default {
   left: 3%;
 }
 .btn_group {
-  margin-top: -30%;
+  margin-top: -28%;
   display: flex;
   margin-left: 17%;
 }

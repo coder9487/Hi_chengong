@@ -618,10 +618,10 @@ export default {
         }
       }        
           document.addEventListener("dblclick", function () {
-             if (displayFishMonger1) store.commit("FishMongerChangeState",{id:'1',display: true})
-             if (displayFishMonger2) store.commit("FishMongerChangeState",{id:'2',display: true})
-             if (displayFishMonger3) store.commit("FishMongerChangeState",{id:'3',display: true})
-             if (displayFishMonger4) store.commit("FishMongerChangeState",{id:'4',display: true})
+            if (displayFishMonger1) store.commit("FishMongerChangeState",{id:'1',display: true})
+            if (displayFishMonger2) store.commit("FishMongerChangeState",{id:'2',display: true})
+            if (displayFishMonger3) store.commit("FishMongerChangeState",{id:'3',display: true})
+            if (displayFishMonger4) store.commit("FishMongerChangeState",{id:'4',display: true})
             });  
       createScene();
       createLight();
