@@ -174,7 +174,7 @@ export default {
         // load a resource
         loader.load(
           // resource URL
-          "../models/0925scene.json",
+          "../models/pisirian.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(10, 10, 10);
@@ -183,6 +183,7 @@ export default {
             lod.addLevel(obj);
             scene.add(lod);
             scene.add(obj)
+            console.log(obj);
           },
           // called when loading is in progresses
           function (xhr) {
