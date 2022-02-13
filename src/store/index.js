@@ -14,20 +14,26 @@ export default createStore({
     marketLoaded: false,
     questionMarketDisplay: false,
     questionMarketTableDisplay: false,
-    FishMongerDisplay: [
-      { id: '0', display: false,}
+    marketDisplay: [
+      { id: 'None', display: false,}
     ],
     FoodDisplay: [
       { id: '0', display: false,}
-    ]
+    ],
+    pisirianDisplay: [
+      { id: 'None', display: false,}
+    ],
   },
   mutations: {
     ///
-    FishMongerChangeState(state, person ) {
-      state.FishMongerDisplay.splice(0,1,person)
+    marketChangeState(state, person ) {
+      state.marketDisplay.splice(0,1,person)
     },
     FoodChangeState(state, cate ) {
       state.FoodDisplay.splice(0,1,cate)
+    },
+    pisirianChangeState(state, person ) {
+      state.pisirianDisplay.splice(0,1,person)
     },
     ///
     setQuestionMarketDisplayTrue(state){

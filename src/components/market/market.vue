@@ -37,29 +37,54 @@ export default {
       let controls;
       let sea, Lowersea;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      let model_loaded = false;
-      let fish_marked_wall_loaded = false;
+      let market_loaded = false;
       let car = false;
       let round = false;
       let boat01,boat02;
-      const fishmonger1 = [];
-      const fishmonger2 = [];
-      const fishmonger3 = [];
-      const fishmonger4 = [];
+      const sheet_power = [];
+      const sheet_brave = [];
+      const monger1 = [];
+      const monger2 = [];
+      const monger3 = [];
+      const monger4 = [];
       let displayFishMonger1 = false;
       let displayFishMonger2 = false;
       let displayFishMonger3 = false;
       let displayFishMonger4 = false;
+      let displayEnd = false;
+      let displaySheet_brave = false;
+      let displaySheet_power = false;
+
       let readyForOBJanimation = false;
 
-      let coneCommut1;
-      let coneCommut2;
-      let coneCommut3;
-      let coneCommut4;
+      let a_kon_start; 
+      let sheet_power_normal;
+      let sheet_brave_normal;
+      let sheet_power_white;
+      let sheet_brave_white;
+      let end_position = new THREE.Vector3(-4.440825462341309*10,0.168561190366745*10,-0.402698934078216*10) // 需要*10 以符合放大10倍的比例
+      let a_kon_start_position = new THREE.Vector3(17.410961389541626,1.68561190366745,-4.0269893407821655);
+      let arrow1 = new THREE.Vector3(6.991161108016968,0.8657156676054001,-0.7908161729574203)
+      let arrow2 = new THREE.Vector3(-8.720005750656128,0.865715742111206,2.573263347148895)
+      let arrow3 = new THREE.Vector3(-17.93976902961731,0.865715742111206,3.0435776710510254)
+      let arrow4 = new THREE.Vector3(-29.51202392578125,0.865715742111206,2.210468053817749)
+      let car_position = new THREE.Vector3(11.767337322235107,2.2295211255550385,0.0820380449295044)
+      let kick = new THREE.Vector3(2.364274263381958,0.22890541702508926,-3.6441126465797424)
+      let fish_position = new THREE.Vector3(-25.051822662353516,0.22890541702508926,-3.6441126465797424)
+      let drag_man = new THREE.Vector3(-15.329395532608032,0.22890541702508926,-3.6441126465797424)
 
+      let mixer;
+      let arrow_monger1,monger1_normal,monger1_hover,animation_arrow1;
+      let arrow_monger2,monger2_normal,monger2_hover,animation_arrow2;
+      let arrow_monger3,monger3_normal,monger3_hover,animation_arrow3;
+      let arrow_monger4,monger4_normal,monger4_hover,animation_arrow4;
 
-      let OctahedronChangeScene;
-      let displayFishMonger;
+      let animation_fish;
+      let animation_kick_man,animation_kick_man_arm,animation_kick_man_leg,animation_kick_box
+      let animation_car,animation_tier01,animation_tier02;
+      let animation_drag_man_body,animation_drag_man_calf_L,animation_drag_man_calf_R,animation_drag_man_leg_L,animation_drag_man_leg_R;
+      let passerby01,passerby02,passerby03,passerby04,passerby05,passerby06,passerby07,passerby08,passerby09;
+      let passer01,passer02,passer03,passer04,passer05,passer06,passer07,passer08,passer09;
 
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();    
@@ -94,10 +119,10 @@ export default {
           0.01,
           1000
         );
-        camera.position.x = 13;
+        camera.position.x = 25;
         camera.position.y = 1.5;
-        camera.position.z = -2.5;
-        camera.lookAt(-5, 1.5, 0);
+        camera.position.z = -3.8;
+        camera.lookAt(25, 1.5, 3.8);
 
         // const axesHelper = new THREE.AxesHelper(5);
         // scene.add(axesHelper);
@@ -214,7 +239,6 @@ export default {
         Lowersea.mesh.castShadow = false;
         Lowersea.mesh.receiveShadow = true;
       }
-      let temp = 1;
       function createObject() {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
@@ -226,95 +250,149 @@ export default {
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
-            obj.alphaTest = 0.7;
-            obj.opacity = 0.5;
+            scene.add(obj);
             controls.colliders = obj;
-            
+            a_kon_start = obj.getObjectByName("a_kon_start")
+            sheet_power_normal = obj.getObjectByName("sheet_power_normal")
+            sheet_brave_normal = obj.getObjectByName("sheet_brave_normal")
+            sheet_power_white = obj.getObjectByName("sheet_power_white")
+            sheet_brave_white = obj.getObjectByName("sheet_brave_white")
+            sheet_power.push(sheet_power_normal)
+            sheet_brave.push(sheet_brave_normal)
+            sheet_power_normal.visible = false;
+            sheet_brave_normal.visible = false;
+            sheet_power_white.visible = false;
+            sheet_brave_white.visible = false;
+
             boat01 = obj.getObjectByName("boat01")
             boat02 = obj.getObjectByName("boat02")
-            scene.add(obj);
-            console.log(obj);
+            arrow_monger1 = obj.getObjectByName("arrow_monger1")
+            arrow_monger2 = obj.getObjectByName("arrow_monger2")
+            arrow_monger3 = obj.getObjectByName("arrow_monger3")
+            arrow_monger4 = obj.getObjectByName("arrow_monger4")
+            monger1_normal = obj.getObjectByName("monger1_normal")
+            monger2_normal = obj.getObjectByName("monger2_normal")
+            monger3_normal = obj.getObjectByName("monger3_normal")
+            monger4_normal = obj.getObjectByName("monger4_normal")
+            monger1.push(monger1_normal)
+            monger2.push(monger2_normal)
+            monger3.push(monger3_normal)
+            monger4.push(monger4_normal)
+            monger1_hover = obj.getObjectByName("monger1_hover")
+            monger2_hover = obj.getObjectByName("monger2_hover")
+            monger3_hover = obj.getObjectByName("monger3_hover")
+            monger4_hover = obj.getObjectByName("monger4_hover")
+            arrow_monger1.visible = false;
+            arrow_monger2.visible = false;
+            arrow_monger3.visible = false;
+            arrow_monger4.visible = false;
+            monger1_hover.visible = false;
+            monger2_hover.visible = false;
+            monger3_hover.visible = false;
+            monger4_hover.visible = false;
+            mixer = new THREE.AnimationMixer(obj)
+
+            animation_car = mixer.clipAction(obj.animations[0]);
+            animation_tier01 = mixer.clipAction(obj.animations[1]);
+            animation_tier02 = mixer.clipAction(obj.animations[2]);
+            animation_car.setLoop(THREE.LoopOnce)
+            animation_tier01.setLoop(THREE.LoopOnce)
+            animation_tier02.setLoop(THREE.LoopOnce)
+            animation_car.clampWhenFinished = true;
+            animation_tier01.clampWhenFinished = true;
+            animation_tier02.clampWhenFinished = true;
+            animation_kick_man_arm = mixer.clipAction(obj.animations[3])
+            animation_kick_man_leg = mixer.clipAction(obj.animations[4])
+            animation_kick_box = mixer.clipAction(obj.animations[5])
+            animation_kick_man_arm.setLoop(THREE.LoopOnce)
+            animation_kick_man_leg.setLoop(THREE.LoopOnce)
+            animation_kick_box.setLoop(THREE.LoopOnce)
+            animation_kick_man_arm.clampWhenFinished = true;
+            animation_kick_man_leg.clampWhenFinished = true;
+            animation_kick_box.clampWhenFinished = true;
+
+            animation_fish = mixer.clipAction(obj.animations[6]);
+            animation_fish.setLoop(THREE.LoopOnce)
+            animation_fish.clampWhenFinished = true;
+
+            animation_drag_man_body = mixer.clipAction(obj.animations[7])
+            animation_drag_man_calf_L = mixer.clipAction(obj.animations[8])
+            animation_drag_man_calf_R = mixer.clipAction(obj.animations[9])
+            animation_drag_man_leg_L = mixer.clipAction(obj.animations[10])
+            animation_drag_man_leg_R = mixer.clipAction(obj.animations[11])
+            animation_drag_man_body.setLoop(THREE.LoopOnce)
+            animation_drag_man_calf_L.setLoop(THREE.LoopOnce)
+            animation_drag_man_calf_R.setLoop(THREE.LoopOnce)
+            animation_drag_man_leg_L.setLoop(THREE.LoopOnce)
+            animation_drag_man_leg_R.setLoop(THREE.LoopOnce)
+            animation_drag_man_body.clampWhenFinished = true;
+            animation_drag_man_calf_L.clampWhenFinished = true;
+            animation_drag_man_calf_R.clampWhenFinished = true;
+            animation_drag_man_leg_L.clampWhenFinished = true;
+            animation_drag_man_leg_R.clampWhenFinished = true;
+            animation_arrow1 = mixer.clipAction(obj.animations[12]);
+            animation_arrow2 = mixer.clipAction(obj.animations[13]);
+            animation_arrow3 = mixer.clipAction(obj.animations[14]);
+            animation_arrow4 = mixer.clipAction(obj.animations[15]);
+            passerby01 = obj.getObjectByName("passerby01")
+            passerby02 = obj.getObjectByName("passerby02")
+            passerby03 = obj.getObjectByName("passerby03")
+            passerby04 = obj.getObjectByName("passerby04")
+            passerby05 = obj.getObjectByName("passerby05")
+            passerby06 = obj.getObjectByName("passerby06")
+            passerby07 = obj.getObjectByName("passerby07")
+            passerby08 = obj.getObjectByName("passerby08")
+            passerby09 = obj.getObjectByName("passerby09")
+
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log(xhr.loaded)
-            // console.log((xhr.loaded / 115040681) * 100 + "% loaded");
-            let marketOnProgress = parseInt((xhr.loaded / 111356897)*100)
             callbacks(xhr)
-            // console.log(PremarketOnProgress)
-            if( marketOnProgress != temp && store.state.marketPercentage <= 100 ){
-              store.commit("marketOnProgressCount")
-              temp = temp + 1;
-              console.log("marketPercentage: ", store.state.marketPercentage,"%")
-            }
-            if (xhr.loaded / 111356897  == 1) {//131005377
-              fish_marked_wall_loaded = true;  
+            if (xhr.loaded / 111356897  == 1) {
+              market_loaded = true;
+              // console.log(xhr.loaded) 
             }
           }
         );
-        loader.load(
-          // resource URL
-          "../models/round.json",
-          // called when resource is loaded
-          function (obj) {
-            obj.scale.set(10, 10, 10);
-            obj.position.set(0, 0, 0);
-            // scene.add(obj);
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            // console.log(xhr.loaded);
-            if (xhr.loaded / 145454 == 1) {
-              round = true;
-            }
-          }
-        );
-        loader.load(
-          // resource URL
-          "../models/car.json",
-          // called when resource is loaded
-          function (obj) {
-            obj.scale.set(8, 8, 8);
-            obj.position.set(0, 1.5, 0);
-            scene.add(obj);
+        
+        // loader.load(
+        //   // resource URL
+        //   "../models/round.json",
+        //   // called when resource is loaded
+        //   function (obj) {
+        //     obj.scale.set(10, 10, 10);
+        //     obj.position.set(0, 0, 0);
+        //     // scene.add(obj);
+        //   },
+        //   // called when loading is in progresses
+        //   function (xhr) {
+        //     // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        //     // console.log(xhr.loaded);
+        //     if (xhr.loaded / 145454 == 1) {
+        //       round = true;
+        //     }
+        //   }
+        // );
+        // loader.load(
+        //   // resource URL
+        //   "../models/car.json",
+        //   // called when resource is loaded
+        //   function (obj) {
+        //     obj.scale.set(8, 8, 8);
+        //     obj.position.set(0, 1.5, 0);
+        //     scene.add(obj);
             
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log(xhr.loaded); // 29346
-            if (xhr.loaded / 819743 == 1) {
-              car = true;
-            }
-          }
-        );
-
-        ///coneCommut
-        var geometryCommut1 = new THREE.ConeBufferGeometry( 0.3, 0.3, 4 ); 
-        var materialCommut1 = new THREE.MeshLambertMaterial( {color: 0x17B3BE} ); 
-        coneCommut1 = new THREE.Mesh( geometryCommut1, materialCommut1 ); 
-        coneCommut1.rotation.x = Math.PI ;
-        coneCommut2 = coneCommut1.clone();
-        coneCommut3 = coneCommut1.clone();
-        coneCommut4 = coneCommut1.clone();
-        coneCommut1.position.set(0.499158293008804*10, 0.169902980327606*10+0.3, 0.366711437702178*10)
-        coneCommut2.position.set(-0.183853179216384*10, 0.169902980327606*10+0.3, 0.411831200122833*10)
-        coneCommut3.position.set(-0.972800016403198*10, 0.169902980327606*10+0.3, 0.419523656368255*10)
-        coneCommut4.position.set(-2.06137442588806*10, 0.169902980327606*10+0.3, 0.332737356424331*10)
-        fishmonger1.push(coneCommut1)
-        fishmonger2.push(coneCommut2)
-        fishmonger3.push(coneCommut3)
-        fishmonger4.push(coneCommut4)
-        scene.add( coneCommut1 );
-        scene.add( coneCommut2 );
-        scene.add( coneCommut3 );
-        scene.add( coneCommut4 );
-        ///to calculate ans position
-        var geometryChangeScene = new THREE.OctahedronGeometry(0.3);
-        var materialChangeScene = new THREE.MeshLambertMaterial({color: 0x4EE4A5});
-        OctahedronChangeScene = new THREE.Mesh(geometryChangeScene, materialChangeScene);
-        OctahedronChangeScene.position.set( -3.2897138595581*10,0.128223806619644*10,-0.402698934078216*10);
-        // scene.add(OctahedronChangeScene);
+        //   },
+        //   // called when loading is in progresses
+        //   function (xhr) {
+        //     // console.log(xhr.loaded); // 29346
+        //     if (xhr.loaded / 819743 == 1) {
+        //       car = true;
+        //     }
+        //   }
+        // );
+  
       }
       ////
       function createControls() {
@@ -339,15 +417,29 @@ export default {
           doOnce = true;
           setTimeout(() => {
             readyForOBJanimation = true
-          }, 3000);
+          }, 1000);
         }
       }
       window.addEventListener( 'mousemove', onMouseMove, false );
+
+      function flipPositive(obj){
+        if (obj.rotation.y < Math.PI){
+          obj.rotation.y += 0.05
+        }
+      }
+      function flipNegative(obj){
+        if (obj.rotation.y > 0){
+          obj.rotation.y -= 0.05
+        }
+      }
+      function flip_a_kon(obj){
+        if (obj.rotation.z< Math.PI/2){
+          obj.rotation.z += 0.05
+        }
+      }   
       function animate() {
-        if (fish_marked_wall_loaded && car && round ){
-          model_loaded = true;
+        if (market_loaded ){
           store.commit("setMarketLoadedTrue");
-         
           delayForAnimate()
         }
         if (readyForOBJanimation) renderer.render(scene, camera);
@@ -358,52 +450,218 @@ export default {
         if (isMobile) controls.mobileMove();
         raycaster.setFromCamera( mouse, camera );
 
-        let disOctahedron = Math.cbrt(Math.pow(controls.getObject().position.x
-            -OctahedronChangeScene.position.x,2)+Math.pow(controls.getObject().position.y
-            -OctahedronChangeScene.position.y,2)+Math.pow(controls.getObject().position.z
-            -OctahedronChangeScene.position.z,2))
-        if(disOctahedron < 1.5) {
+        let disTo_end = camera.position.distanceTo(end_position)
+        if(disTo_end < 1.5) {
           store.commit("setQuestionMarketDisplayTrue")
         }
-        let intersectsFishMonger1 = raycaster.intersectObjects(fishmonger1);
-        let intersectsFishMonger2 = raycaster.intersectObjects(fishmonger2);
-        let intersectsFishMonger3 = raycaster.intersectObjects(fishmonger3);
-        let intersectsFishMonger4 = raycaster.intersectObjects(fishmonger4);
-        if (intersectsFishMonger1.length > 0 ) {
-              coneCommut1.rotation.y += 0.05;
-              displayFishMonger1 = true;
-          } else{
-            displayFishMonger1 = false;
-            }
-        if (intersectsFishMonger2.length > 0 ) {
-              coneCommut2.rotation.y += 0.05;
-              displayFishMonger2 = true;
-          }else{
-            displayFishMonger2 = false;
-            }
-        if (intersectsFishMonger3.length > 0 ) {
-              coneCommut3.rotation.y += 0.05;
-              displayFishMonger3 = true;
-          }else{
-            displayFishMonger3 = false;
-            }
-        if (intersectsFishMonger4.length > 0 ) {
-              coneCommut4.rotation.y += 0.05;
-              displayFishMonger4 = true;
-          }else{
-            displayFishMonger4 = false;
-            }
+
+
+
         if (readyForOBJanimation){
+          mixer.update(0.016)
+          let interscets_sheet_power_normal = raycaster.intersectObjects(sheet_power);
+          let interscets_sheet_brave_normal = raycaster.intersectObjects(sheet_brave);
+          let intersects_monger1 = raycaster.intersectObjects(monger1);
+          let intersects_monger2 = raycaster.intersectObjects(monger2);
+          let intersects_monger3 = raycaster.intersectObjects(monger3);
+          let intersects_monger4 = raycaster.intersectObjects(monger4);
           boat01.position.y = Math.sin(Date.now()/500)*0.05-0.3;
           boat02.position.y = Math.sin(Date.now()/500)*0.05-0.3;
-          // console.log(store.state.FishMongerDisplay[0]["id"],store.state.FishMongerDisplay[0]["display"])
+          //////////////////////////////////////
+
+          let disTo_a_kon_start = camera.position.distanceTo(a_kon_start_position);
+          let disTo_car = camera.position.distanceTo(car_position);
+          let disTo_arrow1 = camera.position.distanceTo(arrow1)
+          let disTo_arrow2 = camera.position.distanceTo(arrow2)
+          let disTo_arrow3 = camera.position.distanceTo(arrow3)
+          let disTo_arrow4 = camera.position.distanceTo(arrow4)
+          let disTo_fish = camera.position.distanceTo(fish_position);
+          let disTo_kick = camera.position.distanceTo(kick);
+          let disTo_dragman = camera.position.distanceTo(drag_man);
+          
+          let disTo_passerby01 = camera.position.distanceTo(passerby01.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby02 = camera.position.distanceTo(passerby02.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby03 = camera.position.distanceTo(passerby03.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby04 = camera.position.distanceTo(passerby04.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby05 = camera.position.distanceTo(passerby05.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby06 = camera.position.distanceTo(passerby06.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby07 = camera.position.distanceTo(passerby07.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby08 = camera.position.distanceTo(passerby08.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby09 = camera.position.distanceTo(passerby09.getWorldPosition(new THREE.Vector3()));
+
+          if (disTo_a_kon_start < 3){
+            flip_a_kon(a_kon_start)
+            sheet_brave_normal.visible = true;
+            sheet_power_normal.visible = true;
+            if (interscets_sheet_power_normal.length > 0){
+              sheet_power_white.visible = true;
+              displaySheet_power = true;
+            ///for 2D image
+              }else{
+                sheet_power_white.visible = false;
+                displaySheet_power = false;
+                }
+              if (interscets_sheet_brave_normal.length > 0){
+                sheet_brave_white.visible = true;
+                displaySheet_brave = true;
+                ///for 2D image
+              }else{
+                sheet_brave_white.visible = false;
+                displaySheet_brave = false;
+                }
+            }else{
+              sheet_power_white.visible = false;
+              sheet_brave_white.visible = false;
+              sheet_brave_normal.visible = false;
+              sheet_power_normal.visible = false;
+              displaySheet_power = false;
+              displaySheet_brave = false;
+            }
+
+          if(disTo_car < 8){
+            animation_car.play();
+            animation_tier01.play();
+            animation_tier02.play();
+          }
+          
+          
+          if(disTo_arrow1 < 6){
+            arrow_monger1.visible = true;
+            animation_arrow1.play()
+
+            if(intersects_monger1.length > 0){
+              monger1_hover.visible = true  
+              displayFishMonger1 = true
+            }else{
+              monger1_hover.visible = false;
+              displayFishMonger1 = false;
+            }
+          }else{
+            arrow_monger1.visible = false;
+            monger1_hover.visible = false;
+            displayFishMonger1 = false;
+          }
+
+          if(disTo_arrow2 < 6){
+            arrow_monger2.visible = true;
+            animation_arrow2.play()
+
+            if(intersects_monger2.length > 0){
+              monger2_hover.visible = true
+              displayFishMonger2 = true
+            }else{
+              monger2_hover.visible = false;
+              displayFishMonger2 = false;
+            }
+          }else{
+            arrow_monger2.visible = false;
+            monger2_hover.visible = false;
+            displayFishMonger2 = false;
+          }
+
+          if(disTo_arrow3 < 6){
+            arrow_monger3.visible = true;
+            animation_arrow3.play()
+            if(intersects_monger3.length > 0){
+              monger3_hover.visible = true;
+              displayFishMonger3 = true;
+            }else{
+              monger3_hover.visible = false;
+              displayFishMonger3 = false;
+            }
+          }else{
+            arrow_monger3.visible = false;
+            monger3_hover.visible = false;
+            displayFishMonger3 = false;
+          }
+
+          if(disTo_arrow4 < 6){
+            arrow_monger4.visible = true;
+            animation_arrow4.play()
+            if(intersects_monger4.length > 0){
+            monger4_hover.visible = true
+            displayFishMonger4 = true;
+            }else{
+              monger4_hover.visible = false;
+              displayFishMonger4 = false;
+            }
+          }else{
+            arrow_monger4.visible = false;
+            monger4_hover.visible = false;
+            displayFishMonger4 = false;
+            }
+
+          if(disTo_kick < 8){
+            animation_kick_man_arm.play();
+            animation_kick_man_leg.play();
+            animation_kick_box.play();
+          } 
+          if(disTo_fish < 8){
+            animation_fish.play();
+            }
+          if(disTo_dragman < 8){
+            animation_drag_man_body.play();
+            animation_drag_man_calf_L.play();
+            animation_drag_man_calf_R.play();
+            animation_drag_man_leg_L.play();
+            animation_drag_man_leg_R.play();
+          }
+          if(disTo_passerby01 < 4.5){
+            flipPositive(passerby01)
+          }else{
+            flipNegative(passerby01)
+          }
+          if(disTo_passerby02 < 4.5){
+            flipPositive(passerby02)
+          }else{
+            flipNegative(passerby02)
+          }
+          if(disTo_passerby03 < 4.5){
+            flipPositive(passerby03)
+          }else{
+            flipNegative(passerby03)
+          }
+          if(disTo_passerby04 < 4.5){
+            flipPositive(passerby04)
+          }else{
+            flipNegative(passerby04)
+          }
+          if(disTo_passerby05 < 4.5){
+            flipPositive(passerby05)
+          }else{
+            flipNegative(passerby05)
+          }
+          if(disTo_passerby06 < 4.5){
+            flipPositive(passerby06)
+          }else{
+            flipNegative(passerby06)
+          }
+          if(disTo_passerby07 < 4.5){
+            flipPositive(passerby07)
+          }else{
+            flipNegative(passerby07)
+          }
+          if(disTo_passerby08 < 4.5){
+            flipPositive(passerby08)
+          }else{
+            flipNegative(passerby08)
+          }
+          if(disTo_passerby09 < 4.5){
+            flipPositive(passerby09)
+          }else{
+            flipNegative(passerby09)
+          }               
         }
       }        
           document.addEventListener("dblclick", function () {
-             if (displayFishMonger1) store.commit("FishMongerChangeState",{id:'1',display: true})
-             if (displayFishMonger2) store.commit("FishMongerChangeState",{id:'2',display: true})
-             if (displayFishMonger3) store.commit("FishMongerChangeState",{id:'3',display: true})
-             if (displayFishMonger4) store.commit("FishMongerChangeState",{id:'4',display: true})
+            if (displaySheet_power) store.commit("marketChangeState",{id:'sheet_power',display: true})
+            if (displaySheet_brave) store.commit("marketChangeState",{id:'sheet_brave',display: true})
+            if (displayFishMonger1) store.commit("marketChangeState",{id:'monger1',display: true})
+            if (displayFishMonger2) store.commit("marketChangeState",{id:'monger2',display: true})
+            if (displayFishMonger3) store.commit("marketChangeState",{id:'monger3',display: true})
+            if (displayFishMonger4) store.commit("marketChangeState",{id:'monger4',display: true})
+            if (displayEnd) store.commit("marketChangeState",{id:'end',display: true})
+            // console.log(store.state.marketDisplay[0]["id"],store.state.marketDisplay[0]["display"])
             });  
       createScene();
       createLight();

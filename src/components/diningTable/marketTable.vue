@@ -25,28 +25,31 @@ export default {
       let controls;
       let sea, Lowersea;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      let coneIntro1;
-      let coneIntro2;
-      let coneIntro3;
-      let coneIntro4;
-      let coneIntro5;
-      let coneIntro6;
+
+      let readyForOBJanimation = false;
       let marketTable_loaded = false;
       let model_loaded = false;
+
       let displayFood1 = false;
       let displayFood2 = false;
       let displayFood3 = false;
       let displayFood4 = false;
       let displayFood5 = false;
       let displayFood6 = false;      
-      let whiteradishslice1,whiteradishslice2;
-
-      const objects1 = [];
-      const objects2 = [];
-      const objects3 = [];
-      const objects4 = [];
-      const objects5 = [];
-      const objects6 = [];
+      
+      let boat01,boat02;
+      let meal = 3;
+      let a_kon_normal,a_kon_hover;
+      let hai_di_ca,sashimi,mahi_fish,miso_soup,orange,wan_que;
+      let hai_y,sahi_y,mahi_y,miso_y,orange_y,wan_que_y;
+      let a_kon2D = false;
+      const a_kon = [];
+      const hai = []
+      const sashi = []
+      const mahi = []
+      const miso = []
+      const ora = []
+      const wan = []
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();    
       function createScene() {
@@ -204,64 +207,157 @@ export default {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
         // load a resource
+        
         let temp = 1;
-        loader.load(
-          // resource URL
-          "../models/market_table.json",
-          // called when resource is loaded
-          function (obj) {
-            obj.scale.set(10, 10, 10);
-            obj.position.set(0, 0, 0);
-            scene.add(obj);
-            whiteradishslice1 = obj.getObjectByName("Plane062");
-            whiteradishslice2 = obj.getObjectByName("Plane044");
-
-            whiteradishslice1.visible = false;
-            whiteradishslice2.visible = false;
-          },
-          // called when loading is in progresses
-          function (xhr) {
-            // console.log(xhr.loaded)
-            let marketTableOnProgress = parseInt((xhr.loaded / 109568636)*100)
-            // console.log(PremarketOnProgress)
-            if( marketTableOnProgress != temp && store.state.marketTablePercentage <= 100){
-              store.commit("marketTableOnProgressCount")
-              temp = temp + 1;
-              console.log("marketTablePercentage: ", store.state.marketTablePercentage,"%")
+        switch(meal){
+          case 1:
+            loader.load(
+            // resource URL
+            "../models/meal01.json",
+            // called when resource is loaded
+            function (obj) {
+              obj.scale.set(10, 10, 10);
+              obj.position.set(0, 0, 0);
+              scene.add(obj);
+              boat01 = obj.getObjectByName("boat01")
+              boat02 = obj.getObjectByName("boat02")
+              a_kon_normal = obj.getObjectByName("a_kon_normal")
+              a_kon_hover = obj.getObjectByName("a_kon_hover")
+              hai_di_ca = obj.getObjectByName("hai_di_ca")
+              sashimi = obj.getObjectByName("sashimi")
+              mahi_fish = obj.getObjectByName("mahi_fish")
+              miso_soup = obj.getObjectByName("miso_soup")
+              hai_y = hai_di_ca.position.y
+              sahi_y = sashimi.position.y
+              mahi_y = mahi_fish.position.y
+              miso_y = miso_soup.position.y
+              hai.push(hai_di_ca)
+              sashi.push(sashimi)
+              mahi.push(mahi_fish)
+              miso.push(miso_soup)
+              a_kon_hover.visible = false;
+              a_kon.push(a_kon_normal)
+            },
+            // called when loading is in progresses
+            function (xhr) {
+              if (xhr.loaded / 94047597  == 1) {   
+                marketTable_loaded = true;
+                callback()
+              }
             }
-            if (xhr.loaded / 109568636  == 1) {   
-              marketTable_loaded = true;
-              callback()
+          );
+          break
+          case 2:
+            loader.load(
+            // resource URL
+            "../models/meal02.json",
+            // called when resource is loaded
+            function (obj) {
+              obj.scale.set(10, 10, 10);
+              obj.position.set(0, 0, 0);
+              scene.add(obj);
+              boat01 = obj.getObjectByName("boat01")
+              boat02 = obj.getObjectByName("boat02")
+              a_kon_normal = obj.getObjectByName("a_kon_normal")
+              a_kon_hover = obj.getObjectByName("a_kon_hover")
+              hai_di_ca = obj.getObjectByName("hai_di_ca")
+              sashimi = obj.getObjectByName("sashimi")
+              mahi_fish = obj.getObjectByName("mahi_fish")
+              miso_soup = obj.getObjectByName("miso_soup")
+              orange = obj.getObjectByName("orange")
+              wan_que = obj.getObjectByName("wan_que")
+              hai_y = hai_di_ca.position.y
+              sahi_y = sashimi.position.y
+              mahi_y = mahi_fish.position.y
+              miso_y = miso_soup.position.y
+              orange_y = orange.position.y
+              wan_que_y = wan_que.position.y
+              hai.push(hai_di_ca)
+              sashi.push(sashimi)
+              mahi.push(mahi_fish)
+              miso.push(miso_soup)
+              ora.push(orange)
+              wan.push(wan_que)
+              a_kon_hover.visible = false;
+              a_kon.push(a_kon_normal)
+            },
+            // called when loading is in progresses
+            function (xhr) {
+              // console.log(xhr.loaded)
+              if (xhr.loaded / 96573644  == 1) {   
+                marketTable_loaded = true;
+                callback()
+              }
             }
-          }
-        );
-        var geometryIntro1 = new THREE.ConeBufferGeometry( 0.04, 0.04, 4 ); 
-        var materialIntro1 = new THREE.MeshLambertMaterial( {color: 0x67DAD5} ); 
-        coneIntro1 = new THREE.Mesh( geometryIntro1, materialIntro1 );   
-        coneIntro1.rotation.x = Math.PI;
-        coneIntro2 = coneIntro1.clone();
-        coneIntro3 = coneIntro1.clone();
-        coneIntro4 = coneIntro1.clone();
-        coneIntro5 = coneIntro1.clone();
-        coneIntro6 = coneIntro1.clone();
-        coneIntro1.position.set(-4.80968475341796*10, 0.102379404008388*10-0.1, -0.0722323656082153*10)///海豬腳
-        coneIntro2.position.set(-4.86205768585205*10, 0.102379404008388*10-0.1, -0.106271788477897*10)///肚臍橙
-        coneIntro3.position.set(-4.83438825607299*10, 0.0999452471733093*10-0.1, -0.0740058720111846*10)///生魚片
-        coneIntro4.position.set(-4.83099460601806*10, 0.111665286123752*10-0.1, -0.104491479694843*10)///柴魚味噌湯
-        coneIntro5.position.set(-4.86796474456787*10+0.08, 0.0991516187787056*10-0.1, -0.0747929289937019*10)///鬼頭刀魚排
-        coneIntro6.position.set(-4.80510187149047*10, 0.102379404008388*10-0.1, -0.10084480792284*10)///碗粿
-        objects1.push(coneIntro1)
-        objects2.push(coneIntro2)
-        objects3.push(coneIntro3)
-        objects4.push(coneIntro4)
-        objects5.push(coneIntro5)
-        objects6.push(coneIntro6)
-        scene.add( coneIntro1 );
-        scene.add( coneIntro2 );
-        scene.add( coneIntro3 );
-        scene.add( coneIntro4 );
-        scene.add( coneIntro5 );
-        scene.add( coneIntro6 );
+          );
+          break
+          case 3:
+            loader.load(
+            // resource URL
+            "../models/meal3_0312.json",
+            // called when resource is loaded
+            function (obj) {
+              obj.scale.set(10, 10, 10);
+              obj.position.set(0, 0, 0);
+              scene.add(obj);
+              boat01 = obj.getObjectByName("boat01")
+              boat02 = obj.getObjectByName("boat02")
+              a_kon_normal = obj.getObjectByName("a_kon_normal")
+              a_kon_hover = obj.getObjectByName("a_kon_hover")
+              sashimi = obj.getObjectByName("sashimi")
+              miso_soup = obj.getObjectByName("miso_soup")
+              sahi_y = sashimi.position.y
+              miso_y = miso_soup.position.y
+              sashi.push(sashimi)
+              miso.push(miso_soup)
+              a_kon_hover.visible = false;
+              a_kon.push(a_kon_normal)
+            },
+            // called when loading is in progresses
+            function (xhr) {
+              if (xhr.loaded / 90445220  == 1) {   
+                marketTable_loaded = true;
+                callback()
+              }
+            }
+          );
+          case 4:
+            loader.load(
+            // resource URL
+            "../models/meal04.json",
+            // called when resource is loaded
+            function (obj) {
+              obj.scale.set(10, 10, 10);
+              obj.position.set(0, 0, 0);
+              scene.add(obj);
+              boat01 = obj.getObjectByName("boat01")
+              boat02 = obj.getObjectByName("boat02")
+              a_kon_normal = obj.getObjectByName("a_kon_normal")
+              a_kon_hover = obj.getObjectByName("a_kon_hover")
+              hai_di_ca = obj.getObjectByName("hai_di_ca")
+              miso_soup = obj.getObjectByName("miso_soup")
+              orange = obj.getObjectByName("orange")
+              wan_que = obj.getObjectByName("wan_que")
+              hai_y = hai_di_ca.position.y
+              miso_y = miso_soup.position.y
+              orange_y = orange.position.y
+              wan_que_y = wan_que.position.y
+              hai.push(hai_di_ca)
+              miso.push(miso_soup)
+              ora.push(orange)
+              wan.push(wan_que)
+              a_kon_hover.visible = false;
+              a_kon.push(a_kon_normal)
+            },
+            // called when loading is in progresses
+            function (xhr) {
+              if (xhr.loaded / 90310211  == 1) {   
+                marketTable_loaded = true;
+                callback()
+              }
+            }
+          );
+        }
       }
 
       function createControls() {
@@ -281,6 +377,16 @@ export default {
       }
       window.addEventListener( 'mousemove', onMouseMove, false );
 
+      let doOnce = false;
+      function delayForAnimate() {
+        if (!doOnce) {
+          doOnce = true;
+          setTimeout(() => {
+            readyForOBJanimation = true
+          }, 500);
+        }
+      }
+      
       function animate() {
         if(marketTable_loaded) model_loaded = true;
         if(model_loaded) renderer.render(scene, camera);
@@ -291,54 +397,61 @@ export default {
         if (isMobile) controls.mobileMove();
 
         raycaster.setFromCamera( mouse, camera );
-        let intersects1 = raycaster.intersectObjects(objects1);
-        let intersects2 = raycaster.intersectObjects(objects2);
-        let intersects3 = raycaster.intersectObjects(objects3);
-        let intersects4 = raycaster.intersectObjects(objects4);
-        let intersects5 = raycaster.intersectObjects(objects5);
-        let intersects6 = raycaster.intersectObjects(objects6);
-        if(model_loaded){
-          if (intersects1.length > 0 ) {
-            coneIntro1.rotation.y += 0.05;
-            displayFood1 = true; // 海豬腳
-            // console.log("海豬腳")
-          } else if (intersects1.length == 0 ) {
-            displayFood1 = false;
+        let intersects_hai = raycaster.intersectObjects(hai);
+        let intersects_sashimi = raycaster.intersectObjects(sashi);
+        let intersects_mahi_fish = raycaster.intersectObjects(mahi);
+        let intersects_miso_soup = raycaster.intersectObjects(miso);
+        let intersects_orange = raycaster.intersectObjects(ora);
+        let intersects_wan_que = raycaster.intersectObjects(wan);
+        let intersects_a_kon = raycaster.intersectObjects(a_kon);
+        if(marketTable_loaded) delayForAnimate()
+        if (readyForOBJanimation){
+          boat01.position.y = Math.sin(Date.now()/500)*0.05-0.3;
+          boat02.position.y = Math.sin(Date.now()/500)*0.05-0.3;
+          if(intersects_a_kon.length > 0){
+            a_kon_normal.visible = false;
+            a_kon_hover.visible = true;
+            a_kon2D = true;
+          }else{
+            a_kon_normal.visible = true;
+            a_kon_hover.visible = false;
+            a_kon2D = false;
           }
-          if (intersects2.length > 0 ) {
-            displayFood2 = true; //肚臍橙
-            coneIntro2.rotation.y += 0.05;
-            // console.log("肚臍橙")
-          } else if (intersects2.length == 0) {
-            displayFood2 = false;
+          if(intersects_hai.length > 0){          
+            while(hai_di_ca.position.y <= hai_y+0.002)
+            hai_di_ca.position.y += 0.000001;
+          }else if (meal == 1 || meal == 2 || meal == 4){
+            hai_di_ca.position.y = hai_y
           }
-          if (intersects3.length > 0  ) {
-            coneIntro3.rotation.y += 0.05;
-            displayFood3 = true; //生魚片
-            // console.log("生魚片")
-          } else if (intersects3.length == 0 ) {
-            displayFood3 = false;
+          if(intersects_sashimi.length > 0){          
+            while(sashimi.position.y <= sahi_y+0.002)
+            sashimi.position.y += 0.000001;
+          }else if (meal ==1 || meal ==2 || meal ==3){
+            sashimi.position.y = sahi_y
           }
-          if (intersects4.length > 0  ) {
-            coneIntro4.rotation.y += 0.05;
-            displayFood4 = true; //味噌湯
-            // console.log("味噌湯")
-          } else if (intersects4.length == 0) {
-            displayFood4 = false;
+          if(intersects_mahi_fish.length > 0){          
+            while(mahi_fish.position.y <= mahi_y+0.002)
+            mahi_fish.position.y += 0.000001;
+          }else if (meal == 1 || meal == 2){
+            mahi_fish.position.y = mahi_y
           }
-          if (intersects5.length > 0 ) {
-            coneIntro5.rotation.y += 0.05;
-            displayFood5 = true; //鬼頭刀魚排
-            // console.log("鬼頭刀魚排")
-          } else if (intersects5.length == 0 ) {
-            displayFood5 = false;
+          if(intersects_miso_soup.length > 0){          
+            while(miso_soup.position.y <= miso_y+0.002)
+            miso_soup.position.y += 0.000001;
+          }else if (meal == 1 || meal == 2 || meal == 3 || meal == 4){
+            miso_soup.position.y = miso_y
           }
-          if (intersects6.length > 0 ) {
-            coneIntro6.rotation.y += 0.05;
-            // console.log("碗粿")
-            displayFood6 = true; //碗粿
-          } else if (intersects6.length == 0 ) {
-            displayFood6 = false;
+          if(intersects_orange.length > 0){          
+            while(orange.position.y <= orange_y+0.002)
+            orange.position.y += 0.000001;
+          }else if (meal == 2 || meal == 4){
+            orange.position.y = orange_y
+          }
+          if(intersects_wan_que.length > 0){          
+            while(wan_que.position.y <= wan_que_y+0.002)
+            wan_que.position.y += 0.000001;
+          }else if (meal ==2 || meal == 4){
+            wan_que.position.y = wan_que_y
           }
         }
         // console.log(store.state.FoodDisplay[0]["id"],store.state.FoodDisplay[0]["display"])
@@ -351,6 +464,7 @@ export default {
              if (displayFood4) store.commit("FoodChangeState",{id:'4',display:true})//味噌湯
              if (displayFood5) store.commit("FoodChangeState",{id:'5',display:true})//鬼頭刀魚排
              if (displayFood6) store.commit("FoodChangeState",{id:'6',display:true})//碗粿
+             if (a_kon2D) store.commit("FoodChangeState",{id:'6',display:true})//碗粿
             });  
       createScene();
       createLight();

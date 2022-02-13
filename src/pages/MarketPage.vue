@@ -52,7 +52,7 @@ export default defineComponent({
       this.progressPercent = loadedProgress;
       let loadingWave = document.getElementById("waveVideo");
       loadingWave.style.top = `${-800 - loadedProgress * 2}px`;
-      console.log(`Loading px ${-800 - loadedProgress * 2}px`);
+      // console.log(`Loading px ${-800 - loadedProgress * 2}px`);
       // alert(document.getElementById("waveVideo").style.top);
 
       if (val == 111356897 * (this.DEBUG+1)) {

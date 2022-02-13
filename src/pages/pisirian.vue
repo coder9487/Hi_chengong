@@ -8,6 +8,7 @@
 import * as THREE from "../../node_modules/three/build/three.module";
 // import { PointerLockControls } from "../../node_modules/three/examples/jsm/controls/PointerLockControls";
 import { FirstPersonCameraControl } from "../Library/FirstPersonCameraControls";
+import store from "../store/index";
 export default {
   name: "three",
   mounted() {
@@ -18,7 +19,15 @@ export default {
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
+      let pisirian_load = false;
+      let readyForOBJanimation = false;
+      let fish_boat;
+      let mixer;
+      let animation_sword,animation_swordfish_Armature,animation_splash;
+      let musician,children,adult,captain,elder,brother_1,brother_2,sea_watcher,a_kon_end;
+      let degree = 0;
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
       function createScene() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color("#eee");
@@ -44,10 +53,10 @@ export default {
           50,
           window.innerWidth / window.innerHeight,
           0.01,
-          1000
+          10000
         );
         camera.position.x = 40;
-        camera.position.y = 9; //8
+        camera.position.y = 30; //8
         camera.position.z = -2;
         camera.lookAt(5, 6.5, 5);
 
@@ -154,7 +163,7 @@ export default {
       function createSea() {
         sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
         scene.add(sea.mesh);
-        sea.mesh.position.y = 0;
+        sea.mesh.position.y = 18;
         sea.mesh.castShadow = false;
         sea.mesh.receiveShadow = true;
       }
@@ -170,25 +179,57 @@ export default {
       function createObject() {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
-        const lod = new THREE.LOD();
         // load a resource
         loader.load(
           // resource URL
           "../models/pisirian.json",
           // called when resource is loaded
           function (obj) {
+            console.log(obj)
             obj.scale.set(10, 10, 10);
-            obj.position.set(0, -20, 0);
+            obj.position.set(0, 0, 0);
             controls.colliders = obj;
-            lod.addLevel(obj);
-            scene.add(lod);
             scene.add(obj)
-            console.log(obj);
+            fish_boat = obj.getObjectByName("fish_boat")
+            
+            mixer = new THREE.AnimationMixer(obj)       
+            animation_splash = mixer.clipAction(obj.animations[0])
+            animation_sword = mixer.clipAction(obj.animations[1])
+            animation_swordfish_Armature = mixer.clipAction(obj.animations[2])
+            animation_swordfish_Armature.setLoop(THREE.LoopOnce)
+            animation_splash.setLoop(THREE.LoopOnce)
+            
+            musician = obj.getObjectByName("musician")
+            children = obj.getObjectByName("children")
+            adult = obj.getObjectByName("adult")
+            captain = obj.getObjectByName("captain")
+            elder = obj.getObjectByName("elder")
+            brother_1 = obj.getObjectByName("brother_1")
+            brother_2 = obj.getObjectByName("brother_2")
+            sea_watcher = obj.getObjectByName("sea_watcher")
+            a_kon_end = obj.getObjectByName("a_kon_end")
+            musician.display = false;
+            children.display = false;
+            adult.display = false;
+            captain.display = false;
+            elder.display = false;
+            brother_1.display = false;
+            brother_2.display = false;
+            sea_watcher.display = false;
+            a_kon_end.display = false;
+
+
+            
+
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log(xhr.loaded)
-            console.log((xhr.loaded / 59227599) * 100 + "% loaded");
+            // console.log((xhr.loaded / 42534400) * 100 + "% loaded");
+            if (xhr.loaded / 42534400 == 1) {
+              pisirian_load = true;
+            }
+            
           }
         );
       }
@@ -200,14 +241,141 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
-      
+      let doOnce = false;
+      function delayForAnimate() {
+        if (!doOnce) {
+          doOnce = true;
+          setTimeout(() => {
+            readyForOBJanimation = true
+          }, 500);
+        }
+      }
+      function flipPositive(obj){
+        if (obj.rotation.y < Math.PI){
+          obj.rotation.y += 0.05
+        }
+      }
+      function flipNegative(obj){
+        if (obj.rotation.y > 0){
+          obj.rotation.y -= 0.05
+        }
+      }
       function animate() {
-        renderer.render(scene, camera);
+        if (readyForOBJanimation) renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
         if (controls.enabled) controls.update();
         if (isMobile) controls.mobileMove();
+        if (pisirian_load) delayForAnimate()
+        if (readyForOBJanimation){
+          mixer.update(0.016)
+          fish_boat.position.y = Math.sin(Date.now()/500)*0.06+1.9;
+          // animation_sword.play();
+          let temp
+          let disTo_musician = camera.position.distanceTo(musician.getWorldPosition(new THREE.Vector3()))
+          let disTo_elder = camera.position.distanceTo(elder.getWorldPosition(new THREE.Vector3()))
+          let disTo_children = camera.position.distanceTo(children.getWorldPosition(new THREE.Vector3()))
+          let disTo_adult = camera.position.distanceTo(adult.getWorldPosition(new THREE.Vector3()))
+          let disTo_captain = camera.position.distanceTo(captain.getWorldPosition(new THREE.Vector3()))
+          let disTo_brother_1 = camera.position.distanceTo(brother_1.getWorldPosition(new THREE.Vector3()))
+          let disTo_brother_2 = camera.position.distanceTo(brother_2.getWorldPosition(new THREE.Vector3()))
+          let disTo_sea_watcher = camera.position.distanceTo(sea_watcher.getWorldPosition(new THREE.Vector3()))
+          let disTo_a_kon_end = camera.position.distanceTo(a_kon_end.getWorldPosition(new THREE.Vector3()))
+
+          let tmp1 = store.state.pisirianDisplay[0]["id"] 
+          let tmp2 = store.state.pisirianDisplay[0]["display"]
+
+          if(disTo_musician < 3 ){  
+            temp = musician.display        
+            flipPositive(musician)
+            musician.display = true;
+            if(temp != musician.display) store.commit("pisirianChangeState",{id:'musician',display: true})
+          }else {
+            flipNegative(musician)
+            musician.display = false;
+          }
+          if(disTo_children < 3 ){
+                
+            temp = children.display   
+            flipPositive(children)
+            children.display = true;
+            if(temp != children.display) store.commit("pisirianChangeState",{id:'children',display: true})
+          }else {
+            flipNegative(children)
+            children.display = false;
+          }
+          if(disTo_adult < 3){
+            temp = adult.display
+            flipPositive(adult)
+            adult.display = true;
+            if (temp != adult.display) store.commit("pisirianChangeState",{id:'adult',display: true})
+          }else {
+            flipNegative(adult)
+            adult.display = false
+          }
+          if(disTo_captain < 3){
+            temp = captain.display
+            flipPositive(captain);
+            captain.display = true;
+            if (temp != captain.display) store.commit("pisirianChangeState",{id:'captain',display: true})
+          }else{
+            flipNegative(captain);
+            captain.display = false;
+          }
+          if(disTo_brother_1 < 3){
+            temp = brother_1.display
+            flipPositive(brother_1);
+            brother_1.display = true;
+            if (temp != brother_1.display) store.commit("pisirianChangeState",{id:'brother_1',display: true})
+          }else{
+            flipNegative(brother_1);
+            brother_1.display = false;
+          }
+          if(disTo_brother_2 < 3){
+            temp = brother_2.display
+            flipPositive(brother_2);
+            brother_2.display = true
+            if(temp != brother_2.display) store.commit("pisirianChangeState",{id:'brother_2',display: true})
+          }else{
+            flipNegative(brother_2);
+            brother_2.display = false;
+          }
+          if(disTo_sea_watcher < 3){
+            temp = sea_watcher.display
+            flipPositive(sea_watcher);
+            sea_watcher.display = true;
+            if (temp != sea_watcher.display) store.commit("pisirianChangeState",{id:'sea_watcher',display: true})
+          }else{
+            flipNegative(sea_watcher);
+            sea_watcher.display = false;
+          }
+          if(disTo_a_kon_end < 3){
+            temp = a_kon_end.display
+            flipPositive(a_kon_end);
+            a_kon_end.display = true;
+            if (temp != a_kon_end.display) store.commit("pisirianChangeState",{id:'a_kon_end',display: true})
+          }else{
+            flipNegative(a_kon_end);
+            a_kon_end.display = false;
+          }
+          if(disTo_elder < 3) {      
+            temp = elder.display
+            flipPositive(elder)
+            elder.display = true;
+            if (temp != elder.display) store.commit("pisirianChangeState",{id:'elder',display: true})
+            animation_swordfish_Armature.play();
+            animation_splash.play();
+          }else{
+            flipNegative(elder)
+            elder.display = false;
+          }
+          
+          if (tmp1 != store.state.pisirianDisplay[0]["id"])         
+          {
+            console.log(store.state.pisirianDisplay[0]["id"])
+          }
+        }
       }
       createScene();
       createLight();
