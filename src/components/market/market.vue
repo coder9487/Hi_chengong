@@ -518,7 +518,7 @@ export default {
               displaySheet_brave = false;
             }
 
-          if(disTo_car < 8.5){
+          if(disTo_car < 8){
             animation_car.play();
             animation_tier01.play();
             animation_tier02.play();
