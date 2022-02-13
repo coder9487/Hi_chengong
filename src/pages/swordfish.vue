@@ -333,8 +333,8 @@ export default {
         }
         if (controls.enabled) controls.update();
         // if (isMobile) controls.mobileMove();
-        sea.mesh.position.x -= 0.02;
-        sea.mesh.position.z -= 0.02;
+        sea.mesh.position.x += 0.13;
+        // sea.mesh.position.z -= 0.02;
       }
       createScene();
       createLight();
