@@ -19,7 +19,10 @@ export default createStore({
     ],
     FoodDisplay: [
       { id: '0', display: false,}
-    ]
+    ],
+    pisirianDisplay: [
+      { id: 'None', display: false,}
+    ],
   },
   mutations: {
     ///
@@ -28,6 +31,9 @@ export default createStore({
     },
     FoodChangeState(state, cate ) {
       state.FoodDisplay.splice(0,1,cate)
+    },
+    pisirianChangeState(state, person ) {
+      state.pisirianDisplay.splice(0,1,person)
     },
     ///
     setQuestionMarketDisplayTrue(state){

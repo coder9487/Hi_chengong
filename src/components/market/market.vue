@@ -344,15 +344,6 @@ export default {
             passerby08 = obj.getObjectByName("passerby08")
             passerby09 = obj.getObjectByName("passerby09")
 
-            passer01 = new THREE.Vector3(passerby01.position.x*10,passerby01.position.y*10,passerby01.position.z*10);
-            passer02 = new THREE.Vector3(passerby02.position.x*10,passerby02.position.y*10,passerby02.position.z*10);
-            passer03 = new THREE.Vector3(passerby03.position.x*10,passerby03.position.y*10,passerby03.position.z*10);
-            passer04 = new THREE.Vector3(passerby04.position.x*10,passerby04.position.y*10,passerby04.position.z*10);
-            passer05 = new THREE.Vector3(passerby05.position.x*10,passerby05.position.y*10,passerby05.position.z*10);
-            passer06 = new THREE.Vector3(passerby06.position.x*10,passerby06.position.y*10,passerby06.position.z*10);
-            passer07 = new THREE.Vector3(passerby07.position.x*10,passerby07.position.y*10,passerby07.position.z*10);
-            passer08 = new THREE.Vector3(passerby08.position.x*10,passerby08.position.y*10,passerby08.position.z*10);
-            passer09 = new THREE.Vector3(passerby09.position.x*10,passerby09.position.y*10,passerby09.position.z*10);
           },
           // called when loading is in progresses
           function (xhr) {
@@ -430,6 +421,22 @@ export default {
         }
       }
       window.addEventListener( 'mousemove', onMouseMove, false );
+
+      function flipPositive(obj){
+        if (obj.rotation.y < Math.PI){
+          obj.rotation.y += 0.05
+        }
+      }
+      function flipNegative(obj){
+        if (obj.rotation.y > 0){
+          obj.rotation.y -= 0.05
+        }
+      }
+      function flip_a_kon(obj){
+        if (obj.rotation.z< Math.PI/2){
+          obj.rotation.z += 0.05
+        }
+      }   
       function animate() {
         if (market_loaded ){
           store.commit("setMarketLoadedTrue");
@@ -472,18 +479,18 @@ export default {
           let disTo_kick = camera.position.distanceTo(kick);
           let disTo_dragman = camera.position.distanceTo(drag_man);
           
-          let disTo_passerby01 = camera.position.distanceTo(passer01);
-          let disTo_passerby02 = camera.position.distanceTo(passer02);
-          let disTo_passerby03 = camera.position.distanceTo(passer03);
-          let disTo_passerby04 = camera.position.distanceTo(passer04);
-          let disTo_passerby05 = camera.position.distanceTo(passer05);
-          let disTo_passerby06 = camera.position.distanceTo(passer06);
-          let disTo_passerby07 = camera.position.distanceTo(passer07);
-          let disTo_passerby08 = camera.position.distanceTo(passer08);
-          let disTo_passerby09 = camera.position.distanceTo(passer09);
+          let disTo_passerby01 = camera.position.distanceTo(passerby01.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby02 = camera.position.distanceTo(passerby02.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby03 = camera.position.distanceTo(passerby03.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby04 = camera.position.distanceTo(passerby04.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby05 = camera.position.distanceTo(passerby05.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby06 = camera.position.distanceTo(passerby06.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby07 = camera.position.distanceTo(passerby07.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby08 = camera.position.distanceTo(passerby08.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby09 = camera.position.distanceTo(passerby09.getWorldPosition(new THREE.Vector3()));
 
           if (disTo_a_kon_start < 3){
-            a_kon_start.rotation.z = Math.PI/2;
+            flip_a_kon(a_kon_start)
             sheet_brave_normal.visible = true;
             sheet_power_normal.visible = true;
             if (interscets_sheet_power_normal.length > 0){
@@ -511,14 +518,14 @@ export default {
               displaySheet_brave = false;
             }
 
-          if(disTo_car < 6){
+          if(disTo_car < 8){
             animation_car.play();
             animation_tier01.play();
             animation_tier02.play();
           }
           
           
-          if(disTo_arrow1 < 3.5){
+          if(disTo_arrow1 < 6){
             arrow_monger1.visible = true;
             animation_arrow1.play()
 
@@ -535,7 +542,7 @@ export default {
             displayFishMonger1 = false;
           }
 
-          if(disTo_arrow2 < 3.5){
+          if(disTo_arrow2 < 6){
             arrow_monger2.visible = true;
             animation_arrow2.play()
 
@@ -552,7 +559,7 @@ export default {
             displayFishMonger2 = false;
           }
 
-          if(disTo_arrow3 < 3.5){
+          if(disTo_arrow3 < 6){
             arrow_monger3.visible = true;
             animation_arrow3.play()
             if(intersects_monger3.length > 0){
@@ -568,7 +575,7 @@ export default {
             displayFishMonger3 = false;
           }
 
-          if(disTo_arrow4 < 3.5){
+          if(disTo_arrow4 < 6){
             arrow_monger4.visible = true;
             animation_arrow4.play()
             if(intersects_monger4.length > 0){
@@ -584,47 +591,65 @@ export default {
             displayFishMonger4 = false;
             }
 
-          if(disTo_kick < 5){
+          if(disTo_kick < 8){
             animation_kick_man_arm.play();
             animation_kick_man_leg.play();
             animation_kick_box.play();
           } 
-          if(disTo_fish < 5){
+          if(disTo_fish < 8){
             animation_fish.play();
             }
-          if(disTo_dragman < 5){
+          if(disTo_dragman < 8){
             animation_drag_man_body.play();
             animation_drag_man_calf_L.play();
             animation_drag_man_calf_R.play();
             animation_drag_man_leg_L.play();
             animation_drag_man_leg_R.play();
           }
-          if(disTo_passerby01 < 3.5){
-            passerby01.rotation.y = Math.PI;
+          if(disTo_passerby01 < 4.5){
+            flipPositive(passerby01)
+          }else{
+            flipNegative(passerby01)
           }
-          if(disTo_passerby02 < 3.5){
-            passerby02.rotation.y = Math.PI;
+          if(disTo_passerby02 < 4.5){
+            flipPositive(passerby02)
+          }else{
+            flipNegative(passerby02)
           }
-          if(disTo_passerby03 < 3.5){
-            passerby03.rotation.y = Math.PI;
+          if(disTo_passerby03 < 4.5){
+            flipPositive(passerby03)
+          }else{
+            flipNegative(passerby03)
           }
-          if(disTo_passerby04 < 3.5){
-            passerby04.rotation.y = Math.PI;
+          if(disTo_passerby04 < 4.5){
+            flipPositive(passerby04)
+          }else{
+            flipNegative(passerby04)
           }
-          if(disTo_passerby05 < 3.5){
-            passerby05.rotation.y = Math.PI;
+          if(disTo_passerby05 < 4.5){
+            flipPositive(passerby05)
+          }else{
+            flipNegative(passerby05)
           }
-          if(disTo_passerby06 < 3.5){
-            passerby06.rotation.y = Math.PI;
+          if(disTo_passerby06 < 4.5){
+            flipPositive(passerby06)
+          }else{
+            flipNegative(passerby06)
           }
-          if(disTo_passerby07 < 3.5){
-            passerby07.rotation.y = Math.PI;
+          if(disTo_passerby07 < 4.5){
+            flipPositive(passerby07)
+          }else{
+            flipNegative(passerby07)
           }
-          if(disTo_passerby08 < 3.5){
-            passerby08.rotation.y = Math.PI;
+          if(disTo_passerby08 < 4.5){
+            flipPositive(passerby08)
+          }else{
+            flipNegative(passerby08)
           }
-          if(disTo_passerby09 < 3.5){
-            passerby09.rotation.y = Math.PI;
+          if(disTo_passerby09 < 4.5){
+            flipPositive(passerby09)
+          }else{
+            flipNegative(passerby09)
           }               
         }
       }        

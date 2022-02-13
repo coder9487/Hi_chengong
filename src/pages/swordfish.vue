@@ -21,15 +21,20 @@ export default {
       let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const objects = [];
       const objects2 = [];
-      let mixer_fish,animation_fish;
-      let fish_loaded = false;
-      let spear_loaded = false;
+      let mixer
+      let animation_fish;
+      let sword_fish_loaded = false;
+      // let sworfish_loaded = false;
+      // let spear_loaded = false;
       let model_loaded = false;
       let pole,pole_head,plane,origin,posit,direct,man;
       let readyForOBJanimation = false;
       let fish;
-
-
+      let animation0,animation1,animation2,animation3,animation4
+      let animation5,animation6,animation7,animation8,animation9;
+      let animation10,animation11,animation12,animation13,animation14;
+      let animation15,animation16,animation17,animation18,animation19;
+      let animation20,animation21,animation22,animation23,animation24;
       const mouse = new THREE.Vector2();
       const raycaster = new THREE.Raycaster();
       function createScene() {
@@ -186,45 +191,60 @@ export default {
         // instantiate a loader
         const loader = new THREE.ObjectLoader();
 
-        // load a resource
         loader.load(
           // resource URL
-          "models/sailfish_swim_test.json",
+          "models/swordfish.json",
           // called when resource is loaded
           function (obj) {
-            obj.scale.set(4, 4, 4);
+            obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
+            // console.log(obj)
             fish = obj.children[0];
+            console.log(fish.getWorldPosition(new THREE.Vector3()))
+            mixer = new THREE.AnimationMixer(obj);
             
-            mixer_fish = new THREE.AnimationMixer(obj);
-            animation_fish = mixer_fish.clipAction(obj.animations[0]).play();
+            pole = obj.getObjectByName("spear");
+            man = obj.getObjectByName("Armature001")
+            pole_head = pole.children[0];
+            animation0 = mixer.clipAction(obj.animations[0]).play()
+            animation1 = mixer.clipAction(obj.animations[1]).play()
+            animation2 = mixer.clipAction(obj.animations[2]).play()
+            animation3 = mixer.clipAction(obj.animations[3]).play()
+            animation4 = mixer.clipAction(obj.animations[4]).play()
+
+            animation5 = mixer.clipAction(obj.animations[5]).play()
+            animation6 = mixer.clipAction(obj.animations[6]).play()
+            animation7 = mixer.clipAction(obj.animations[7]).play()
+            animation8 = mixer.clipAction(obj.animations[8]).play()
+            animation9 = mixer.clipAction(obj.animations[9]).play()
+
+            // animation10 = mixer.clipAction(obj.animations[10]).play() // shooter
+            animation11 = mixer.clipAction(obj.animations[11]).play()
+            animation12 = mixer.clipAction(obj.animations[12]).play()
+            animation13 = mixer.clipAction(obj.animations[13]).play()
+            animation14 = mixer.clipAction(obj.animations[14]).play()
+
+            animation15 = mixer.clipAction(obj.animations[15]).play()
+            animation16 = mixer.clipAction(obj.animations[16]).play()
+            animation17 = mixer.clipAction(obj.animations[17]).play()
+            animation18 = mixer.clipAction(obj.animations[18]).play()
+            animation19 = mixer.clipAction(obj.animations[19]).play()
+
+            animation20 = mixer.clipAction(obj.animations[20]).play()
+            animation21 = mixer.clipAction(obj.animations[21]).play()
+            animation22 = mixer.clipAction(obj.animations[22]).play()
+            animation23 = mixer.clipAction(obj.animations[23]).play()
+            animation24 = mixer.clipAction(obj.animations[24]).play()
+
+
           },
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
             // console.log(xhr.loaded)
-            if (xhr.loaded / 3541040 == 1) fish_loaded = true;
-          }
-        );
-
-        loader.load(
-          // resource URL
-          "models/swordfish.json",
-          // onLoad callback
-          // Here the loaded data is assumed to be an object
-          function (obj) {
-            pole = obj.getObjectByName("spear");
-            man = obj.getObjectByName("Armature001")
-            pole_head = pole.children[0];
-            obj.scale.set(10,10,10)
-            scene.add(obj);
-          },
-          // onProgress callback
-          function (xhr) {
-            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            // console.log(xhr.loaded)
-            if (xhr.loaded / 3752339 == 1) spear_loaded = true;
+            if (xhr.loaded / 4732415 == 1) sword_fish_loaded = true;
+            // console.log(xhr.loaded / 4732415) *100
           }
         );
         let geo = new THREE.PlaneBufferGeometry(8000, 8000, 1, 1);
@@ -266,7 +286,7 @@ export default {
       window.addEventListener( 'mousemove', onMouseMove, false );
       function animate() {
         // const time = performance.now();
-        if(fish_loaded && spear_loaded) {
+        if(sword_fish_loaded) {
           model_loaded = true;
          delayForAnimate();
         }
@@ -277,12 +297,12 @@ export default {
         raycaster.setFromCamera(mouse,camera)
         if(readyForOBJanimation){
           renderer.render(scene, camera);
-          mixer_fish.update(0.016);
+          mixer.update(0.016);
 
           let intersects = raycaster.intersectObjects(objects);
           if(intersects.length > 0){
             origin = intersects[0].point;
-            posit = new THREE.Vector3(1.7277,5.3,-0.4074)
+            posit = new THREE.Vector3(1.7277862131595612,5.302516222000122,-0.40740348398685455)
             direct = posit.sub(origin).normalize();
             let raycasterToSky = new THREE.Raycaster(origin,direct);
             let intersectSky = raycasterToSky.intersectObjects(objects2);
@@ -296,10 +316,13 @@ export default {
               pole.translateZ(-0.01);
               pole.translateZ(-0.01);
             }
+
+
+
             let pohe = pole_head.getWorldPosition(new THREE.Vector3())
-            let fipo = fish.getWorldPosition(new THREE.Vector3())
+            let fish_position = fish.getWorldPosition(new THREE.Vector3())
             
-            let dis = pohe.distanceTo(fipo)
+            let dis = pohe.distanceTo(fish_position)
             if(dis < 0.4 ){
               alert("You hit!")
             }else if(pohe.y < -2){
