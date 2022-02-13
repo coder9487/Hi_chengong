@@ -518,14 +518,14 @@ export default {
               displaySheet_brave = false;
             }
 
-          if(disTo_car < 6){
+          if(disTo_car < 8){
             animation_car.play();
             animation_tier01.play();
             animation_tier02.play();
           }
           
           
-          if(disTo_arrow1 < 3.5){
+          if(disTo_arrow1 < 6){
             arrow_monger1.visible = true;
             animation_arrow1.play()
 
@@ -542,7 +542,7 @@ export default {
             displayFishMonger1 = false;
           }
 
-          if(disTo_arrow2 < 3.5){
+          if(disTo_arrow2 < 6){
             arrow_monger2.visible = true;
             animation_arrow2.play()
 
@@ -559,7 +559,7 @@ export default {
             displayFishMonger2 = false;
           }
 
-          if(disTo_arrow3 < 3.5){
+          if(disTo_arrow3 < 6){
             arrow_monger3.visible = true;
             animation_arrow3.play()
             if(intersects_monger3.length > 0){
@@ -575,7 +575,7 @@ export default {
             displayFishMonger3 = false;
           }
 
-          if(disTo_arrow4 < 3.5){
+          if(disTo_arrow4 < 6){
             arrow_monger4.visible = true;
             animation_arrow4.play()
             if(intersects_monger4.length > 0){
@@ -591,62 +591,62 @@ export default {
             displayFishMonger4 = false;
             }
 
-          if(disTo_kick < 5){
+          if(disTo_kick < 8){
             animation_kick_man_arm.play();
             animation_kick_man_leg.play();
             animation_kick_box.play();
           } 
-          if(disTo_fish < 5){
+          if(disTo_fish < 8){
             animation_fish.play();
             }
-          if(disTo_dragman < 5){
+          if(disTo_dragman < 8){
             animation_drag_man_body.play();
             animation_drag_man_calf_L.play();
             animation_drag_man_calf_R.play();
             animation_drag_man_leg_L.play();
             animation_drag_man_leg_R.play();
           }
-          if(disTo_passerby01 < 3.5){
+          if(disTo_passerby01 < 4.5){
             flipPositive(passerby01)
           }else{
             flipNegative(passerby01)
           }
-          if(disTo_passerby02 < 3.5){
+          if(disTo_passerby02 < 4.5){
             flipPositive(passerby02)
           }else{
             flipNegative(passerby02)
           }
-          if(disTo_passerby03 < 3.5){
+          if(disTo_passerby03 < 4.5){
             flipPositive(passerby03)
           }else{
             flipNegative(passerby03)
           }
-          if(disTo_passerby04 < 3.5){
+          if(disTo_passerby04 < 4.5){
             flipPositive(passerby04)
           }else{
             flipNegative(passerby04)
           }
-          if(disTo_passerby05 < 3.5){
+          if(disTo_passerby05 < 4.5){
             flipPositive(passerby05)
           }else{
             flipNegative(passerby05)
           }
-          if(disTo_passerby06 < 3.5){
+          if(disTo_passerby06 < 4.5){
             flipPositive(passerby06)
           }else{
             flipNegative(passerby06)
           }
-          if(disTo_passerby07 < 3.5){
+          if(disTo_passerby07 < 4.5){
             flipPositive(passerby07)
           }else{
             flipNegative(passerby07)
           }
-          if(disTo_passerby08 < 3.5){
+          if(disTo_passerby08 < 4.5){
             flipPositive(passerby08)
           }else{
             flipNegative(passerby08)
           }
-          if(disTo_passerby09 < 3.5){
+          if(disTo_passerby09 < 4.5){
             flipPositive(passerby09)
           }else{
             flipNegative(passerby09)

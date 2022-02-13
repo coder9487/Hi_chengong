@@ -219,6 +219,7 @@ export default {
             pole_head = pole.children[0];
             obj.scale.set(10,10,10)
             scene.add(obj);
+            console.log(obj);
           },
           // onProgress callback
           function (xhr) {
