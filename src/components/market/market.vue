@@ -660,7 +660,7 @@ export default {
             if (displayFishMonger2) store.commit("marketChangeState",{id:'monger2',display: true})
             if (displayFishMonger3) store.commit("marketChangeState",{id:'monger3',display: true})
             if (displayFishMonger4) store.commit("marketChangeState",{id:'monger4',display: true})
-            if (displayEnd) store.commit("marketChangeState",{id:'end',display: true})
+            if (displayEnd) store.commit("marketChangeState",{id:'sence_end',display: true})
             // console.log(store.state.marketDisplay[0]["id"],store.state.marketDisplay[0]["display"])
             });  
       createScene();

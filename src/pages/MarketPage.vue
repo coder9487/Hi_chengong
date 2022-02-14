@@ -99,7 +99,7 @@ export default defineComponent({
 #loadingGroup #loadingProgressText {
   position: relative;
   z-index: 11;
-  top: -500px;
+  top: -400px;
   margin-left: 45.5vw;
   color:skyblue;
   opacity: 1;

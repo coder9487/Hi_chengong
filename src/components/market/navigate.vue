@@ -5,7 +5,7 @@
     </q-icon>
 
     <img
-      src="images/npc.png"
+      src="images/a_kon.png"
       class="navigator_image"
       alt=""
       v-if="ShowNPC('startchat')"
@@ -22,7 +22,9 @@
             class="text_size"
             :src="talkContent.startchat[this.textIndex.startchat]"
           />
+
           <q-btn
+          v-if="0"
             class="chatContentButton"
             flat
             round
@@ -32,6 +34,10 @@
           />
         </q-card-section>
       </q-card>
+          <img
+          class="chatContentButton"
+          src="icons/press_any_key.svg"
+          />
     </div>
   </div>
 
@@ -78,6 +84,7 @@ export default {
   setup() {
     const info = ref(null);
     const panning = ref(false);
+    //
     let intrpducerShowFlag = reactive({
       showEnable: false,
       showIndex: 0,
@@ -87,11 +94,7 @@ export default {
 
     class FishMonger_class {
       indexArray = [0, 3, 4, 3, 6];
-      // constructor(indexArray, controlObject) {
-      //   this.indexArray = indexArray;
-      //   this.controlObject = controlObject;
-      //   this.photoindex = 0;
-      // }
+
       controlObject = null;
       photoindex = 0;
       Init(passInobj) {
@@ -102,7 +105,6 @@ export default {
         this.controlObject.imageUrl = `images/monger${
           this.controlObject.showIndex
         }/${this.controlObject.showIndex}-${this.photoindex + 1}.png`;
-        
       }
       nextImage() {
         this.photoindex++;
@@ -163,8 +165,8 @@ export default {
     };
   },
   computed: {
-    ChangeScene() {
-      return this.$store.state.toMarketTableSceneIndex;
+    marketChangeState() {
+      return this.$store.state.marketChangeState;
     },
     PopupChat() {
       let stateObject = [];
@@ -173,31 +175,38 @@ export default {
 
       return stateObject;
     },
-    approachGrandpa() {
-      return this.$store.state.questionMarketDisplay;
-    },
+    // approachGrandpa() {
+    //   return this.$store.state.questionMarketDisplay;
+    // },
   },
   watch: {
     ChangeScene: function () {
       this.$router.push("DiningTable");
     },
     PopupChat: function () {
-      //alert("detect fishMonger");
       let object = this.PopupChat;
+      
+      if (object[0].includes("_")) {
 
-      this.ShowFishMonger = object[0];
 
-      this.intrpducerShowFlag.showEnable = true;
-      this.intrpducerShowFlag.showIndex = parseInt(this.ShowFishMonger, 10);
-      this.FishMonger.imagePath();
-      console.log(this.intrpducerShowFlag);
+
+
+        console.log(" ")
+      } else {
+        let seq = object[0].split('monger')[1];
+        //console.log('fishmonger seq. ',seq)
+        this.ShowFishMonger = seq;
+        this.intrpducerShowFlag.showEnable = true;
+        this.intrpducerShowFlag.showIndex = parseInt(this.ShowFishMonger, 10);
+        this.FishMonger.imagePath();
+      }
     },
     approachGrandpa: function () {
       this.textIndex.startchat = 5;
-      
-
-    }
-    
+    },
+    marketChangeState: function () {
+      console.log("Get event ", this.marketChangeState);
+    },
   },
   data() {
     return {
@@ -209,7 +218,7 @@ export default {
           "./images/UI/hint1-(2).svg",
           "./images/UI/hint1-(3).svg",
           "",
-          "./images/UI/hint1-(5).svg"
+          "./images/UI/hint1-(5).svg",
         ],
         grandpa: [],
         fishmonger: [],
@@ -229,19 +238,15 @@ export default {
     },
 
     ShowNPC(charactor) {
-      if(this.textIndex.startchat == 6)
-      {
+      if (this.textIndex.startchat == 6) {
         this.$router.push("DiningTable");
       }
       if (charactor == "startchat")
-        if (this.textIndex.startchat != 4 && this.textIndex.startchat < 6) return true;
+        if (this.textIndex.startchat != 4 && this.textIndex.startchat < 6)
+          return true;
     },
     fishMongerHandler() {
       this.ShowFishMonger = 0;
-    },
-
-    debug_message(msg) {
-      console.log("message:", msg);
     },
   },
 };
@@ -260,16 +265,16 @@ export default {
 
 .navigator_image {
   width: auto;
-  height: 38%;
+  height: 63%;
   z-index: 50;
-  right: 6%;
+  left: 6%;
   bottom: 0;
   position: fixed;
 }
-.introductor_chatbox{
+.introductor_chatbox {
   z-index: 52;
-position: fixed;
-top: 0;
+  position: fixed;
+  top: 0;
 }
 .introductor_image {
   width: auto;
@@ -281,8 +286,8 @@ top: 0;
 }
 .navigator_chatbox {
   z-index: 49;
-  right: 20%;
-  bottom: 0%;
+  left: 30%;
+  bottom: 30%;
   width: 26%;
   height: 40%;
   size: 15px;
@@ -293,8 +298,10 @@ top: 0;
   display: inline-block;
 }
 .chatContentButton {
-  margin-top: -50px;
-  margin-left: 80%;
+  margin-top: 35%;
+  margin-left: -40%;
+  position: absolute;
+  height: 25px;
 }
 .introduceBox {
   margin-top: 10vh;
@@ -323,16 +330,17 @@ top: 0;
 }
 
 .text_size {
-  width: 80%;
+  width: 40vw;
   margin-top: 5%;
-  margin-left: 10%;
+  margin-right: 10%;
+  // margin-left: 10%;
 }
 
 .control_pannle {
   position: fixed;
   right: 5%;
   bottom: 5%;
-  z-index: 40;
+  z-index: 40;  
   width: 20%;
   height: 20%;
   background: fuchsia;
@@ -358,9 +366,9 @@ top: 0;
   margin-left: 17%;
 }
 .btn_group * {
-float: left;
-    margin-left: 14%;
-    z-index: 51;
-    width: 30%;
+  float: left;
+  margin-left: 14%;
+  z-index: 51;
+  width: 30%;
 }
 </style>
