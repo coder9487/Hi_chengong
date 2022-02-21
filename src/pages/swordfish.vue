@@ -193,13 +193,13 @@ export default {
 
         loader.load(
           // resource URL
-          "models/swordfish.json",
+          "models/swordfish1.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
-            // console.log(obj)
+            console.log(obj)
             fish = obj.children[0];
             console.log(fish.getWorldPosition(new THREE.Vector3()))
             mixer = new THREE.AnimationMixer(obj);
