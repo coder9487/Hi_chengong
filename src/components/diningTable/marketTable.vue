@@ -240,7 +240,7 @@ export default {
             },
             // called when loading is in progresses
             function (xhr) {
-              if (xhr.loaded / 94047597  == 1) {   
+              if (xhr.loaded / 96573644  == 1) {   
                 marketTable_loaded = true;
                 callback()
               }
@@ -294,12 +294,12 @@ export default {
           case 3:
             loader.load(
             // resource URL
-            "../models/meal3_0312.json",
+            "../models/meal03.json",
             // called when resource is loaded
             function (obj) {
               obj.scale.set(10, 10, 10);
               obj.position.set(0, 0, 0);
-              scene.add(obj);
+              // scene.add(obj);
               boat01 = obj.getObjectByName("boat01")
               boat02 = obj.getObjectByName("boat02")
               a_kon_normal = obj.getObjectByName("a_kon_normal")

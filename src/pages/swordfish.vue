@@ -193,15 +193,14 @@ export default {
 
         loader.load(
           // resource URL
-          "models/swordfish1.json",
+          "models/swordfish.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
-            console.log(obj)
-            fish = obj.children[0];
-            console.log(fish.getWorldPosition(new THREE.Vector3()))
+            // console.log(obj)
+            fish = obj.children[4];
             mixer = new THREE.AnimationMixer(obj);
             
             pole = obj.getObjectByName("spear");
@@ -243,7 +242,7 @@ export default {
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
             // console.log(xhr.loaded)
-            if (xhr.loaded / 4732415 == 1) sword_fish_loaded = true;
+            if (xhr.loaded / 7944053 == 1) sword_fish_loaded = true;
             // console.log(xhr.loaded / 4732415) *100
           }
         );
@@ -312,7 +311,7 @@ export default {
               man.lookAt(intersects[0].point.y*0.05,4.3,intersects[0].point.z*0.05);
             }
             if (poleGo) {
-              pole.translateY(-0.00098*2);
+              pole.translateY(-0.00098*3);
               pole.translateZ(-0.01);
               pole.translateZ(-0.01);
             }
@@ -323,7 +322,7 @@ export default {
             let fish_position = fish.getWorldPosition(new THREE.Vector3())
             
             let dis = pohe.distanceTo(fish_position)
-            if(dis < 0.4 ){
+            if(dis < 2 ){
               alert("You hit!")
             }else if(pohe.y < -2){
               pole.position.set(0.17277,0.53,-0.04074)
@@ -333,7 +332,7 @@ export default {
         }
         if (controls.enabled) controls.update();
         // if (isMobile) controls.mobileMove();
-        sea.mesh.position.x += 0.13;
+        sea.mesh.position.x += 0.1;
         // sea.mesh.position.z -= 0.02;
       }
       createScene();
