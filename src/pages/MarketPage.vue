@@ -17,18 +17,19 @@
     <MarketView
       id="MarketView"
       @loadingProgress="getLoadingProgress"
+      @dblclick="notification"
       v-if="showEnable"
     ></MarketView>
-    <Navigate id="Navigate" v-if="showEnable"></Navigate>
+    <Navigate id="Navigate" v-if="showEnable" :golbalEventRecieve="golbalEvent.dblclick"></Navigate>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref,reactive } from "vue";
 import "../components/market/loading";
 import MarketView from "../components/market/market.vue";
 import Navigate from "../components/market/navigate.vue";
-import { useQuasar } from "quasar";
+
 
 export default defineComponent({
   name: "MarketPage",
@@ -43,10 +44,15 @@ export default defineComponent({
       progressPercent: ref(0),
       showEnable: ref(true),
       DEBUG: 0,
+      golbalEvent:{dblclick:false}
     };
   },
   computed: {},
   methods: {
+    notification()
+    {
+      this.golbalEvent.dblclick = !this.golbalEvent.dblclick;
+    },
     getLoadingProgress(val) {
       let loadedProgress = ((val / 111356897) * 100).toFixed(2);
       this.progressPercent = loadedProgress;
@@ -73,9 +79,10 @@ export default defineComponent({
   position: relative;
   opacity: 0.1;
 }
-#Navigate {
-}
+
 .fullViewPage {
+    width: 100vw;
+  height: 100vh;
   position: relative;
   opacity: 0;
 }

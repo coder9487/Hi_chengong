@@ -19,12 +19,13 @@
       >
         <q-card-section>
           <img
+            
             class="text_size"
             :src="talkContent.startchat[this.textIndex.startchat]"
           />
 
           <q-btn
-          v-if="0"
+            v-if="0"
             class="chatContentButton"
             flat
             round
@@ -34,10 +35,7 @@
           />
         </q-card-section>
       </q-card>
-          <img
-          class="chatContentButton"
-          src="icons/press_any_key.svg"
-          />
+      <img class="chatContentButton" src="icons/press_any_key.svg" v-if="ShowNPC('startchat')" />
     </div>
   </div>
 
@@ -81,9 +79,35 @@ import { ref, reactive } from "vue";
 //import { store } from '../../store'
 
 export default {
+  data() {
+    return {
+      ShowFishMonger: 0,
+      talkContent: {
+        startchat: [
+          "./images/UI/hint1-(4).svg",
+          "./images/UI/hint1-(1).svg",
+          "./images/UI/hint1-(2).svg",
+          "./images/UI/hint1-(3).svg",
+          "",
+          "./images/UI/hint1-(5).svg",
+        ],
+        grandpa: [],
+        fishmonger: [],
+      },
+
+      direction: {
+        forward: false,
+        backword: false,
+        right: false,
+        left: false,
+      },
+    };
+  },
+  props: ["golbalEventRecieve"],
   setup() {
     const info = ref(null);
     const panning = ref(false);
+    let textIndex = reactive({ startchat: 0, grandpa: 0, fishmonger: 0 });
     //
     let intrpducerShowFlag = reactive({
       showEnable: false,
@@ -94,7 +118,6 @@ export default {
 
     class FishMonger_class {
       indexArray = [0, 3, 4, 3, 6];
-
       controlObject = null;
       photoindex = 0;
       Init(passInobj) {
@@ -129,6 +152,7 @@ export default {
     FishMonger.Init(intrpducerShowFlag);
 
     return {
+      textIndex,
       FishMonger,
       intrpducerShowFlag,
       info,
@@ -175,25 +199,25 @@ export default {
 
       return stateObject;
     },
+
     // approachGrandpa() {
     //   return this.$store.state.questionMarketDisplay;
     // },
   },
   watch: {
+    golbalEventRecieve: function () {
+      this.textIndex.startchat++;
+    },
     ChangeScene: function () {
       this.$router.push("DiningTable");
     },
     PopupChat: function () {
       let object = this.PopupChat;
-      
+
       if (object[0].includes("_")) {
-
-
-
-
-        console.log(" ")
+        console.log(" ");
       } else {
-        let seq = object[0].split('monger')[1];
+        let seq = object[0].split("monger")[1];
         //console.log('fishmonger seq. ',seq)
         this.ShowFishMonger = seq;
         this.intrpducerShowFlag.showEnable = true;
@@ -207,32 +231,12 @@ export default {
     marketChangeState: function () {
       console.log("Get event ", this.marketChangeState);
     },
+
+    //textIndex: "A_Kong_Handler",
   },
-  data() {
-    return {
-      ShowFishMonger: 0,
-      talkContent: {
-        startchat: [
-          "./images/UI/hint1-(4).svg",
-          "./images/UI/hint1-(1).svg",
-          "./images/UI/hint1-(2).svg",
-          "./images/UI/hint1-(3).svg",
-          "",
-          "./images/UI/hint1-(5).svg",
-        ],
-        grandpa: [],
-        fishmonger: [],
-      },
-      textIndex: { startchat: 0, grandpa: 0, fishmonger: 0 },
-      direction: {
-        forward: false,
-        backword: false,
-        right: false,
-        left: false,
-      },
-    };
-  },
+
   methods: {
+    clickDetct() {},
     BackComicBook() {
       this.$router.push("/ComicBook");
     },
@@ -245,8 +249,12 @@ export default {
         if (this.textIndex.startchat != 4 && this.textIndex.startchat < 6)
           return true;
     },
-    fishMongerHandler() {
-      this.ShowFishMonger = 0;
+    A_Kong_Handler() {
+      alert("index change");
+      // window.setTimeout(function () {
+      //   this.textIndex.startchat = 1;
+      //   alter("To next chat");
+      // }, 6000);
     },
   },
 };
@@ -340,7 +348,7 @@ export default {
   position: fixed;
   right: 5%;
   bottom: 5%;
-  z-index: 40;  
+  z-index: 40;
   width: 20%;
   height: 20%;
   background: fuchsia;
