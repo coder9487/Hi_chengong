@@ -306,8 +306,8 @@ export default {
   display: inline-block;
 }
 .chatContentButton {
-  margin-top: 35%;
-  margin-left: -40%;
+  margin-top: 0px;
+  margin-left: 100%;
   position: absolute;
   height: 25px;
 }
