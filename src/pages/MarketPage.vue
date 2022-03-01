@@ -1,118 +1,119 @@
-<template id="body">
-  <div id="loadingGroup">
-    <img src="../../public/loading/loadingPhoto_1.png" alt="" />
-    <div id="loadingProgressText">
-      <h3>
-        <b> {{progressPercent}}% </b>
-      </h3>
-    </div>
-    <div id="waveVideo">
-      <video autoplay loop>
-        <source src="../../public/loading/wave.mp4" type="video/mp4" />
-      </video>
-    </div>
-  </div>
-
-  <div class="fullViewPage">
-    <MarketView
-      id="MarketView"
-      @loadingProgress="getLoadingProgress"
-      @dblclick="notification"
-      v-if="showEnable"
-    ></MarketView>
-    <Navigate id="Navigate" v-if="showEnable" :golbalEventRecieve="golbalEvent.dblclick"></Navigate>
+<template>
+  <Loading id="Loading" v-if="0"></Loading>
+  <MarketView id="MarketView" v-if="1"></MarketView>
+  <Navigate id="Navigate" v-if="1"></Navigate>
+  <div class="controlPan" v-if="0">
+    <q-card
+      class="controlPan-directionPan"
+      v-touch-pan.prevent.mouse="directionPan"
+    >
+    </q-card>
+    <q-card class="controlPan-speedPan" v-touch-pan.prevent.mouse="speedPan">
+    </q-card>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref,reactive } from "vue";
-import "../components/market/loading";
+import { defineComponent, ref, reactive } from "vue";
 import MarketView from "../components/market/market.vue";
-import Navigate from "../components/market/navigate.vue";
-
+import Navigate from "../components/market/marketNavgative.vue";
+import Loading from "../components/loadingView.vue";
 
 export default defineComponent({
   name: "MarketPage",
   components: {
-    MarketView: MarketView,
-    Navigate: Navigate,
+    MarketView,
+    Navigate,
+    Loading,
   },
-  setup() {},
+  setup() {
+    const info = ref(null);
+    const panning = ref(false);
+
+    return {
+      info,
+      panning,
+
+      directionPan({ evt, ...newInfo }) {
+        info.value = newInfo;
+
+        // native Javascript event
+        // console.log(evt)
+        if (newInfo.isFirst) {
+          panning.value = true;
+        } else if (newInfo.isFinal) {
+          panning.value = false;
+        }
+      },
+      speedPan({ evt, ...newInfo }) {
+        info.value = newInfo;
+
+        // native Javascript event
+        // console.log(evt)
+        if (newInfo.isFirst) {
+          panning.value = true;
+        } else if (newInfo.isFinal) {
+          panning.value = false;
+        }
+      },
+    };
+  },
   watch: {},
   data() {
     return {
       progressPercent: ref(0),
       showEnable: ref(true),
       DEBUG: 0,
-      golbalEvent:{dblclick:false}
+      golbalEvent: { dblclick: false },
     };
   },
   computed: {},
   methods: {
-    notification()
-    {
-      this.golbalEvent.dblclick = !this.golbalEvent.dblclick;
-    },
-    getLoadingProgress(val) {
-      let loadedProgress = ((val / 111356897) * 100).toFixed(2);
-      this.progressPercent = loadedProgress;
-      let loadingWave = document.getElementById("waveVideo");
-      loadingWave.style.top = `${-800 - loadedProgress * 2}px`;
-      // console.log(`Loading px ${-800 - loadedProgress * 2}px`);
-      // alert(document.getElementById("waveVideo").style.top);
-
-      if (val == 111356897 * (this.DEBUG+1)) {
-        let element = document.getElementsByClassName("fullViewPage");
-        element[0].style.opacity = 1;
-        let MarketView_element = document.getElementById("MarketView");
-        MarketView_element.style.opacity = 1;
-        let loading = document.getElementById("loadingGroup");
-        loading.style.opacity = 0;
-      }
-    },
+    //111356897
   },
 });
 </script>
 <style lang="scss">
-#MarketView {
-  z-index: 2;
-  position: relative;
-  opacity: 0.1;
+@media screen and (max-device-width: 768px) {
+  .controlPan {
+    z-index: 100;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    &-directionPan {
+      height: 100vh;
+      width: 20vw;
+      position: absolute;
+      left: 0;
+      background-color: goldenrod;
+    }
+    &-speedPan {
+      height: 100vh;
+      width: 20vw;
+      position: absolute;
+      background-color: goldenrod;
+      right: 0;
+    }
+  }
 }
 
-.fullViewPage {
-    width: 100vw;
-  height: 100vh;
-  position: relative;
-  opacity: 0;
+#MarketView {
+  position: fixed;
 }
-#loadingGroup {
-  position: flex;
-  display: blocks;
-}
-#loadingGroup #waveVideo {
-  position: relative;
-  margin-left: 30%;
-  top: -800px;
-  width: 10vw;
-  z-index: 9;
-}
-#loadingGroup img {
-  position: relative;
+#Loading {
+  position: absolute;
+  // background-color:orange;
+  z-index: 100;
+  // opacity: 0.5;
   width: 100vw;
-  z-index: 10;
-  opacity: 1;
+  height: 100vh;
 }
-#loadingGroup #loadingProgressText {
-  position: relative;
-  z-index: 11;
-  top: -400px;
-  margin-left: 45.5vw;
-  color:skyblue;
-  opacity: 1;
-}
-#body {
-  overflow-y: hidden;
-  overflow-x: hidden;
+#Navigate {
+  position: absolute;
+  // background-color: chartreuse;
+  // opacity: 0.3;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

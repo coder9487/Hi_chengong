@@ -19,7 +19,6 @@
       >
         <q-card-section>
           <img
-            
             class="text_size"
             :src="talkContent.startchat[this.textIndex.startchat]"
           />
@@ -35,7 +34,11 @@
           />
         </q-card-section>
       </q-card>
-      <img class="chatContentButton" src="icons/press_any_key.svg" v-if="ShowNPC('startchat')" />
+      <img
+        class="chatContentButton"
+        src="icons/press_any_key.svg"
+        v-if="ShowNPC('startchat')"
+      />
     </div>
   </div>
 
@@ -55,10 +58,12 @@
         <div class="btn_group">
           <img
             src="images/UI/Group_50.svg"
+            class="introduceButton"
             @click="FishMonger.clearAndExit()"
           />
           <img
             src="images/UI/Group_51.svg"
+            class="introduceButton"
             v-if="!intrpducerShowFlag.lastPhoto"
             @click="FishMonger.nextImage()"
           />
@@ -238,23 +243,29 @@ export default {
   methods: {
     clickDetct() {},
     BackComicBook() {
-      this.$router.push("/ComicBook");
+      //this.$router.push("/ComicBook");
     },
 
     ShowNPC(charactor) {
-      if (this.textIndex.startchat == 6) {
-        this.$router.push("DiningTable");
+      let textIndex_a_guo = this.textIndex
+      if (textIndex_a_guo.startchat == 6) {
+        //this.$router.push("DiningTable");
       }
       if (charactor == "startchat")
-        if (this.textIndex.startchat != 4 && this.textIndex.startchat < 6)
+        if (textIndex_a_guo.startchat != 4 && textIndex_a_guo.startchat < 6) {
+          switch (textIndex_a_guo.startchat) {
+            case 0:
+              window.setTimeout(function () {
+                textIndex_a_guo.startchat = 1;
+                console.log(typeof(textIndex_a_guo))
+              }, 6000);
+              break;
+          }
           return true;
+        }
     },
     A_Kong_Handler() {
       alert("index change");
-      // window.setTimeout(function () {
-      //   this.textIndex.startchat = 1;
-      //   alter("To next chat");
-      // }, 6000);
     },
   },
 };
@@ -264,6 +275,14 @@ export default {
   .view {
     width: 400px;
   }
+}
+img {
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 #introduce_group {
   position: center;
@@ -283,6 +302,10 @@ export default {
   z-index: 52;
   position: fixed;
   top: 0;
+}
+
+.introduceButton:hover {
+  transform: scale(1.2);
 }
 .introductor_image {
   width: auto;

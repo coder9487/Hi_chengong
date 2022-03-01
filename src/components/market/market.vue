@@ -1,13 +1,11 @@
 <template>
   <div>
     <canvas id="three"></canvas>
-    <canvas id="circle"></canvas>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-import { useQuasar } from "quasar";
+
 import * as THREE from "three/build/three.module.js";
 import { FirstPersonCameraControl } from "../FirstPersonCameraControls.js";
 import store from "../../store/index";
@@ -19,7 +17,7 @@ export default {
     this.initThree(this.loading_callbacks);
     // useQuasar().loading.hide();
   },
-  data() {   
+  data() {
     return {
       animation: {},
     };
@@ -57,7 +55,7 @@ export default {
 
       let readyForOBJanimation = false;
 
-      let a_kon_start; 
+      let a_kon_start;
       let sheet_power_normal;
       let sheet_brave_normal;
       let sheet_power_white;
@@ -87,7 +85,7 @@ export default {
       let passer01,passer02,passer03,passer04,passer05,passer06,passer07,passer08,passer09;
 
       const raycaster = new THREE.Raycaster();
-      const mouse = new THREE.Vector2();    
+      const mouse = new THREE.Vector2();
 
       function createScene() {
         scene = new THREE.Scene();
@@ -351,11 +349,11 @@ export default {
             callbacks(xhr)
             if (xhr.loaded / 111356897  == 1) {
               market_loaded = true;
-              // console.log(xhr.loaded) 
+              // console.log(xhr.loaded)
             }
           }
         );
-        
+
         // loader.load(
         //   // resource URL
         //   "../models/round.json",
@@ -382,7 +380,7 @@ export default {
         //     obj.scale.set(8, 8, 8);
         //     obj.position.set(0, 1.5, 0);
         //     scene.add(obj);
-            
+
         //   },
         //   // called when loading is in progresses
         //   function (xhr) {
@@ -392,13 +390,13 @@ export default {
         //     }
         //   }
         // );
-  
+
       }
       ////
       function createControls() {
         controls = new FirstPersonCameraControl(camera, document.body);
         controls.enabled = true;
-        controls.applyGravity = false; 
+        controls.applyGravity = false;
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
@@ -436,7 +434,7 @@ export default {
         if (obj.rotation.z< Math.PI/2){
           obj.rotation.z += 0.05
         }
-      }   
+      }
       function animate() {
         if (market_loaded ){
           store.commit("setMarketLoadedTrue");
@@ -478,7 +476,7 @@ export default {
           let disTo_fish = camera.position.distanceTo(fish_position);
           let disTo_kick = camera.position.distanceTo(kick);
           let disTo_dragman = camera.position.distanceTo(drag_man);
-          
+
           let disTo_passerby01 = camera.position.distanceTo(passerby01.getWorldPosition(new THREE.Vector3()));
           let disTo_passerby02 = camera.position.distanceTo(passerby02.getWorldPosition(new THREE.Vector3()));
           let disTo_passerby03 = camera.position.distanceTo(passerby03.getWorldPosition(new THREE.Vector3()));
@@ -523,14 +521,14 @@ export default {
             animation_tier01.play();
             animation_tier02.play();
           }
-          
-          
+
+
           if(disTo_arrow1 < 6){
             arrow_monger1.visible = true;
             animation_arrow1.play()
 
             if(intersects_monger1.length > 0){
-              monger1_hover.visible = true  
+              monger1_hover.visible = true
               displayFishMonger1 = true
             }else{
               monger1_hover.visible = false;
@@ -595,7 +593,7 @@ export default {
             animation_kick_man_arm.play();
             animation_kick_man_leg.play();
             animation_kick_box.play();
-          } 
+          }
           if(disTo_fish < 8){
             animation_fish.play();
             }
@@ -650,9 +648,9 @@ export default {
             flipPositive(passerby09)
           }else{
             flipNegative(passerby09)
-          }               
+          }
         }
-      }        
+      }
           document.addEventListener("dblclick", function () {
             if (displaySheet_power) store.commit("marketChangeState",{id:'sheet_power',display: true})
             if (displaySheet_brave) store.commit("marketChangeState",{id:'sheet_brave',display: true})
@@ -662,7 +660,7 @@ export default {
             if (displayFishMonger4) store.commit("marketChangeState",{id:'monger4',display: true})
             if (displayEnd) store.commit("marketChangeState",{id:'sence_end',display: true})
             // console.log(store.state.marketDisplay[0]["id"],store.state.marketDisplay[0]["display"])
-            });  
+            });
       createScene();
       createLight();
       createControls();
