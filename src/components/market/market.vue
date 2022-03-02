@@ -83,7 +83,7 @@ export default {
       let animation_drag_man_body,animation_drag_man_calf_L,animation_drag_man_calf_R,animation_drag_man_leg_L,animation_drag_man_leg_R;
       let passerby01,passerby02,passerby03,passerby04,passerby05,passerby06,passerby07,passerby08,passerby09;
       let passer01,passer02,passer03,passer04,passer05,passer06,passer07,passer08,passer09;
-
+      let start_display = true;
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
 
@@ -430,9 +430,14 @@ export default {
           obj.rotation.y -= 0.05
         }
       }
-      function flip_a_kon(obj){
+      function flip_a_kon_pos(obj){
         if (obj.rotation.z< Math.PI/2){
           obj.rotation.z += 0.05
+        }
+      }
+      function flip_a_kon_neg(obj){
+        if (obj.rotation.z > -Math.PI/2){
+          obj.rotation.z -= 0.05
         }
       }
       function animate() {
@@ -449,8 +454,8 @@ export default {
         raycaster.setFromCamera( mouse, camera );
 
         let disTo_end = camera.position.distanceTo(end_position)
-        if(disTo_end < 1.5) {
-          store.commit("setQuestionMarketDisplayTrue")
+        if(disTo_end < 3) {
+          store.commit("marketChangeState",{id:'sence_end',display: true})
         }
 
 
@@ -487,21 +492,42 @@ export default {
           let disTo_passerby08 = camera.position.distanceTo(passerby08.getWorldPosition(new THREE.Vector3()));
           let disTo_passerby09 = camera.position.distanceTo(passerby09.getWorldPosition(new THREE.Vector3()));
 
+
           if (disTo_a_kon_start < 3){
-            flip_a_kon(a_kon_start)
-            sheet_brave_normal.visible = true;
-            sheet_power_normal.visible = true;
+            store.commit("marketChangeState",{id:'sence_start',display: true})
+            if(start_display) {
+              flip_a_kon_pos(a_kon_start)
+            }else{
+              flip_a_kon_neg(a_kon_start)
+            }
+            if(start_display){
+              sheet_brave_normal.visible = true;
+              sheet_power_normal.visible = true;
+            }else{
+              sheet_brave_normal.visible = false;
+              sheet_power_normal.visible = false;
+            }
             if (interscets_sheet_power_normal.length > 0){
+              if(start_display){
               sheet_power_white.visible = true;
               displaySheet_power = true;
+              }else{
+              sheet_brave_normal.visible = false;
+              sheet_power_normal.visible = false;
+            }
             ///for 2D image
               }else{
                 sheet_power_white.visible = false;
                 displaySheet_power = false;
                 }
               if (interscets_sheet_brave_normal.length > 0){
-                sheet_brave_white.visible = true;
-                displaySheet_brave = true;
+                if(start_display){
+                  sheet_brave_white.visible = true;
+                  displaySheet_brave = true;
+                  }else{
+                  sheet_brave_normal.visible = false;
+                  sheet_power_normal.visible = false;
+                }
                 ///for 2D image
               }else{
                 sheet_brave_white.visible = false;
@@ -652,15 +678,18 @@ export default {
         }
       }
           document.addEventListener("dblclick", function () {
-
-            if (displaySheet_power) store.commit("marketChangeState",{id:'sheet_power',display: true})
-            if (displaySheet_brave) store.commit("marketChangeState",{id:'sheet_brave',display: true})
+            if (displaySheet_power) {
+              store.commit("marketChangeState",{id:'sheet_power',display: true})
+              start_display = false;
+              }
+            if (displaySheet_brave) {
+              store.commit("marketChangeState",{id:'sheet_brave',display: true})
+              start_display = false;
+              }
             if (displayFishMonger1) store.commit("marketChangeState",{id:'monger1',display: true})
             if (displayFishMonger2) store.commit("marketChangeState",{id:'monger2',display: true})
             if (displayFishMonger3) store.commit("marketChangeState",{id:'monger3',display: true})
             if (displayFishMonger4) store.commit("marketChangeState",{id:'monger4',display: true})
-            if (displayEnd) store.commit("marketChangeState",{id:'sence_end',display: true})
-            // console.log(store.state.marketDisplay[0]["id"],store.state.marketDisplay[0]["display"])
             });
       createScene();
       createLight();

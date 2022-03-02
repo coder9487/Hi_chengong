@@ -57,7 +57,11 @@ export default {
         " <div class='navigate-dialog-content-b'> WASD按鍵 </div> 可以移動，你先試試看走過來找阿公~",
         "",
         "做得好，阿公要送一個禮物給你當做獎勵，這兩張體驗卷你選一張，我已經幫你報名好了!",
+        "",
+        "",
         "這張體驗卷你收著，體驗活動開始前先逛逛魚市場，等一下再來找我，保證好玩的啦!",
+        "",
+        "來啦!是體驗卷派上用場的時候了，鏢旗魚最需要體力、眼力、耐力，我們去體驗看看吧!",
       ],
 
       fishmonger_sequence: ref(0),
@@ -72,14 +76,11 @@ export default {
   },
   watch: {
     marketPersonDisplay: function () {
-      console.log(this.marketDisplay)
       if (this.marketPersonDisplay.includes("_")) {
         //select cupon
         this.A_kon_chatbox_handle();
-        console.log(
-          "detect change available ",
-          this.navigate_dialog_content_show_availbale
-        );
+
+
       } else {
         console.log(this.marketPersonDisplay.split("monger")[1]);
 
@@ -100,10 +101,18 @@ export default {
   methods: {
     A_kon_chatbox_handle() {
       this.navigate_dialog_content_index++;
+      console.log(this.navigate_dialog_content_index)
       switch (this.navigate_dialog_content_index) {
         case 2:
-        case 5:
+        case 4:
+        case 7:
+
+           this.navigate_dialog_content_show_availbale = false;
+
+          break;
+        case 9:
           this.navigate_dialog_content_show_availbale = false;
+          this.$router.push('swordfish')
           break;
 
         default:

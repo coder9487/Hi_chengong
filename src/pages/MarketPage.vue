@@ -1,7 +1,7 @@
 <template>
   <Loading id="Loading" v-if="0"></Loading>
-  <MarketView id="MarketView" v-if="1"></MarketView>
-  <Navigate id="Navigate" v-if="1"></Navigate>
+  <MarketView id="MarketView" v-if="0"></MarketView>
+  <Navigate id="Navigate" v-if="0"></Navigate>
   <div class="controlPan" v-if="0">
     <q-card
       class="controlPan-directionPan"
