@@ -72,6 +72,7 @@ export default {
   },
   watch: {
     marketPersonDisplay: function () {
+      console.log(this.marketDisplay)
       if (this.marketPersonDisplay.includes("_")) {
         //select cupon
         this.A_kon_chatbox_handle();
@@ -198,7 +199,7 @@ export default {
       width: 40%;
       @media screen and (min-width: 1024px) {
         margin-left: 70%;
-        width: 25%;
+        width: 130px;
       }
     }
     &-button * {

@@ -652,6 +652,7 @@ export default {
         }
       }
           document.addEventListener("dblclick", function () {
+
             if (displaySheet_power) store.commit("marketChangeState",{id:'sheet_power',display: true})
             if (displaySheet_brave) store.commit("marketChangeState",{id:'sheet_brave',display: true})
             if (displayFishMonger1) store.commit("marketChangeState",{id:'monger1',display: true})
