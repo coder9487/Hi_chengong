@@ -1,15 +1,9 @@
 <template>
-  <Loading id="Loading" v-if="0"></Loading>
-  <MarketView id="MarketView" v-if="0"></MarketView>
-  <Navigate id="Navigate" v-if="0"></Navigate>
+  <Loading id="Loading" v-if="1"></Loading>
+  <MarketView id="MarketView" v-if="1"></MarketView>
+  <Navigate id="Navigate"  v-if="0"></Navigate>
   <div class="controlPan" v-if="0">
-    <q-card
-      class="controlPan-directionPan"
-      v-touch-pan.prevent.mouse="directionPan"
-    >
-    </q-card>
-    <q-card class="controlPan-speedPan" v-touch-pan.prevent.mouse="speedPan">
-    </q-card>
+
   </div>
 </template>
 
@@ -27,40 +21,12 @@ export default defineComponent({
     Loading,
   },
   setup() {
-    const info = ref(null);
-    const panning = ref(false);
 
-    return {
-      info,
-      panning,
-
-      directionPan({ evt, ...newInfo }) {
-        info.value = newInfo;
-
-        // native Javascript event
-        // console.log(evt)
-        if (newInfo.isFirst) {
-          panning.value = true;
-        } else if (newInfo.isFinal) {
-          panning.value = false;
-        }
-      },
-      speedPan({ evt, ...newInfo }) {
-        info.value = newInfo;
-
-        // native Javascript event
-        // console.log(evt)
-        if (newInfo.isFirst) {
-          panning.value = true;
-        } else if (newInfo.isFinal) {
-          panning.value = false;
-        }
-      },
-    };
   },
   watch: {},
   data() {
     return {
+       MobileMoving : reactive({}),
       progressPercent: ref(0),
       showEnable: ref(true),
       DEBUG: 0,

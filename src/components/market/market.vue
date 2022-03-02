@@ -450,7 +450,7 @@ export default {
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
         if (controls.enabled) controls.update();
-        if (isMobile) controls.mobileMove();
+        if (1) controls.mobileMove();//isMobile
         raycaster.setFromCamera( mouse, camera );
 
         let disTo_end = camera.position.distanceTo(end_position)
