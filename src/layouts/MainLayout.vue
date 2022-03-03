@@ -1,7 +1,7 @@
 <template>
   <q-layout id="root_layout" view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white" height-hint="98" v-if="1">
-      <q-tabs align="left" v-if="1">
+      <q-tabs align="left" v-if="0">
         <!-- <q-route-tab to="/market-page" label="market" /> -->
 
         <q-route-tab to="/swordfish-page" label="swordfish-page" />

@@ -1,40 +1,67 @@
 <template>
-  <Loading id="Loading" v-if="0"></Loading>
-  <MarketView id="MarketView" v-if="1"></MarketView>
-  <Navigate id="Navigate"  v-if="1"></Navigate>
-  <div class="controlPan" v-if="0">
-
+  <div class="loadingPage" v-if="!showingFlag">
+    <img class="loadingPage-mask" src="../../public/loading/loading.png" />
+    <div class="loadingPage-percentage">
+      <b>{{ loading }}</b
+      >%
+    </div>
+    <div class="loadingPage-loading-video">
+      <video src="../../public/loading/wave.mp4" autoplay loop></video>
+    </div>
   </div>
+  <MarketView
+    id="MarketView"
+    @loadingProgress="loadingProgressPercentage"
+    v-if="1"
+    v-show="showingFlag"
+  ></MarketView>
+  <Navigate id="Navigate" v-if="showingFlag"></Navigate>
 </template>
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
 import MarketView from "../components/market/market.vue";
 import Navigate from "../components/market/marketNavgative.vue";
-import Loading from "../components/loadingView.vue";
 
 export default defineComponent({
   name: "MarketPage",
   components: {
     MarketView,
     Navigate,
-    Loading,
   },
-  setup() {
+  setup() {},
+  watch: {
+    loading: function () {
+      // console.log("loading progress ", this.loading);
+      if (this.loading >= 98) {
+        setTimeout(() => {
+          this.showingFlag = true;
+          this.audio= new Audio("/sound/sound.mp3");
+          this.audio.play();
 
+
+        }, 5000);
+      }
+    },
   },
-  watch: {},
+  computed: {},
   data() {
     return {
-       MobileMoving : reactive({}),
+      audio:null,
+      loading: ref(0),
+      showingFlag: false,
+      MobileMoving: reactive({}),
       progressPercent: ref(0),
       showEnable: ref(true),
       DEBUG: 0,
       golbalEvent: { dblclick: false },
     };
   },
-  computed: {},
   methods: {
+    loadingProgressPercentage(val) {
+      this.loading = (val * 99).toFixed(2);
+    },
+    finishLoading() {},
     //111356897
   },
 });
@@ -62,18 +89,40 @@ export default defineComponent({
     }
   }
 }
-
+.loadingPage {
+  width: 100vw;
+  height: 100vh;
+  background-color: cadetblue;
+  &-mask {
+    // opacity: 0.3;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    height: auto;
+    top: -10%;
+  }
+  &-percentage {
+    z-index: 20;
+    position: fixed;
+    font-size: 50px;
+    color: darkorange;
+    bottom: 30%;
+    left: 45%;
+    @media screen and (max-device-width: 768px) {
+      bottom: 10%;
+      left: 40%;
+    }
+  }
+  &-loading-video {
+    position: absolute;
+    left: 20%;
+    z-index: 8;
+  }
+}
 #MarketView {
   position: fixed;
 }
-#Loading {
-  position: absolute;
-  // background-color:orange;
-  z-index: 40;
-  // opacity: 0.5;
-  width: 100vw;
-  height: 100vh;
-}
+
 #Navigate {
   position: absolute;
   // background-color: chartreuse;

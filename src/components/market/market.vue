@@ -12,10 +12,7 @@ import store from "../../store/index";
 export default {
   name: "three",
   mounted() {
-
-
     this.initThree(this.loading_callbacks);
-    // useQuasar().loading.hide();
   },
   data() {
     return {
@@ -25,8 +22,8 @@ export default {
   watch: {},
   methods: {
     loading_callbacks(val){
-      // console.log('Pass into callbacks ',val.loaded)
-      this.$emit('loadingProgress',val.loaded)
+      //  console.log('Pass into callbacks ',val.loaded)
+      this.$emit('loadingProgress',(val.loaded/111356897).toFixed(2))
     },
     initThree(callbacks) {
       ///DiningTable

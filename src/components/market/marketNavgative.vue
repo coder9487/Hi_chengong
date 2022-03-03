@@ -22,7 +22,7 @@
     {{ direc }}
   </div>
 
-  <div class="navigate" v-if="navigate_dialog_content_show_availbale">
+  <div class="navigate" v-show="navigate_dialog_content_show_availbale">
     <q-img
       class="navigate-a_kon"
       src="../../../public/images/a_kon.png"
@@ -42,7 +42,7 @@
     </q-card>
   </div>
 
-  <div class="fishmonger" v-if="fishmonger_dialog_content_show_available">
+  <div class="fishmonger" v-show="fishmonger_dialog_content_show_available">
     <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" />
     <div class="fishmonger-dialog">
       <q-img :src="fishMonger_image_path.dialogBox"> </q-img>
@@ -208,7 +208,7 @@ export default {
           break;
         case 9:
           this.navigate_dialog_content_show_availbale = false;
-          this.$router.push("swordfish");
+          this.$router.push("swordfish-page");
           break;
 
         default:
