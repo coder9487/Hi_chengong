@@ -1,4 +1,27 @@
 <template>
+  <div
+    v-if="detectPaltform"
+    class="controlPannel-movement"
+    v-touch-pan.prevent.mouse="movement"
+    v-show="
+      !navigate_dialog_content_show_availbale &&
+      !fishmonger_dialog_content_show_available
+    "
+  >
+    {{ moving }}
+  </div>
+  <div
+  v-if="detectPaltform"
+    class="controlPannel-direction"
+    v-touch-pan.prevent.mouse="direciton"
+    v-show="
+      !navigate_dialog_content_show_availbale &&
+      !fishmonger_dialog_content_show_available
+    "
+  >
+    {{ direc }}
+  </div>
+
   <div class="navigate" v-if="navigate_dialog_content_show_availbale">
     <q-img
       class="navigate-a_kon"
@@ -49,7 +72,52 @@
 import { ref, reactive } from "vue";
 
 export default {
-  setup() {},
+  setup() {
+    let moving = reactive({ x: 0, y: 0 });
+    let direc = reactive({ hori: 0, vert: 0 });
+    return {
+      moving,
+      direc,
+      movement({ evt, ...newInfo }) {
+        // movementInfo.value = newInfo;
+
+        // native Javascript event
+        moving.x = (newInfo.offset.x / 10).toFixed(0);
+        moving.y = (newInfo.offset.y / 10).toFixed(0);
+        if (moving.x > 13) {
+          moving.x = 13;
+        } else if (moving.x < -13) {
+          moving.x = -13;
+        }
+        if (moving.y > 13) {
+          moving.y = 13;
+        } else if (moving.y < -13) {
+          moving.y = -13;
+        }
+        if (newInfo.isFirst) {
+          // movementInfo.value = true;
+        } else if (newInfo.isFinal) {
+          // movementPanning.value = false;
+          moving.x = 0;
+          moving.y = 0;
+        }
+      },
+      direciton({ evt, ...newInfo }) {
+        // direcitonInfo.value = newInfo;
+
+        direc.hori = newInfo.delta.x.toFixed(0);
+        direc.vert = newInfo.delta.y.toFixed(0);
+
+        if (newInfo.isFirst) {
+          // direcitonInfo.value = true;
+        } else if (newInfo.isFinal) {
+          // direcitonPanning.value = false;
+          direc.hori = 0;
+          direc.vert = 0;
+        }
+      },
+    };
+  },
   data() {
     return {
       A_kon_dialogContent: [
@@ -75,12 +143,28 @@ export default {
     };
   },
   watch: {
+    moving: {
+      handler(newVal) {
+        this.$store.commit("MobileMovement", [this.moving.x, this.moving.y]);
+        // console.log(this.$store.state.MobileMovement);
+      },
+      deep: true,
+    },
+    direc: {
+      handler(newVal) {
+        this.$store.commit("MobileDirection", [
+          this.direc.hori,
+          this.direc.vert,
+        ]);
+        console.log(this.$store.state.MobileDirection);
+      },
+      deep: true,
+    },
+
     marketPersonDisplay: function () {
       if (this.marketPersonDisplay.includes("_")) {
         //select cupon
         this.A_kon_chatbox_handle();
-
-
       } else {
         console.log(this.marketPersonDisplay.split("monger")[1]);
 
@@ -97,22 +181,34 @@ export default {
     fishmongerPhoto() {
       return this.fishMonger_image_path.fishMonger;
     },
+    detectPaltform() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      )
+        return true;
+      else return false;
+    },
   },
   methods: {
+    consoleTest() {
+      console.log("Test");
+    },
+
     A_kon_chatbox_handle() {
       this.navigate_dialog_content_index++;
-      console.log(this.navigate_dialog_content_index)
+      console.log(this.navigate_dialog_content_index);
       switch (this.navigate_dialog_content_index) {
         case 2:
         case 4:
         case 7:
-
-           this.navigate_dialog_content_show_availbale = false;
+          this.navigate_dialog_content_show_availbale = false;
 
           break;
         case 9:
           this.navigate_dialog_content_show_availbale = false;
-          this.$router.push('swordfish')
+          this.$router.push("swordfish");
           break;
 
         default:
@@ -165,6 +261,30 @@ export default {
 };
 </script>
 <style lang="scss">
+.controlPannel {
+  // // background-color: antiquewhite;
+
+  &-movement {
+    background-color: orange;
+    opacity: 0.3;
+    width: 20vw;
+    height: 33vh;
+    position: fixed;
+    left: 0px;
+    z-index: 200;
+    bottom: 33vh;
+  }
+  &-direction {
+    z-index: 101;
+    background-color: orange;
+    opacity: 0.3;
+    width: 20vw;
+    height: 50vh;
+    position: fixed;
+    right: 0px;
+  }
+}
+
 .navigate {
   * {
     display: inline;

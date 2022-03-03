@@ -57,46 +57,9 @@ export default createStore({
       state.MobileDirection.hori = parseInt(arr[0], 10);
       state.MobileDirection.vert = parseInt(arr[1], 10);
     },
-    setForwardTrue(state) {
-      // Go
-      state.Forward = true;
-    },
-    setForwardFalse(state) {
-      // stop Go
-      state.Forward = false;
-    },
-    setRotationRightTrue(state) {
-      // turn right
-      state.Right = true;
-    },
-    setRotationRightFalse(state) {
-      // stop turn right
-      state.Right = false;
-    },
-    setRotationLeftTrue(state) {
-      // turn left
-      state.Left = true;
-    },
-    setRotationLeftFalse(state) {
-      // stop turn left
-      state.Left = false;
-    },
-    setLookupTrue(state) {
-      // look up
-      state.Lookup = true;
-    },
-    setLookupFalse(state) {
-      // stop look up
-      state.Lookup = false;
-    },
-    setLookdownTrue(state) {
-      // look down
-      state.Lookdown = true;
-    },
-    setLookdownFalse(state) {
-      // stop look down
-      state.Lookdown = false;
-    },
+
+
+
     //////////////////////////////////
     setDisplayFishMonger1False(state) {
       state.displayfishmonger1 = false;

@@ -1,7 +1,7 @@
 <template>
-  <Loading id="Loading" v-if="1"></Loading>
+  <Loading id="Loading" v-if="0"></Loading>
   <MarketView id="MarketView" v-if="1"></MarketView>
-  <Navigate id="Navigate"  v-if="0"></Navigate>
+  <Navigate id="Navigate"  v-if="1"></Navigate>
   <div class="controlPan" v-if="0">
 
   </div>
@@ -69,7 +69,7 @@ export default defineComponent({
 #Loading {
   position: absolute;
   // background-color:orange;
-  z-index: 100;
+  z-index: 40;
   // opacity: 0.5;
   width: 100vw;
   height: 100vh;

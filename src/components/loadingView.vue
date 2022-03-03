@@ -1,14 +1,14 @@
 <template>
-  <div class="controlPannel" v-if="detectPaltform">
-    <q-card class="controlPannel-movement" v-touch-pan.prevent.mouse="movement">
-      {{ moving }}
-    </q-card>
-    <q-card
+  <div class="controlPannel" v-if="0">
+    <div class="controlPannel-movement" v-touch-pan.prevent.mouse="movement">
+      <!-- {{ moving }} -->
+    </div>
+    <div
       class="controlPannel-direction"
       v-touch-pan.prevent.mouse="direciton"
     >
-      {{ direcitonInfo }}
-    </q-card>
+      <!-- {{ direcitonInfo }} -->
+    </div>
   </div>
 </template>
 <script>
@@ -16,17 +16,11 @@ import { ref, reactive } from "vue";
 
 export default {
   setup() {
-    const movementInfo = ref(null);
-    const movementPanning = ref(false);
-    const direcitonInfo = ref(null);
-    const direcitonPanning = ref(false);
+
     let moving = reactive({ x: 0, y: 0 });
     let direc = reactive({ hori: 0, vert: 0 });
     return {
-      movementInfo,
-      movementPanning,
-      direcitonInfo,
-      direcitonPanning,
+
       moving,
       direc,
       movement({ evt, ...newInfo }) {
@@ -108,6 +102,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .controlPannel {
+  position: fixed;
+  z-index: 5;
   // width: 100vw;
   // height: 100vh;
   // position: fixed;
@@ -120,13 +116,15 @@ export default {
     height: 33vh;
     position: absolute;
     left: 0px;
+    z-index:100;
     bottom: 33vh;
   }
   &-direction {
+    z-index:100;
     background-color: orange;
     opacity: 0.3;
-    width: 40vw;
-    height: 100vh;
+    width: 20vw;
+    height: 50vh;
     position: absolute;
     right: 0px;
   }

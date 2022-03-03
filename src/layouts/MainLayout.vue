@@ -1,14 +1,12 @@
 <template>
   <q-layout id="root_layout" view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white" height-hint="98" v-if="1">
-      <q-tabs align="left" v-if="0">
+      <q-tabs align="left" v-if="1">
         <!-- <q-route-tab to="/market-page" label="market" /> -->
-        <q-route-tab to="/startVideo" label="startVideo" />
-        <q-route-tab to="/ComicBook" label="ComicBook" />
-        <q-route-tab to="/pisirian" label="pisirian" />
-        <q-route-tab to="/lantern" label="lantern" />
-        <q-route-tab to="/swordfish" label="swordfish" />
+
+        <q-route-tab to="/swordfish-page" label="swordfish-page" />
         <q-route-tab to="/market-page" label="market-page" />
+        <q-route-tab to="/" label="homepage" />
       </q-tabs>
     </q-header>
 
@@ -47,7 +45,7 @@ export default {
 <style lang="scss">
 #root_layout {
   overflow: hidden;
-  
+
   // position: relative;
 }
 #systemIcon_group {
@@ -62,7 +60,7 @@ export default {
 .systemIcon_group * {
   z-index: 20;
   padding: 50px;
-  
+
 }
 
 
