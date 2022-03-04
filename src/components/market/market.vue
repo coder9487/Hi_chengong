@@ -27,7 +27,7 @@ export default {
     },
     initThree(callbacks) {
       ///DiningTable
-      store.commit("marketOnProgressReset")
+      // store.commit("marketOnProgressReset")
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
@@ -240,7 +240,7 @@ export default {
         // load a resource
         loader.load(
           // resource URL
-          "../models/market2.json",
+          "../models/market3.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(10, 10, 10);
@@ -342,11 +342,11 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log(xhr.loaded)
+             console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 111356897  == 1) {
+            if (xhr.loaded / 111343412  == 1) {
               market_loaded = true;
-              // console.log(xhr.loaded)
+              //  console.log(xhr.loaded)
             }
           }
         );
@@ -439,7 +439,7 @@ export default {
       }
       function animate() {
         if (market_loaded ){
-          store.commit("setMarketLoadedTrue");
+          // store.commit("setMarketLoadedTrue");
           delayForAnimate()
         }
         if (readyForOBJanimation) renderer.render(scene, camera);
