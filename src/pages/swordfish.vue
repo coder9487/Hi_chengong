@@ -311,9 +311,9 @@ export default {
               man.lookAt(intersects[0].point.y*0.05,4.3,intersects[0].point.z*0.05);
             }
             if (poleGo) {
-              pole.translateY(-0.00098*3);
-              pole.translateZ(-0.01);
-              pole.translateZ(-0.01);
+              pole.translateY(-0.00098*4);  //-0.00098*3
+              pole.translateZ(-0.05);  //-0.01
+              pole.translateZ(-0.05);  //-0.01
             }
 
 
@@ -322,7 +322,7 @@ export default {
             let fish_position = fish.getWorldPosition(new THREE.Vector3())
             
             let dis = pohe.distanceTo(fish_position)
-            if(dis < 2 ){
+            if(dis < 0.6 ){
               alert("You hit!")
             }else if(pohe.y < -2){
               pole.position.set(0.17277,0.53,-0.04074)
@@ -332,7 +332,7 @@ export default {
         }
         if (controls.enabled) controls.update();
         // if (isMobile) controls.mobileMove();
-        sea.mesh.position.x += 0.1;
+        sea.mesh.position.x += 0.3;
         // sea.mesh.position.z -= 0.02;
       }
       createScene();

@@ -245,7 +245,7 @@ export default {
         // load a resource
         loader.load(
           // resource URL
-          "../models/market2.json",
+          "../models/market3.json",
           // called when resource is loaded
           function (obj) {
             obj.scale.set(10, 10, 10);
@@ -349,7 +349,7 @@ export default {
           function (xhr) {
             // console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 111356897  == 1) {
+            if (xhr.loaded / 111343412  == 1) {
               market_loaded = true;
               // console.log(xhr.loaded) 
             }
@@ -684,7 +684,7 @@ export default {
   left: 0;
   top: 0;
 }
-#circle {
+/* #circle {
   width: 10px;
   height: 10px;
   position: fixed;
@@ -692,5 +692,5 @@ export default {
   left: 50%;
   border-radius: 99em;
   background-color:white ;
-}
+} */
 </style>

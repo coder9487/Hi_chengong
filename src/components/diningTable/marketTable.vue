@@ -38,7 +38,7 @@ export default {
       let displayFood6 = false;      
       
       let boat01,boat02;
-      let meal = 3;
+      let meal = 2;  //預設顯示的吃飯桌檔案
       let a_kon_normal,a_kon_hover;
       let hai_di_ca,sashimi,mahi_fish,miso_soup,orange,wan_que;
       let hai_y,sahi_y,mahi_y,miso_y,orange_y,wan_que_y;
@@ -240,7 +240,8 @@ export default {
             },
             // called when loading is in progresses
             function (xhr) {
-              if (xhr.loaded / 96573644  == 1) {   
+              // console.log(xhr.loaded)
+              if (xhr.loaded / 94047597  == 1) {   
                 marketTable_loaded = true;
                 callback()
               }
@@ -283,7 +284,7 @@ export default {
             },
             // called when loading is in progresses
             function (xhr) {
-              // console.log(xhr.loaded)
+              console.log(xhr.loaded)
               if (xhr.loaded / 96573644  == 1) {   
                 marketTable_loaded = true;
                 callback()
@@ -312,10 +313,12 @@ export default {
               miso.push(miso_soup)
               a_kon_hover.visible = false;
               a_kon.push(a_kon_normal)
+              console.log(obj)
             },
             // called when loading is in progresses
             function (xhr) {
-              if (xhr.loaded / 90445220  == 1) {   
+              console.log(xhr.loaded);
+              if (xhr.loaded / 86459852  == 1) {   
                 marketTable_loaded = true;
                 callback()
               }
@@ -485,7 +488,7 @@ export default {
   left: 0;
   top: 0;
 }
-#circle {
+/* #circle {
   width: 10px;
   height: 10px;
   position: fixed;
@@ -493,5 +496,5 @@ export default {
   left: 50%;
   border-radius: 99em;
   background-color:white ;
-}
+} */
 </style>
