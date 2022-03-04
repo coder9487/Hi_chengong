@@ -29,7 +29,12 @@ export default defineComponent({
     MarketView,
     Navigate,
   },
-  setup() {},
+  setup() {
+
+
+
+
+  },
   watch: {
     loading: function () {
       // console.log("loading progress ", this.loading);

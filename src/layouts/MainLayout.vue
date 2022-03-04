@@ -1,12 +1,13 @@
 <template>
   <q-layout id="root_layout" view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white" height-hint="98" v-if="1">
-      <q-tabs align="left" v-if="0">
+      <q-tabs align="left" v-if="showDebugTab">
         <!-- <q-route-tab to="/market-page" label="market" /> -->
 
         <q-route-tab to="/swordfish-page" label="swordfish-page" />
         <q-route-tab to="/market-page" label="market-page" />
         <q-route-tab to="/" label="homepage" />
+        <q-route-tab @click="showDebugTab=false" label="CloseTab" />
       </q-tabs>
     </q-header>
 
@@ -34,6 +35,11 @@
 </template>
 <script>
 export default {
+  data(){
+    return{
+        showDebugTab:true
+    }
+  },
   methods: {
     systemIconSize() {
       if (this.$q.platform.is.mobile) return "xs";

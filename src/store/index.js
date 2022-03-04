@@ -17,9 +17,11 @@ export default createStore({
     marketLoaded: false,
     questionMarketDisplay: false,
     questionMarketTableDisplay: false,
+    poleDirection:{x:0,y:0},
     marketDisplay: [{ id: "None", display: false }],
     FoodDisplay: [{ id: "0", display: false }],
     pisirianDisplay: [{ id: "None", display: false }],
+    swordfishShootToggle:false,
   },
   mutations: {
     ///
@@ -61,35 +63,19 @@ export default createStore({
 
 
     //////////////////////////////////
-    setDisplayFishMonger1False(state) {
-      state.displayfishmonger1 = false;
-    },
-    setDisplayFishMonger2False(state) {
-      state.displayfishmonger2 = false;
-    },
-    setDisplayFishMonger3False(state) {
-      state.displayfishmonger3 = false;
-    },
-    setDisplayFishMonger4False(state) {
-      state.displayfishmonger4 = false;
+    PoleDirection(state,arr){
+      state.poleDirection.x = parseInt(arr[0], 10)/150;
+      state.poleDirection.y = -parseInt(arr[1], 10)/200;
     },
     /////////////////////////////////////////
     setMarketLoadedTrue(state) {
       state.marketLoaded = true;
     },
     /////////////////////////////////////////
-    marketOnProgressCount(state) {
-      state.marketPercentage++;
+    swordfishShoot(state) {
+      state.swordfishShootToggle = !state.swordfishShootToggle;
     },
-    marketOnProgressReset(state) {
-      state.marketPercentage = 1;
-    },
-    marketTableOnProgressCount(state) {
-      state.marketTablePercentage++;
-    },
-    marketTableOnProgressReset(state) {
-      state.marketTablePercentage = 1;
-    },
+
   },
   actions: {},
   modules: {},

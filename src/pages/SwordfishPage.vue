@@ -1,13 +1,14 @@
 <template>
   <div>
-    <swordfish></swordfish>
+    <swordfishView></swordfishView>
+    <swordfishNavigative></swordfishNavigative>
   </div>
 </template>
 <script>
 
 
-import swordfish from "../components/swordfish/swordfish.vue";
-
+import swordfishView from "../components/swordfish/swordfish.vue";
+import swordfishNavigative from "src/components/swordfish/swordfishNavigative.vue";
 
 
 export default {
@@ -15,7 +16,8 @@ export default {
 
   },
   components:{
-    swordfish
+    swordfishView,
+    swordfishNavigative
   }
 }
 </script>
