@@ -7,11 +7,10 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import store from "../store";
-import "../components/market/loading";
+
 import MarketTable from "../components/diningTable/marketTable.vue";
 import NavigateMarketTable from "../components/diningTable/navigate.vue";
-import { useQuasar } from "quasar";
+
 
 export default defineComponent({
   name: "DiningTable",

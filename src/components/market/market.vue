@@ -1,25 +1,20 @@
 <template>
   <div>
     <canvas id="three"></canvas>
-    <canvas id="circle"></canvas>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-import { useQuasar } from "quasar";
+
 import * as THREE from "three/build/three.module.js";
 import { FirstPersonCameraControl } from "../FirstPersonCameraControls.js";
 import store from "../../store/index";
 export default {
   name: "three",
   mounted() {
-
-
     this.initThree(this.loading_callbacks);
-    // useQuasar().loading.hide();
   },
-  data() {   
+  data() {
     return {
       animation: {},
     };
@@ -27,12 +22,12 @@ export default {
   watch: {},
   methods: {
     loading_callbacks(val){
-      // console.log('Pass into callbacks ',val.loaded)
-      this.$emit('loadingProgress',val.loaded)
+      //  console.log('Pass into callbacks ',val.loaded)
+      this.$emit('loadingProgress',(val.loaded/114204521).toFixed(2))
     },
     initThree(callbacks) {
       ///DiningTable
-      store.commit("marketOnProgressReset")
+      // store.commit("marketOnProgressReset")
       let scene, camera, renderer, canvas;
       let controls;
       let sea, Lowersea;
@@ -57,7 +52,7 @@ export default {
 
       let readyForOBJanimation = false;
 
-      let a_kon_start; 
+      let a_kon_start;
       let sheet_power_normal;
       let sheet_brave_normal;
       let sheet_power_white;
@@ -69,9 +64,9 @@ export default {
       let arrow3 = new THREE.Vector3(-17.93976902961731,0.865715742111206,3.0435776710510254)
       let arrow4 = new THREE.Vector3(-29.51202392578125,0.865715742111206,2.210468053817749)
       let car_position = new THREE.Vector3(11.767337322235107,2.2295211255550385,0.0820380449295044)
-      let kick = new THREE.Vector3(2.364274263381958,0.22890541702508926,-3.6441126465797424)
-      let fish_position = new THREE.Vector3(-25.051822662353516,0.22890541702508926,-3.6441126465797424)
-      let drag_man = new THREE.Vector3(-15.329395532608032,0.22890541702508926,-3.6441126465797424)
+      let kick = new THREE.Vector3(-2.7316588163375854,0.815223678946495,-7.15338945388794)
+      let fish_position = new THREE.Vector3(-28.70699882507324,-1.7775985598564148,-11.736360788345337)
+      let drag_man = new THREE.Vector3(-21.90814971923828,0.25204645469784737, -3.91421377658844)
 
       let mixer;
       let arrow_monger1,monger1_normal,monger1_hover,animation_arrow1;
@@ -82,12 +77,12 @@ export default {
       let animation_fish;
       let animation_kick_man,animation_kick_man_arm,animation_kick_man_leg,animation_kick_box
       let animation_car,animation_tier01,animation_tier02;
-      let animation_drag_man_body,animation_drag_man_calf_L,animation_drag_man_calf_R,animation_drag_man_leg_L,animation_drag_man_leg_R;
+      let animation_drag_man_body,animation_drag_man_calf_L,animation_drag_man_calf_R,animation_drag_man_leg_L,animation_drag_man_leg_R,drag_man_body;
       let passerby01,passerby02,passerby03,passerby04,passerby05,passerby06,passerby07,passerby08,passerby09;
       let passer01,passer02,passer03,passer04,passer05,passer06,passer07,passer08,passer09;
-
+      let start_display = true;
       const raycaster = new THREE.Raycaster();
-      const mouse = new THREE.Vector2();    
+      const mouse = new THREE.Vector2();
 
       function createScene() {
         scene = new THREE.Scene();
@@ -251,6 +246,7 @@ export default {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
+            // console.log(obj)
             controls.colliders = obj;
             a_kon_start = obj.getObjectByName("a_kon_start")
             sheet_power_normal = obj.getObjectByName("sheet_power_normal")
@@ -316,20 +312,24 @@ export default {
             animation_fish.clampWhenFinished = true;
 
             animation_drag_man_body = mixer.clipAction(obj.animations[7])
+            // animation_drag_man_calf_L = mixer.clipAction(obj.animations[8]).play()
+            // animation_drag_man_calf_R = mixer.clipAction(obj.animations[9]).play()
+            // animation_drag_man_leg_L = mixer.clipAction(obj.animations[10]).play()
+            // animation_drag_man_leg_R = mixer.clipAction(obj.animations[11]).play()
             animation_drag_man_calf_L = mixer.clipAction(obj.animations[8])
             animation_drag_man_calf_R = mixer.clipAction(obj.animations[9])
             animation_drag_man_leg_L = mixer.clipAction(obj.animations[10])
             animation_drag_man_leg_R = mixer.clipAction(obj.animations[11])
             animation_drag_man_body.setLoop(THREE.LoopOnce)
-            animation_drag_man_calf_L.setLoop(THREE.LoopOnce)
-            animation_drag_man_calf_R.setLoop(THREE.LoopOnce)
-            animation_drag_man_leg_L.setLoop(THREE.LoopOnce)
-            animation_drag_man_leg_R.setLoop(THREE.LoopOnce)
-            animation_drag_man_body.clampWhenFinished = true;
-            animation_drag_man_calf_L.clampWhenFinished = true;
-            animation_drag_man_calf_R.clampWhenFinished = true;
-            animation_drag_man_leg_L.clampWhenFinished = true;
-            animation_drag_man_leg_R.clampWhenFinished = true;
+            animation_drag_man_calf_L.setLoop(THREE.LoopRepeat)
+            animation_drag_man_calf_R.setLoop(THREE.LoopRepeat)
+            animation_drag_man_leg_L.setLoop(THREE.LoopRepeat)
+            animation_drag_man_leg_R.setLoop(THREE.LoopRepeat)
+            // animation_drag_man_body.clampWhenFinished = true;
+            // animation_drag_man_calf_L.clampWhenFinished = true;
+            // animation_drag_man_calf_R.clampWhenFinished = true;
+            // animation_drag_man_leg_L.clampWhenFinished = true;
+            // animation_drag_man_leg_R.clampWhenFinished = true;
             animation_arrow1 = mixer.clipAction(obj.animations[12]);
             animation_arrow2 = mixer.clipAction(obj.animations[13]);
             animation_arrow3 = mixer.clipAction(obj.animations[14]);
@@ -343,19 +343,21 @@ export default {
             passerby07 = obj.getObjectByName("passerby07")
             passerby08 = obj.getObjectByName("passerby08")
             passerby09 = obj.getObjectByName("passerby09")
+            drag_man_body = obj.getObjectByName("drag_man_body");
+            
 
           },
           // called when loading is in progresses
           function (xhr) {
-            // console.log(xhr.loaded)
+            //  console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 111343412  == 1) {
+            if (xhr.loaded / 114204521  == 1) {
               market_loaded = true;
-              // console.log(xhr.loaded) 
+              //  console.log(xhr.loaded)
             }
           }
         );
-        
+
         // loader.load(
         //   // resource URL
         //   "../models/round.json",
@@ -382,7 +384,7 @@ export default {
         //     obj.scale.set(8, 8, 8);
         //     obj.position.set(0, 1.5, 0);
         //     scene.add(obj);
-            
+
         //   },
         //   // called when loading is in progresses
         //   function (xhr) {
@@ -392,13 +394,13 @@ export default {
         //     }
         //   }
         // );
-  
+
       }
       ////
       function createControls() {
         controls = new FirstPersonCameraControl(camera, document.body);
         controls.enabled = true;
-        controls.applyGravity = false; 
+        controls.applyGravity = false;
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
@@ -432,14 +434,19 @@ export default {
           obj.rotation.y -= 0.05
         }
       }
-      function flip_a_kon(obj){
+      function flip_a_kon_pos(obj){
         if (obj.rotation.z< Math.PI/2){
           obj.rotation.z += 0.05
         }
-      }   
+      }
+      function flip_a_kon_neg(obj){
+        if (obj.rotation.z > -Math.PI/2){
+          obj.rotation.z -= 0.05
+        }
+      }
       function animate() {
         if (market_loaded ){
-          store.commit("setMarketLoadedTrue");
+          // store.commit("setMarketLoadedTrue");
           delayForAnimate()
         }
         if (readyForOBJanimation) renderer.render(scene, camera);
@@ -447,12 +454,12 @@ export default {
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
         if (controls.enabled) controls.update();
-        if (isMobile) controls.mobileMove();
+        if (1) controls.mobileMove();//isMobile
         raycaster.setFromCamera( mouse, camera );
 
         let disTo_end = camera.position.distanceTo(end_position)
-        if(disTo_end < 1.5) {
-          store.commit("setQuestionMarketDisplayTrue")
+        if(disTo_end < 3) {
+          store.commit("marketChangeState",{id:'sence_end',display: true})
         }
 
 
@@ -478,7 +485,7 @@ export default {
           let disTo_fish = camera.position.distanceTo(fish_position);
           let disTo_kick = camera.position.distanceTo(kick);
           let disTo_dragman = camera.position.distanceTo(drag_man);
-          
+
           let disTo_passerby01 = camera.position.distanceTo(passerby01.getWorldPosition(new THREE.Vector3()));
           let disTo_passerby02 = camera.position.distanceTo(passerby02.getWorldPosition(new THREE.Vector3()));
           let disTo_passerby03 = camera.position.distanceTo(passerby03.getWorldPosition(new THREE.Vector3()));
@@ -489,21 +496,42 @@ export default {
           let disTo_passerby08 = camera.position.distanceTo(passerby08.getWorldPosition(new THREE.Vector3()));
           let disTo_passerby09 = camera.position.distanceTo(passerby09.getWorldPosition(new THREE.Vector3()));
 
+
           if (disTo_a_kon_start < 3){
-            flip_a_kon(a_kon_start)
-            sheet_brave_normal.visible = true;
-            sheet_power_normal.visible = true;
+            store.commit("marketChangeState",{id:'sence_start',display: true})
+            if(start_display) {
+              flip_a_kon_pos(a_kon_start)
+            }else{
+              flip_a_kon_neg(a_kon_start)
+            }
+            if(start_display){
+              sheet_brave_normal.visible = true;
+              sheet_power_normal.visible = true;
+            }else{
+              sheet_brave_normal.visible = false;
+              sheet_power_normal.visible = false;
+            }
             if (interscets_sheet_power_normal.length > 0){
+              if(start_display){
               sheet_power_white.visible = true;
               displaySheet_power = true;
+              }else{
+              sheet_brave_normal.visible = false;
+              sheet_power_normal.visible = false;
+            }
             ///for 2D image
               }else{
                 sheet_power_white.visible = false;
                 displaySheet_power = false;
                 }
               if (interscets_sheet_brave_normal.length > 0){
-                sheet_brave_white.visible = true;
-                displaySheet_brave = true;
+                if(start_display){
+                  sheet_brave_white.visible = true;
+                  displaySheet_brave = true;
+                  }else{
+                  sheet_brave_normal.visible = false;
+                  sheet_power_normal.visible = false;
+                }
                 ///for 2D image
               }else{
                 sheet_brave_white.visible = false;
@@ -518,19 +546,19 @@ export default {
               displaySheet_brave = false;
             }
 
-          if(disTo_car < 8){
+          if(disTo_car < 6){
             animation_car.play();
             animation_tier01.play();
             animation_tier02.play();
           }
-          
-          
+
+
           if(disTo_arrow1 < 6){
             arrow_monger1.visible = true;
             animation_arrow1.play()
 
             if(intersects_monger1.length > 0){
-              monger1_hover.visible = true  
+              monger1_hover.visible = true
               displayFishMonger1 = true
             }else{
               monger1_hover.visible = false;
@@ -591,21 +619,29 @@ export default {
             displayFishMonger4 = false;
             }
 
-          if(disTo_kick < 8){
+          if(disTo_kick < 5){
             animation_kick_man_arm.play();
             animation_kick_man_leg.play();
             animation_kick_box.play();
-          } 
-          if(disTo_fish < 8){
+          }
+          if(disTo_fish < 5){
             animation_fish.play();
             }
-          if(disTo_dragman < 8){
-            animation_drag_man_body.play();
+            console.log(drag_man_body.position.z)
+          if(disTo_dragman < 5 & drag_man_body.position.z < 1.3){
             animation_drag_man_calf_L.play();
             animation_drag_man_calf_R.play();
             animation_drag_man_leg_L.play();
             animation_drag_man_leg_R.play();
-          }
+            drag_man_body.position.z += 0.003;}
+          else if(drag_man_body.position.z >= 1.3){
+            drag_man_body.position.z += 0;
+            animation_drag_man_calf_L.stop();
+            animation_drag_man_calf_R.stop();
+            animation_drag_man_leg_L.stop();
+            animation_drag_man_leg_R.stop();
+            }
+          
           if(disTo_passerby01 < 4.5){
             flipPositive(passerby01)
           }else{
@@ -650,19 +686,23 @@ export default {
             flipPositive(passerby09)
           }else{
             flipNegative(passerby09)
-          }               
+          }
         }
-      }        
+      }
           document.addEventListener("dblclick", function () {
-            if (displaySheet_power) store.commit("marketChangeState",{id:'sheet_power',display: true})
-            if (displaySheet_brave) store.commit("marketChangeState",{id:'sheet_brave',display: true})
+            if (displaySheet_power) {
+              store.commit("marketChangeState",{id:'sheet_power',display: true})
+              start_display = false;
+              }
+            if (displaySheet_brave) {
+              store.commit("marketChangeState",{id:'sheet_brave',display: true})
+              start_display = false;
+              }
             if (displayFishMonger1) store.commit("marketChangeState",{id:'monger1',display: true})
             if (displayFishMonger2) store.commit("marketChangeState",{id:'monger2',display: true})
             if (displayFishMonger3) store.commit("marketChangeState",{id:'monger3',display: true})
             if (displayFishMonger4) store.commit("marketChangeState",{id:'monger4',display: true})
-            if (displayEnd) store.commit("marketChangeState",{id:'sence_end',display: true})
-            // console.log(store.state.marketDisplay[0]["id"],store.state.marketDisplay[0]["display"])
-            });  
+            });
       createScene();
       createLight();
       createControls();
@@ -681,6 +721,7 @@ export default {
   width: 100%;
   height: 100%;
   position: fixed;
+  z-index: 6;
   left: 0;
   top: 0;
 }
