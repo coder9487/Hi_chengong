@@ -23,7 +23,7 @@ export default {
   methods: {
     loading_callbacks(val){
       //  console.log('Pass into callbacks ',val.loaded)
-      this.$emit('loadingProgress',(val.loaded/111356897).toFixed(2))
+      this.$emit('loadingProgress',(val.loaded/114204521).toFixed(2))
     },
     initThree(callbacks) {
       ///DiningTable
@@ -64,9 +64,9 @@ export default {
       let arrow3 = new THREE.Vector3(-17.93976902961731,0.865715742111206,3.0435776710510254)
       let arrow4 = new THREE.Vector3(-29.51202392578125,0.865715742111206,2.210468053817749)
       let car_position = new THREE.Vector3(11.767337322235107,2.2295211255550385,0.0820380449295044)
-      let kick = new THREE.Vector3(2.364274263381958,0.22890541702508926,-3.6441126465797424)
-      let fish_position = new THREE.Vector3(-25.051822662353516,0.22890541702508926,-3.6441126465797424)
-      let drag_man = new THREE.Vector3(-15.329395532608032,0.22890541702508926,-3.6441126465797424)
+      let kick = new THREE.Vector3(-2.7316588163375854,0.815223678946495,-7.15338945388794)
+      let fish_position = new THREE.Vector3(-28.70699882507324,-1.7775985598564148,-11.736360788345337)
+      let drag_man = new THREE.Vector3(-21.90814971923828,0.25204645469784737, -3.91421377658844)
 
       let mixer;
       let arrow_monger1,monger1_normal,monger1_hover,animation_arrow1;
@@ -77,7 +77,7 @@ export default {
       let animation_fish;
       let animation_kick_man,animation_kick_man_arm,animation_kick_man_leg,animation_kick_box
       let animation_car,animation_tier01,animation_tier02;
-      let animation_drag_man_body,animation_drag_man_calf_L,animation_drag_man_calf_R,animation_drag_man_leg_L,animation_drag_man_leg_R;
+      let animation_drag_man_body,animation_drag_man_calf_L,animation_drag_man_calf_R,animation_drag_man_leg_L,animation_drag_man_leg_R,drag_man_body;
       let passerby01,passerby02,passerby03,passerby04,passerby05,passerby06,passerby07,passerby08,passerby09;
       let passer01,passer02,passer03,passer04,passer05,passer06,passer07,passer08,passer09;
       let start_display = true;
@@ -246,6 +246,7 @@ export default {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
+            // console.log(obj)
             controls.colliders = obj;
             a_kon_start = obj.getObjectByName("a_kon_start")
             sheet_power_normal = obj.getObjectByName("sheet_power_normal")
@@ -311,20 +312,24 @@ export default {
             animation_fish.clampWhenFinished = true;
 
             animation_drag_man_body = mixer.clipAction(obj.animations[7])
+            // animation_drag_man_calf_L = mixer.clipAction(obj.animations[8]).play()
+            // animation_drag_man_calf_R = mixer.clipAction(obj.animations[9]).play()
+            // animation_drag_man_leg_L = mixer.clipAction(obj.animations[10]).play()
+            // animation_drag_man_leg_R = mixer.clipAction(obj.animations[11]).play()
             animation_drag_man_calf_L = mixer.clipAction(obj.animations[8])
             animation_drag_man_calf_R = mixer.clipAction(obj.animations[9])
             animation_drag_man_leg_L = mixer.clipAction(obj.animations[10])
             animation_drag_man_leg_R = mixer.clipAction(obj.animations[11])
             animation_drag_man_body.setLoop(THREE.LoopOnce)
-            animation_drag_man_calf_L.setLoop(THREE.LoopOnce)
-            animation_drag_man_calf_R.setLoop(THREE.LoopOnce)
-            animation_drag_man_leg_L.setLoop(THREE.LoopOnce)
-            animation_drag_man_leg_R.setLoop(THREE.LoopOnce)
-            animation_drag_man_body.clampWhenFinished = true;
-            animation_drag_man_calf_L.clampWhenFinished = true;
-            animation_drag_man_calf_R.clampWhenFinished = true;
-            animation_drag_man_leg_L.clampWhenFinished = true;
-            animation_drag_man_leg_R.clampWhenFinished = true;
+            animation_drag_man_calf_L.setLoop(THREE.LoopRepeat)
+            animation_drag_man_calf_R.setLoop(THREE.LoopRepeat)
+            animation_drag_man_leg_L.setLoop(THREE.LoopRepeat)
+            animation_drag_man_leg_R.setLoop(THREE.LoopRepeat)
+            // animation_drag_man_body.clampWhenFinished = true;
+            // animation_drag_man_calf_L.clampWhenFinished = true;
+            // animation_drag_man_calf_R.clampWhenFinished = true;
+            // animation_drag_man_leg_L.clampWhenFinished = true;
+            // animation_drag_man_leg_R.clampWhenFinished = true;
             animation_arrow1 = mixer.clipAction(obj.animations[12]);
             animation_arrow2 = mixer.clipAction(obj.animations[13]);
             animation_arrow3 = mixer.clipAction(obj.animations[14]);
@@ -338,13 +343,15 @@ export default {
             passerby07 = obj.getObjectByName("passerby07")
             passerby08 = obj.getObjectByName("passerby08")
             passerby09 = obj.getObjectByName("passerby09")
+            drag_man_body = obj.getObjectByName("drag_man_body");
+            
 
           },
           // called when loading is in progresses
           function (xhr) {
-             console.log(xhr.loaded)
+            //  console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 111343412  == 1) {
+            if (xhr.loaded / 114204521  == 1) {
               market_loaded = true;
               //  console.log(xhr.loaded)
             }
@@ -539,7 +546,7 @@ export default {
               displaySheet_brave = false;
             }
 
-          if(disTo_car < 8){
+          if(disTo_car < 6){
             animation_car.play();
             animation_tier01.play();
             animation_tier02.play();
@@ -612,21 +619,29 @@ export default {
             displayFishMonger4 = false;
             }
 
-          if(disTo_kick < 8){
+          if(disTo_kick < 5){
             animation_kick_man_arm.play();
             animation_kick_man_leg.play();
             animation_kick_box.play();
           }
-          if(disTo_fish < 8){
+          if(disTo_fish < 5){
             animation_fish.play();
             }
-          if(disTo_dragman < 8){
-            animation_drag_man_body.play();
+            console.log(drag_man_body.position.z)
+          if(disTo_dragman < 5 & drag_man_body.position.z < 1.3){
             animation_drag_man_calf_L.play();
             animation_drag_man_calf_R.play();
             animation_drag_man_leg_L.play();
             animation_drag_man_leg_R.play();
-          }
+            drag_man_body.position.z += 0.003;}
+          else if(drag_man_body.position.z >= 1.3){
+            drag_man_body.position.z += 0;
+            animation_drag_man_calf_L.stop();
+            animation_drag_man_calf_R.stop();
+            animation_drag_man_leg_L.stop();
+            animation_drag_man_leg_R.stop();
+            }
+          
           if(disTo_passerby01 < 4.5){
             flipPositive(passerby01)
           }else{
@@ -710,7 +725,7 @@ export default {
   left: 0;
   top: 0;
 }
-#circle {
+/* #circle {
   width: 10px;
   height: 10px;
   position: fixed;
@@ -718,5 +733,5 @@ export default {
   left: 50%;
   border-radius: 99em;
   background-color:white ;
-}
+} */
 </style>
