@@ -2,6 +2,7 @@ import * as THREE from "three";
 import store from "../store/index";
 
 export class FirstPersonCameraControl {
+
   constructor(camera, domElement, rayCastObjects) {
     this.camera = camera;
     this.domElement = domElement;
@@ -27,11 +28,14 @@ export class FirstPersonCameraControl {
     this.playerHeight = 1.4;
     this.g = 9.8;
     // event bindings
+
     this.bindmousedown = this.onMouseDown.bind(this);
     this.bindmouseup = this.onMouseUp.bind(this);
     this.bindmousemove = this.onMouseMove.bind(this);
     this.bindonKeyDown = this.onKeyDown.bind(this);
     this.bindonKeyUp = this.onKeyUp.bind(this);
+
+
     this.getObject = function () {
       // retaining this method for backward compatibility
 

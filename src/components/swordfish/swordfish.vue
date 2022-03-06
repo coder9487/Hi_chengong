@@ -6,7 +6,7 @@
 
 <script>
 import * as THREE from "three/build/three.module.js";
-import { FirstPersonCameraControl } from "../FirstPersonCameraControls";
+import { FirstPersonCameraControl_ForSwordfish } from "./FirstPersonCameraControlsForSwordfish";
 import store from "../../store/index";
 import { ref, reactive } from "vue";
 
@@ -22,6 +22,11 @@ export default {
     };
   },
   mounted() {
+    // class FirstPersonCameraControl extends WithoutMoving{
+
+
+    // }
+    // FirstPersonCameraControl.removeEvents();
     this.initThree(this.loadingCallbacks, this.poleDirection, this.option);
   },
   props: [""],
@@ -316,7 +321,7 @@ export default {
         }
       }
       {
-        controls = new FirstPersonCameraControl(camera, document.body);
+        controls = new FirstPersonCameraControl_ForSwordfish(camera, document.body);
         controls.enabled = true;
         controls.applyGravity = false;
         controls.applyCollision = false;
