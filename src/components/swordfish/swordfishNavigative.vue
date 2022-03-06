@@ -216,7 +216,7 @@ export default {
     width: 25%;
     position: absolute;
     bottom: 0;
-    margin-left: 10%;
+   left: 10%;
   }
   &-dialog {
     max-width: 50vw;
@@ -246,7 +246,8 @@ export default {
 
       position: relative;
       border-radius: 30px;
-      margin-left: 10%;
+      display: flex;
+      left: 5%;
       bottom: 30%;
       width: 40vw;
       @media screen and (min-width: 1024px) {

@@ -346,7 +346,7 @@ export default {
             callbacks(xhr)
             if (xhr.loaded / 111343412  == 1) {
               market_loaded = true;
-              //  console.log(xhr.loaded)
+
             }
           }
         );

@@ -97,7 +97,7 @@ export default defineComponent({
 .loadingPage {
   width: 100vw;
   height: 100vh;
-  background-color: cadetblue;
+  // background-color: cadetblue;
   &-mask {
     // opacity: 0.3;
     position: fixed;

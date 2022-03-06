@@ -7,6 +7,7 @@
       text-color="cyan-7"
       color="grey-1"
       @click="playVideo()"
+      :size="$q.platform.is.desktop ? 'lg' : 'md'"
       >走！去成功</q-btn
     >
   </div>
