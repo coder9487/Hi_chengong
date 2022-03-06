@@ -181,6 +181,7 @@ export default {
       let bar = document.getElementById("timeBar");
       this.TimeObj.counter++;
       if (this.TimeObj.counter > 600) this.TimeObj.counter = 600;
+      if(bar)
       bar.style.width = (this.TimeObj.counter * 0.167).toFixed(1) + "%";
 
     },
