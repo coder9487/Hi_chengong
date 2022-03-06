@@ -23,7 +23,7 @@ export default {
   methods: {
     loading_callbacks(val){
       //  console.log('Pass into callbacks ',val.loaded)
-      this.$emit('loadingProgress',(val.loaded/114204521).toFixed(2))
+      this.$emit('loadingProgress',(val.loaded/127035832).toFixed(2))
     },
     initThree(callbacks) {
       ///DiningTable
@@ -349,9 +349,9 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            //  console.log(xhr.loaded)
+             console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 114204521  == 1) {
+            if (xhr.loaded / 127035832  == 1) {
               market_loaded = true;
               //  console.log(xhr.loaded)
             }
@@ -624,10 +624,14 @@ export default {
             animation_kick_man_leg.play();
             animation_kick_box.play();
           }
-          if(disTo_fish < 5){
+          if(disTo_fish < 10){
             animation_fish.play();
+            flipPositive(passerby07)
+          }else{
+            flipNegative(passerby07)
+          
             }
-            console.log(drag_man_body.position.z)
+           
           if(disTo_dragman < 5 & drag_man_body.position.z < 1.3){
             animation_drag_man_calf_L.play();
             animation_drag_man_calf_R.play();
@@ -672,11 +676,11 @@ export default {
           }else{
             flipNegative(passerby06)
           }
-          if(disTo_passerby07 < 4.5){
-            flipPositive(passerby07)
-          }else{
-            flipNegative(passerby07)
-          }
+          // if(disTo_passerby07 < 4.5){
+          //   flipPositive(passerby07)
+          // }else{
+          //   flipNegative(passerby07)
+          // }
           if(disTo_passerby08 < 4.5){
             flipPositive(passerby08)
           }else{
