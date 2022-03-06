@@ -21,7 +21,8 @@ export default createStore({
     marketDisplay: [{ id: "None", display: false }],
     FoodDisplay: [{ id: "0", display: false }],
     pisirianDisplay: [{ id: "None", display: false }],
-    swordfishShootToggle: false,
+    swordfishShoottimes: 0,
+    animateEnable:false,
   },
   mutations: {
     ///
@@ -72,9 +73,17 @@ export default createStore({
       state.marketLoaded = true;
     },
     /////////////////////////////////////////
-    swordfishShoot(state) {
-      state.swordfishShootToggle = !state.swordfishShootToggle;
+    swordfishShootTimes(state) {
+      state.swordfishShoottimes ++;
     },
+    controlAnimateTrue(state)
+    {
+      state.animateEnable = true;
+    },
+    controlAnimateFalse(state)
+    {
+      state.animateEnable = false;
+    }
   },
   actions: {},
   modules: {},

@@ -8,7 +8,7 @@
       !fishmonger_dialog_content_show_available
     "
   >
-    {{ moving }}
+    <!-- {{ moving }} -->
   </div>
   <div
     v-if="detectPaltform"
@@ -19,7 +19,7 @@
       !fishmonger_dialog_content_show_available
     "
   >
-    {{ direc }}
+    <!-- {{ direc }} -->
   </div>
 
   <div class="navigate" v-show="navigate_dialog_content_show_availbale">
@@ -265,7 +265,7 @@ export default {
   // // background-color: antiquewhite;
 
   &-movement {
-    background-color: orange;
+    // background-color: orange;
     opacity: 0.3;
     width: 20vw;
     height: 33vh;
@@ -276,10 +276,10 @@ export default {
   }
   &-direction {
     z-index: 101;
-    background-color: orange;
+    // background-color: orange;
     opacity: 0.3;
     width: 20vw;
-    height: 50vh;
+    height: 100vh;
     position: fixed;
     right: 0px;
   }

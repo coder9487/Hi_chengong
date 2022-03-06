@@ -41,8 +41,7 @@ export default defineComponent({
       if (this.loading >= 98) {
         setTimeout(() => {
           this.showingFlag = true;
-          this.audio= new Audio("/sound/sound.mp3");
-          this.audio.play();
+
 
 
         }, 5000);

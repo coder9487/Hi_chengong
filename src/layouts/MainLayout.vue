@@ -37,7 +37,7 @@
 export default {
   data(){
     return{
-        showDebugTab:true
+        showDebugTab:false
     }
   },
   methods: {

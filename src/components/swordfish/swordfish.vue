@@ -18,7 +18,7 @@ export default {
       showingFlag: true,
       AnimationEnable: false,
       poleDirection: reactive({ x: 0, y: 0 }),
-      OptionArray:reactive({})
+      OptionArray: reactive({}),
     };
   },
   mounted() {
@@ -26,6 +26,9 @@ export default {
   },
   props: [""],
   computed: {
+    detetctShootFishAvailable() {
+      return this.$store.state.swordfishShoottimes;
+    },
     poleDirectionDetect() {
       return this.$store.state.poleDirection;
     },
@@ -34,6 +37,14 @@ export default {
     },
   },
   watch: {
+    detetctShootFishAvailable: function () {
+      // let threeObj = document.getElementById("three");
+      // threeObj.style.opacity = 0.3;
+      // setTimeout(() => {
+      //  threeObj = document.getElementById("three");
+      //   threeObj.style.opacity = 1;
+      // }, 3000);
+    },
     shoot: function () {
       this.shootPoleByVuex();
     },
@@ -114,6 +125,20 @@ export default {
         camera.position.y = 6;
         camera.position.z = 0;
         camera.lookAt(-5, 0.5, 0);
+        const listener = new THREE.AudioListener();
+        camera.add(listener);
+
+        // create a global audio source
+        const sound = new THREE.Audio(listener);
+
+        // load a sound and set it as the Audio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load("sound/sea.mp3", function (buffer) {
+          sound.setBuffer(buffer);
+          sound.setLoop(true);
+          sound.setVolume(0.5);
+          sound.play();
+        });
 
         const axesHelper = new THREE.AxesHelper(5);
         scene.add(axesHelper);
@@ -312,12 +337,15 @@ export default {
       else {
         mouse = outer_poleDirection;
       }
+
       function animate(OptionArray) {
         let AnimationEnable = true;
-        if (window.innerHeight > window.innerWidth || 1) {
+        if (window.innerHeight > window.innerWidth) {
           AnimationEnable = false;
         }
+
         if (1) {
+          // console.log(store.state.animateEnable)
           if (isMobile) {
           }
 
@@ -329,8 +357,7 @@ export default {
 
           sea.moveWaves();
           Lowersea.moveWaves();
-          if(AnimationEnable)
-          return
+          if (!AnimationEnable) return;
           requestAnimationFrame(animate);
           raycaster.setFromCamera(mouse, camera);
           if (readyForOBJanimation) {
@@ -368,7 +395,7 @@ export default {
 
               let dis = pohe.distanceTo(fish_position);
               if (dis < 1) {
-                alert("你成功了");
+                store.commit("swordfishShootTimes");
                 pole.position.set(0.17277, 0.53, -0.04074);
                 poleGo = false;
               } else if (pohe.y < -2) {
@@ -379,13 +406,13 @@ export default {
           }
           if (controls.enabled) controls.update();
           // if (isMobile) controls.mobileMove();
-          if (isMobile) sea.mesh.position.x += 1;
-          else sea.mesh.position.x += 0.5;
+          if (isMobile) sea.mesh.position.x += 0.2;
+          else sea.mesh.position.x += 0.2;
           // sea.mesh.position.z -= 0.02;
         }
       }
 
-      animate(outer_poleDirection,OptionArray);
+      animate(outer_poleDirection, OptionArray);
     },
   },
 };
