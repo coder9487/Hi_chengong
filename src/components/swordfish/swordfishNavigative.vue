@@ -21,10 +21,14 @@
     ></q-img>
     <q-card class="navigate-dialog">
       <div class="navigate-dialog-content">
-        <div v-html="A_kon_dialogContent[navigate_dialog_content_index]"></div>
+        <!-- <span v-html="A_kon_dialogContent[navigate_dialog_content_index]"></span> -->
+        <q-img
+          class="navigate-dialog-content-photo"
+          :src="A_kon_dialogPhoto[navigate_dialog_content_index]"
+        ></q-img>
         <q-btn
           class="navigate-dialog-button"
-          :color="navigate_dialog_content_index < 2 ? 'cyan-6' : 'orange-9'"
+          :color="navigate_dialog_content_index < 2 ? 'amber-8' : 'amber-8'"
           @click="A_kon_chatbox_handle"
           :size="$q.platform.is.desktop ? 'lg' : 'lg'"
         >
@@ -113,11 +117,19 @@ export default {
     return {
       TimeObj: { limit: 60000, id: null, counter: 0 },
       A_kon_dialogContent: [
-        "當然不容易啊，但用鏢的旗魚也會特別好吃喔!今天難得遇上旗魚季體驗活動，一年一次的難得機會，你可要好好把握啊!",
-        " 用滑鼠移動可以瞄準旗魚，點擊左鍵就會投出鏢竿，注意要看準接近魚鰓的區域投，傷到魚身就沒價值了!體驗時間一分鐘，把握時間，旗魚可是不等人的喔!",
+        `來，阿公跟你說，鏢旗魚是<b>成功鎮特有的</b>傳統技法，漁夫會舉著長<b>4~6公尺</b>，重達<b>18公斤</b>的鏢竿鏢旗魚，雖然辛苦，但鏢到的旗魚也會特別好吃喔!`,
+        " 用<div class='navigate-dialog-content-b'>滑鼠移動</div>可以瞄準旗魚，<div class='navigate-dialog-content-b'>點擊左鍵</div>就會投出鏢竿，注意要看準接近魚鰓的區域投，傷到魚身就沒價值了!體驗時間<div class='navigate-dialog-content-b'>一分鐘</div>，把握時間，旗魚可是不等人的喔!",
         "",
         "做得好好玩吧!有沒有發現這樣就不容易捕到小魚或保育類了，鏢旗魚對環境是很友善的喔!阿如果你鏢到也不要氣餒啦，阿公是有50年經驗才這麼厲害，你還要多練練啦!",
         "好啦，鏢旗魚很辛苦對吧!經過努力收穫的漁獲會特別好吃喔!阿公帶你去漁港吃些好料吧!",
+        "",
+      ],
+      A_kon_dialogPhoto: [
+        "images/sowrdfishDialog3.png",
+        "images/sowrdfishDialog4.png",
+        "",
+        "images/sowrdfishDialog2.png",
+        "images/sowrdfishDialog1.png",
         "",
       ],
       A_kon_dialogButton: [
@@ -181,9 +193,8 @@ export default {
       let bar = document.getElementById("timeBar");
       this.TimeObj.counter++;
       if (this.TimeObj.counter > 600) this.TimeObj.counter = 600;
-      if(bar)
-      bar.style.width = (this.TimeObj.counter * 0.167).toFixed(1) + "%";
-
+      if (bar)
+        bar.style.width = (this.TimeObj.counter * 0.167).toFixed(1) + "%";
     },
     shoot() {
       this.$store.commit("swordfishShoot");
@@ -274,11 +285,16 @@ export default {
     left: 10%;
   }
   &-dialog {
-    max-width: 50vw;
+    max-width: 60vw;
     left: 35%;
     top: 20vh;
     border-radius: 40px;
+    padding: 3%;
     // background-color: chocolate;
+    width: 60vw;
+    @media screen and (min-width: 1024px) {
+      max-width: 50vw;
+    }
 
     &-content {
       font-size: 5vh;
@@ -295,6 +311,13 @@ export default {
       color: rgb(18, 89, 74);
       &-b {
         color: orange;
+      }
+
+      &-photo {
+        width: 50vw;
+        @media screen and (min-width: 1024px) {
+          width: 40vw;
+        }
       }
     }
     &-button {

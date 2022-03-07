@@ -132,7 +132,7 @@ export default {
       ],
 
       fishmonger_sequence: ref(0),
-      fishmonger_dialog_content_index_limit: [0, 3, 4, 3, 6],
+      fishmonger_dialog_content_index_limit: [0, 2, 2, 1, 3],
       fishmonger_dialog_content_index: ref(0),
       fishMonger_image_path: reactive({ fishMonger: "", dialogBox: "" }),
       fishmonger_dialog_content_show_available: ref(false),
@@ -364,7 +364,7 @@ export default {
       display: flex;
       top: -20px;
       justify-content: space-between;
-      left: -16vw;
+      left: -12vw;
       width: 50vw;
       position: relative;
       @media screen and (min-width: 1024px) {

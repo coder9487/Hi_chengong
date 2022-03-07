@@ -110,8 +110,8 @@ export default defineComponent({
     position: fixed;
     font-size: 50px;
     color: darkorange;
-    bottom: 30%;
-    left: 45%;
+    bottom: 10%;
+    left: 40%;
     @media screen and (max-device-width: 768px) {
       bottom: 10%;
       left: 40%;

@@ -28,6 +28,7 @@ export default {
     // }
     // FirstPersonCameraControl.removeEvents();
     this.initThree(this.loadingCallbacks, this.poleDirection, this.option);
+
   },
   props: [""],
   computed: {
@@ -68,6 +69,20 @@ export default {
     //     poleDirection =
     // },
     option(setPoleGo) {},
+         openFullscreen() {
+      var elem = document.getElementById("id-webglcanvas");
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+      }
+      elem.style.width = '100%';
+      elem.style.height = '100%';
+    },
     shootPoleByVuex() {
       console.log("shoot:");
       document.getElementById("three").click();
