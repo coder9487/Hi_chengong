@@ -308,7 +308,7 @@ export default {
              console.log(xhr.loaded)
             loadingCallbacks(xhr.loaded);
 
-            if (xhr.loaded / 8287578 == 1) sword_fish_loaded = true;
+            if (xhr.loaded / 7944053 == 1) sword_fish_loaded = true;
             // console.log(xhr.loaded / 4732415) *100
           }
         );

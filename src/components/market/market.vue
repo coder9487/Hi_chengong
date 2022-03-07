@@ -22,7 +22,8 @@ export default {
   methods: {
     loading_callbacks(val){
       //  console.log('Pass into callbacks ',val.loaded)
-      this.$emit('loadingProgress',(val.loaded/131887127).toFixed(2))
+      this.$emit('loadingProgress',(val.loaded/111343412
+).toFixed(2))
     },
     initThree(callbacks) {
       ///DiningTable
@@ -364,7 +365,8 @@ export default {
           function (xhr) {
              console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 131887127  == 1) {
+            if (xhr.loaded / 111343412
+  == 1) {
               market_loaded = true;
             }
           }
@@ -660,9 +662,9 @@ export default {
             flipPositive(passerby07)
           }else{
             flipNegative(passerby07)
-          
+
             }
-           
+
           if(disTo_dragman < 5 & drag_man_body.position.z < 1.3){
             animation_drag_man_calf_L.play();
             animation_drag_man_calf_R.play();
