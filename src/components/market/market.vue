@@ -23,7 +23,7 @@ export default {
   methods: {
     loading_callbacks(val){
       //  console.log('Pass into callbacks ',val.loaded)
-      this.$emit('loadingProgress',(val.loaded/127035832).toFixed(2))
+      this.$emit('loadingProgress',(val.loaded/130587364).toFixed(2))
     },
     initThree(callbacks) {
       ///DiningTable
@@ -351,7 +351,7 @@ export default {
           function (xhr) {
              console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 127035832  == 1) {
+            if (xhr.loaded / 130587364  == 1) {
               market_loaded = true;
               //  console.log(xhr.loaded)
             }
