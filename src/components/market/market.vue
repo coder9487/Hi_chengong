@@ -5,7 +5,6 @@
 </template>
 
 <script>
-
 import * as THREE from "three/build/three.module.js";
 import { FirstPersonCameraControl } from "../FirstPersonCameraControls.js";
 import store from "../../store/index";
@@ -35,7 +34,7 @@ export default {
       let market_loaded = false;
       let car = false;
       let round = false;
-      let boat01,boat02;
+      let boat01, boat02;
       const sheet_power = [];
       const sheet_brave = [];
       const monger1 = [];
@@ -69,10 +68,10 @@ export default {
       let drag_man = new THREE.Vector3(-21.90814971923828,0.25204645469784737, -3.91421377658844)
 
       let mixer;
-      let arrow_monger1,monger1_normal,monger1_hover,animation_arrow1;
-      let arrow_monger2,monger2_normal,monger2_hover,animation_arrow2;
-      let arrow_monger3,monger3_normal,monger3_hover,animation_arrow3;
-      let arrow_monger4,monger4_normal,monger4_hover,animation_arrow4;
+      let arrow_monger1, monger1_normal, monger1_hover, animation_arrow1;
+      let arrow_monger2, monger2_normal, monger2_hover, animation_arrow2;
+      let arrow_monger3, monger3_normal, monger3_hover, animation_arrow3;
+      let arrow_monger4, monger4_normal, monger4_hover, animation_arrow4;
 
       let animation_fish;
       let animation_kick_man,animation_kick_man_arm,animation_kick_man_leg,animation_kick_box
@@ -132,6 +131,20 @@ export default {
             "images/sky_pos_z.jpg",
           ]);
         scene.fog = new THREE.Fog(0x4ca7e6, 400, 800);
+        const listener = new THREE.AudioListener();
+        camera.add(listener);
+
+        // create a global audio source
+        const sound = new THREE.Audio(listener);
+
+        // load a sound and set it as the Audio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load("sound/sea.mp3", function (buffer) {
+          sound.setBuffer(buffer);
+          sound.setLoop(true);
+          sound.setVolume(0.5);
+          sound.play();
+        });
       }
 
       function createLight() {
@@ -248,36 +261,36 @@ export default {
             scene.add(obj);
             // console.log(obj)
             controls.colliders = obj;
-            a_kon_start = obj.getObjectByName("a_kon_start")
-            sheet_power_normal = obj.getObjectByName("sheet_power_normal")
-            sheet_brave_normal = obj.getObjectByName("sheet_brave_normal")
-            sheet_power_white = obj.getObjectByName("sheet_power_white")
-            sheet_brave_white = obj.getObjectByName("sheet_brave_white")
-            sheet_power.push(sheet_power_normal)
-            sheet_brave.push(sheet_brave_normal)
+            a_kon_start = obj.getObjectByName("a_kon_start");
+            sheet_power_normal = obj.getObjectByName("sheet_power_normal");
+            sheet_brave_normal = obj.getObjectByName("sheet_brave_normal");
+            sheet_power_white = obj.getObjectByName("sheet_power_white");
+            sheet_brave_white = obj.getObjectByName("sheet_brave_white");
+            sheet_power.push(sheet_power_normal);
+            sheet_brave.push(sheet_brave_normal);
             sheet_power_normal.visible = false;
             sheet_brave_normal.visible = false;
             sheet_power_white.visible = false;
             sheet_brave_white.visible = false;
 
-            boat01 = obj.getObjectByName("boat01")
-            boat02 = obj.getObjectByName("boat02")
-            arrow_monger1 = obj.getObjectByName("arrow_monger1")
-            arrow_monger2 = obj.getObjectByName("arrow_monger2")
-            arrow_monger3 = obj.getObjectByName("arrow_monger3")
-            arrow_monger4 = obj.getObjectByName("arrow_monger4")
-            monger1_normal = obj.getObjectByName("monger1_normal")
-            monger2_normal = obj.getObjectByName("monger2_normal")
-            monger3_normal = obj.getObjectByName("monger3_normal")
-            monger4_normal = obj.getObjectByName("monger4_normal")
-            monger1.push(monger1_normal)
-            monger2.push(monger2_normal)
-            monger3.push(monger3_normal)
-            monger4.push(monger4_normal)
-            monger1_hover = obj.getObjectByName("monger1_hover")
-            monger2_hover = obj.getObjectByName("monger2_hover")
-            monger3_hover = obj.getObjectByName("monger3_hover")
-            monger4_hover = obj.getObjectByName("monger4_hover")
+            boat01 = obj.getObjectByName("boat01");
+            boat02 = obj.getObjectByName("boat02");
+            arrow_monger1 = obj.getObjectByName("arrow_monger1");
+            arrow_monger2 = obj.getObjectByName("arrow_monger2");
+            arrow_monger3 = obj.getObjectByName("arrow_monger3");
+            arrow_monger4 = obj.getObjectByName("arrow_monger4");
+            monger1_normal = obj.getObjectByName("monger1_normal");
+            monger2_normal = obj.getObjectByName("monger2_normal");
+            monger3_normal = obj.getObjectByName("monger3_normal");
+            monger4_normal = obj.getObjectByName("monger4_normal");
+            monger1.push(monger1_normal);
+            monger2.push(monger2_normal);
+            monger3.push(monger3_normal);
+            monger4.push(monger4_normal);
+            monger1_hover = obj.getObjectByName("monger1_hover");
+            monger2_hover = obj.getObjectByName("monger2_hover");
+            monger3_hover = obj.getObjectByName("monger3_hover");
+            monger4_hover = obj.getObjectByName("monger4_hover");
             arrow_monger1.visible = false;
             arrow_monger2.visible = false;
             arrow_monger3.visible = false;
@@ -286,29 +299,29 @@ export default {
             monger2_hover.visible = false;
             monger3_hover.visible = false;
             monger4_hover.visible = false;
-            mixer = new THREE.AnimationMixer(obj)
+            mixer = new THREE.AnimationMixer(obj);
 
             animation_car = mixer.clipAction(obj.animations[0]);
             animation_tier01 = mixer.clipAction(obj.animations[1]);
             animation_tier02 = mixer.clipAction(obj.animations[2]);
-            animation_car.setLoop(THREE.LoopOnce)
-            animation_tier01.setLoop(THREE.LoopOnce)
-            animation_tier02.setLoop(THREE.LoopOnce)
+            animation_car.setLoop(THREE.LoopOnce);
+            animation_tier01.setLoop(THREE.LoopOnce);
+            animation_tier02.setLoop(THREE.LoopOnce);
             animation_car.clampWhenFinished = true;
             animation_tier01.clampWhenFinished = true;
             animation_tier02.clampWhenFinished = true;
-            animation_kick_man_arm = mixer.clipAction(obj.animations[3])
-            animation_kick_man_leg = mixer.clipAction(obj.animations[4])
-            animation_kick_box = mixer.clipAction(obj.animations[5])
-            animation_kick_man_arm.setLoop(THREE.LoopOnce)
-            animation_kick_man_leg.setLoop(THREE.LoopOnce)
-            animation_kick_box.setLoop(THREE.LoopOnce)
+            animation_kick_man_arm = mixer.clipAction(obj.animations[3]);
+            animation_kick_man_leg = mixer.clipAction(obj.animations[4]);
+            animation_kick_box = mixer.clipAction(obj.animations[5]);
+            animation_kick_man_arm.setLoop(THREE.LoopOnce);
+            animation_kick_man_leg.setLoop(THREE.LoopOnce);
+            animation_kick_box.setLoop(THREE.LoopOnce);
             animation_kick_man_arm.clampWhenFinished = true;
             animation_kick_man_leg.clampWhenFinished = true;
             animation_kick_box.clampWhenFinished = true;
 
             animation_fish = mixer.clipAction(obj.animations[6]);
-            animation_fish.setLoop(THREE.LoopOnce)
+            animation_fish.setLoop(THREE.LoopOnce);
             animation_fish.clampWhenFinished = true;
 
             animation_drag_man_body = mixer.clipAction(obj.animations[7])
@@ -344,7 +357,7 @@ export default {
             passerby08 = obj.getObjectByName("passerby08")
             passerby09 = obj.getObjectByName("passerby09")
             drag_man_body = obj.getObjectByName("drag_man_body");
-            
+
 
           },
           // called when loading is in progresses
@@ -353,7 +366,6 @@ export default {
             callbacks(xhr)
             if (xhr.loaded / 130587364  == 1) {
               market_loaded = true;
-              //  console.log(xhr.loaded)
             }
           }
         );
@@ -394,7 +406,6 @@ export default {
         //     }
         //   }
         // );
-
       }
       ////
       function createControls() {
@@ -404,13 +415,12 @@ export default {
         controls.applyCollision = true;
         controls.positionEasing = true;
       }
-      function onMouseMove( event ) {
-
+      function onMouseMove(event) {
         // calculate mouse position in normalized device coordinates
         // (-1 to +1) for both components
 
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       }
 
       let doOnce = false;
@@ -418,133 +428,154 @@ export default {
         if (!doOnce) {
           doOnce = true;
           setTimeout(() => {
-            readyForOBJanimation = true
+            readyForOBJanimation = true;
           }, 1000);
         }
       }
-      window.addEventListener( 'mousemove', onMouseMove, false );
+      window.addEventListener("mousemove", onMouseMove, false);
 
-      function flipPositive(obj){
-        if (obj.rotation.y < Math.PI){
-          obj.rotation.y += 0.05
+      function flipPositive(obj) {
+        if (obj.rotation.y < Math.PI) {
+          obj.rotation.y += 0.05;
         }
       }
-      function flipNegative(obj){
-        if (obj.rotation.y > 0){
-          obj.rotation.y -= 0.05
+      function flipNegative(obj) {
+        if (obj.rotation.y > 0) {
+          obj.rotation.y -= 0.05;
         }
       }
-      function flip_a_kon_pos(obj){
-        if (obj.rotation.z< Math.PI/2){
-          obj.rotation.z += 0.05
+      function flip_a_kon_pos(obj) {
+        if (obj.rotation.z < Math.PI / 2) {
+          obj.rotation.z += 0.05;
         }
       }
-      function flip_a_kon_neg(obj){
-        if (obj.rotation.z > -Math.PI/2){
-          obj.rotation.z -= 0.05
+      function flip_a_kon_neg(obj) {
+        if (obj.rotation.z > -Math.PI / 2) {
+          obj.rotation.z -= 0.05;
         }
       }
       function animate() {
-        if (market_loaded ){
+        if (market_loaded) {
           // store.commit("setMarketLoadedTrue");
-          delayForAnimate()
+          delayForAnimate();
         }
         if (readyForOBJanimation) renderer.render(scene, camera);
         sea.moveWaves();
         Lowersea.moveWaves();
         requestAnimationFrame(animate);
         if (controls.enabled) controls.update();
-        if (1) controls.mobileMove();//isMobile
-        raycaster.setFromCamera( mouse, camera );
+        if (1) controls.mobileMove(); //isMobile
+        raycaster.setFromCamera(mouse, camera);
 
-        let disTo_end = camera.position.distanceTo(end_position)
-        if(disTo_end < 3) {
-          store.commit("marketChangeState",{id:'sence_end',display: true})
+        let disTo_end = camera.position.distanceTo(end_position);
+        if (disTo_end < 3) {
+          store.commit("marketChangeState", { id: "sence_end", display: true });
         }
 
-
-
-        if (readyForOBJanimation){
-          mixer.update(0.016)
-          let interscets_sheet_power_normal = raycaster.intersectObjects(sheet_power);
-          let interscets_sheet_brave_normal = raycaster.intersectObjects(sheet_brave);
+        if (readyForOBJanimation) {
+          mixer.update(0.016);
+          let interscets_sheet_power_normal =
+            raycaster.intersectObjects(sheet_power);
+          let interscets_sheet_brave_normal =
+            raycaster.intersectObjects(sheet_brave);
           let intersects_monger1 = raycaster.intersectObjects(monger1);
           let intersects_monger2 = raycaster.intersectObjects(monger2);
           let intersects_monger3 = raycaster.intersectObjects(monger3);
           let intersects_monger4 = raycaster.intersectObjects(monger4);
-          boat01.position.y = Math.sin(Date.now()/500)*0.05-0.3;
-          boat02.position.y = Math.sin(Date.now()/500)*0.05-0.3;
+          boat01.position.y = Math.sin(Date.now() / 500) * 0.05 - 0.3;
+          boat02.position.y = Math.sin(Date.now() / 500) * 0.05 - 0.3;
           //////////////////////////////////////
 
-          let disTo_a_kon_start = camera.position.distanceTo(a_kon_start_position);
+          let disTo_a_kon_start =
+            camera.position.distanceTo(a_kon_start_position);
           let disTo_car = camera.position.distanceTo(car_position);
-          let disTo_arrow1 = camera.position.distanceTo(arrow1)
-          let disTo_arrow2 = camera.position.distanceTo(arrow2)
-          let disTo_arrow3 = camera.position.distanceTo(arrow3)
-          let disTo_arrow4 = camera.position.distanceTo(arrow4)
+          let disTo_arrow1 = camera.position.distanceTo(arrow1);
+          let disTo_arrow2 = camera.position.distanceTo(arrow2);
+          let disTo_arrow3 = camera.position.distanceTo(arrow3);
+          let disTo_arrow4 = camera.position.distanceTo(arrow4);
           let disTo_fish = camera.position.distanceTo(fish_position);
           let disTo_kick = camera.position.distanceTo(kick);
           let disTo_dragman = camera.position.distanceTo(drag_man);
 
-          let disTo_passerby01 = camera.position.distanceTo(passerby01.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby02 = camera.position.distanceTo(passerby02.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby03 = camera.position.distanceTo(passerby03.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby04 = camera.position.distanceTo(passerby04.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby05 = camera.position.distanceTo(passerby05.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby06 = camera.position.distanceTo(passerby06.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby07 = camera.position.distanceTo(passerby07.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby08 = camera.position.distanceTo(passerby08.getWorldPosition(new THREE.Vector3()));
-          let disTo_passerby09 = camera.position.distanceTo(passerby09.getWorldPosition(new THREE.Vector3()));
+          let disTo_passerby01 = camera.position.distanceTo(
+            passerby01.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby02 = camera.position.distanceTo(
+            passerby02.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby03 = camera.position.distanceTo(
+            passerby03.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby04 = camera.position.distanceTo(
+            passerby04.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby05 = camera.position.distanceTo(
+            passerby05.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby06 = camera.position.distanceTo(
+            passerby06.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby07 = camera.position.distanceTo(
+            passerby07.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby08 = camera.position.distanceTo(
+            passerby08.getWorldPosition(new THREE.Vector3())
+          );
+          let disTo_passerby09 = camera.position.distanceTo(
+            passerby09.getWorldPosition(new THREE.Vector3())
+          );
 
-
-          if (disTo_a_kon_start < 3){
-            store.commit("marketChangeState",{id:'sence_start',display: true})
-            if(start_display) {
-              flip_a_kon_pos(a_kon_start)
-            }else{
-              flip_a_kon_neg(a_kon_start)
+          if (disTo_a_kon_start < 3) {
+            store.commit("marketChangeState", {
+              id: "sence_start",
+              display: true,
+            });
+            if (start_display) {
+              flip_a_kon_pos(a_kon_start);
+            } else {
+              flip_a_kon_neg(a_kon_start);
             }
-            if(start_display){
+            if (start_display) {
               sheet_brave_normal.visible = true;
               sheet_power_normal.visible = true;
-            }else{
+            } else {
               sheet_brave_normal.visible = false;
               sheet_power_normal.visible = false;
             }
-            if (interscets_sheet_power_normal.length > 0){
-              if(start_display){
-              sheet_power_white.visible = true;
-              displaySheet_power = true;
-              }else{
-              sheet_brave_normal.visible = false;
-              sheet_power_normal.visible = false;
-            }
-            ///for 2D image
-              }else{
-                sheet_power_white.visible = false;
-                displaySheet_power = false;
-                }
-              if (interscets_sheet_brave_normal.length > 0){
-                if(start_display){
-                  sheet_brave_white.visible = true;
-                  displaySheet_brave = true;
-                  }else{
-                  sheet_brave_normal.visible = false;
-                  sheet_power_normal.visible = false;
-                }
-                ///for 2D image
-              }else{
-                sheet_brave_white.visible = false;
-                displaySheet_brave = false;
-                }
-            }else{
+            if (interscets_sheet_power_normal.length > 0) {
+              if (start_display) {
+                sheet_power_white.visible = true;
+                displaySheet_power = true;
+              } else {
+                sheet_brave_normal.visible = false;
+                sheet_power_normal.visible = false;
+              }
+              ///for 2D image
+            } else {
               sheet_power_white.visible = false;
-              sheet_brave_white.visible = false;
-              sheet_brave_normal.visible = false;
-              sheet_power_normal.visible = false;
               displaySheet_power = false;
+            }
+            if (interscets_sheet_brave_normal.length > 0) {
+              if (start_display) {
+                sheet_brave_white.visible = true;
+                displaySheet_brave = true;
+              } else {
+                sheet_brave_normal.visible = false;
+                sheet_power_normal.visible = false;
+              }
+              ///for 2D image
+            } else {
+              sheet_brave_white.visible = false;
               displaySheet_brave = false;
             }
+          } else {
+            sheet_power_white.visible = false;
+            sheet_brave_white.visible = false;
+            sheet_brave_normal.visible = false;
+            sheet_power_normal.visible = false;
+            displaySheet_power = false;
+            displaySheet_brave = false;
+          }
 
           if(disTo_car < 6){
             animation_car.play();
@@ -552,72 +583,71 @@ export default {
             animation_tier02.play();
           }
 
-
-          if(disTo_arrow1 < 6){
+          if (disTo_arrow1 < 6) {
             arrow_monger1.visible = true;
-            animation_arrow1.play()
+            animation_arrow1.play();
 
-            if(intersects_monger1.length > 0){
-              monger1_hover.visible = true
-              displayFishMonger1 = true
-            }else{
+            if (intersects_monger1.length > 0) {
+              monger1_hover.visible = true;
+              displayFishMonger1 = true;
+            } else {
               monger1_hover.visible = false;
               displayFishMonger1 = false;
             }
-          }else{
+          } else {
             arrow_monger1.visible = false;
             monger1_hover.visible = false;
             displayFishMonger1 = false;
           }
 
-          if(disTo_arrow2 < 6){
+          if (disTo_arrow2 < 6) {
             arrow_monger2.visible = true;
-            animation_arrow2.play()
+            animation_arrow2.play();
 
-            if(intersects_monger2.length > 0){
-              monger2_hover.visible = true
-              displayFishMonger2 = true
-            }else{
+            if (intersects_monger2.length > 0) {
+              monger2_hover.visible = true;
+              displayFishMonger2 = true;
+            } else {
               monger2_hover.visible = false;
               displayFishMonger2 = false;
             }
-          }else{
+          } else {
             arrow_monger2.visible = false;
             monger2_hover.visible = false;
             displayFishMonger2 = false;
           }
 
-          if(disTo_arrow3 < 6){
+          if (disTo_arrow3 < 6) {
             arrow_monger3.visible = true;
-            animation_arrow3.play()
-            if(intersects_monger3.length > 0){
+            animation_arrow3.play();
+            if (intersects_monger3.length > 0) {
               monger3_hover.visible = true;
               displayFishMonger3 = true;
-            }else{
+            } else {
               monger3_hover.visible = false;
               displayFishMonger3 = false;
             }
-          }else{
+          } else {
             arrow_monger3.visible = false;
             monger3_hover.visible = false;
             displayFishMonger3 = false;
           }
 
-          if(disTo_arrow4 < 6){
+          if (disTo_arrow4 < 6) {
             arrow_monger4.visible = true;
-            animation_arrow4.play()
-            if(intersects_monger4.length > 0){
-            monger4_hover.visible = true
-            displayFishMonger4 = true;
-            }else{
+            animation_arrow4.play();
+            if (intersects_monger4.length > 0) {
+              monger4_hover.visible = true;
+              displayFishMonger4 = true;
+            } else {
               monger4_hover.visible = false;
               displayFishMonger4 = false;
             }
-          }else{
+          } else {
             arrow_monger4.visible = false;
             monger4_hover.visible = false;
             displayFishMonger4 = false;
-            }
+          }
 
           if(disTo_kick < 5){
             animation_kick_man_arm.play();
@@ -645,36 +675,36 @@ export default {
             animation_drag_man_leg_L.stop();
             animation_drag_man_leg_R.stop();
             }
-          
+
           if(disTo_passerby01 < 4.5){
             flipPositive(passerby01)
           }else{
             flipNegative(passerby01)
           }
-          if(disTo_passerby02 < 4.5){
-            flipPositive(passerby02)
-          }else{
-            flipNegative(passerby02)
+          if (disTo_passerby02 < 4.5) {
+            flipPositive(passerby02);
+          } else {
+            flipNegative(passerby02);
           }
-          if(disTo_passerby03 < 4.5){
-            flipPositive(passerby03)
-          }else{
-            flipNegative(passerby03)
+          if (disTo_passerby03 < 4.5) {
+            flipPositive(passerby03);
+          } else {
+            flipNegative(passerby03);
           }
-          if(disTo_passerby04 < 4.5){
-            flipPositive(passerby04)
-          }else{
-            flipNegative(passerby04)
+          if (disTo_passerby04 < 4.5) {
+            flipPositive(passerby04);
+          } else {
+            flipNegative(passerby04);
           }
-          if(disTo_passerby05 < 4.5){
-            flipPositive(passerby05)
-          }else{
-            flipNegative(passerby05)
+          if (disTo_passerby05 < 4.5) {
+            flipPositive(passerby05);
+          } else {
+            flipNegative(passerby05);
           }
-          if(disTo_passerby06 < 4.5){
-            flipPositive(passerby06)
-          }else{
-            flipNegative(passerby06)
+          if (disTo_passerby06 < 4.5) {
+            flipPositive(passerby06);
+          } else {
+            flipNegative(passerby06);
           }
           // if(disTo_passerby07 < 4.5){
           //   flipPositive(passerby07)
@@ -686,27 +716,37 @@ export default {
           }else{
             flipNegative(passerby08)
           }
-          if(disTo_passerby09 < 4.5){
-            flipPositive(passerby09)
-          }else{
-            flipNegative(passerby09)
+          if (disTo_passerby09 < 4.5) {
+            flipPositive(passerby09);
+          } else {
+            flipNegative(passerby09);
           }
         }
       }
-          document.addEventListener("dblclick", function () {
-            if (displaySheet_power) {
-              store.commit("marketChangeState",{id:'sheet_power',display: true})
-              start_display = false;
-              }
-            if (displaySheet_brave) {
-              store.commit("marketChangeState",{id:'sheet_brave',display: true})
-              start_display = false;
-              }
-            if (displayFishMonger1) store.commit("marketChangeState",{id:'monger1',display: true})
-            if (displayFishMonger2) store.commit("marketChangeState",{id:'monger2',display: true})
-            if (displayFishMonger3) store.commit("marketChangeState",{id:'monger3',display: true})
-            if (displayFishMonger4) store.commit("marketChangeState",{id:'monger4',display: true})
-            });
+      document.addEventListener("dblclick", function () {
+        if (displaySheet_power) {
+          store.commit("marketChangeState", {
+            id: "sheet_power",
+            display: true,
+          });
+          start_display = false;
+        }
+        if (displaySheet_brave) {
+          store.commit("marketChangeState", {
+            id: "sheet_brave",
+            display: true,
+          });
+          start_display = false;
+        }
+        if (displayFishMonger1)
+          store.commit("marketChangeState", { id: "monger1", display: true });
+        if (displayFishMonger2)
+          store.commit("marketChangeState", { id: "monger2", display: true });
+        if (displayFishMonger3)
+          store.commit("marketChangeState", { id: "monger3", display: true });
+        if (displayFishMonger4)
+          store.commit("marketChangeState", { id: "monger4", display: true });
+      });
       createScene();
       createLight();
       createControls();

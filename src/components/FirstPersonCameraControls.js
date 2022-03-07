@@ -23,7 +23,7 @@ export class FirstPersonCameraControl {
     this.positionEasing = true;
     this.lookflag = 1;
     this.lookSpeed = 0.008;
-    this.moveSpeed = 0.15; ///改速度
+    this.moveSpeed = 0.3; ///改速度
     this.playerHeight = 1.4;
     this.g = 9.8;
     // event bindings

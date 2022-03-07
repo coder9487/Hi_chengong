@@ -8,10 +8,10 @@
       !fishmonger_dialog_content_show_available
     "
   >
-    {{ moving }}
+    <!-- {{ moving }} -->
   </div>
   <div
-  v-if="detectPaltform"
+    v-if="detectPaltform"
     class="controlPannel-direction"
     v-touch-pan.prevent.mouse="direciton"
     v-show="
@@ -19,7 +19,7 @@
       !fishmonger_dialog_content_show_available
     "
   >
-    {{ direc }}
+    <!-- {{ direc }} -->
   </div>
 
   <div class="navigate" v-show="navigate_dialog_content_show_availbale">
@@ -44,27 +44,26 @@
 
   <div class="fishmonger" v-show="fishmonger_dialog_content_show_available">
     <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" />
-    <div class="fishmonger-dialog">
+    <div class="fishmonger-dialog" v-show="fishmonger_dialog_content_show_available">
       <q-img :src="fishMonger_image_path.dialogBox"> </q-img>
-    </div>
-
-    <div class="fishmonger-dialog-button-group">
-      <q-btn
-        class="fishmonger-dialog-button"
-        id="escapeIntroduceBox"
-        color="orange"
-        :size="$q.platform.is.desktop ? 'lg' : 'md'"
-        @click="FishMonger_handler('next')"
-        >繼續說</q-btn
-      >
-      <q-btn
-        class="fishmonger-dialog-button"
-        id="nextIntroduceBox"
-        color="cyan-8"
-        :size="$q.platform.is.desktop ? 'lg' : 'md'"
-        @click="FishMonger_handler('end')"
-        >了解，謝謝</q-btn
-      >
+      <div class="fishmonger-dialog-button-group" >
+        <q-btn
+          class="fishmonger-dialog-button"
+          id="escapeIntroduceBox"
+          color="orange"
+          :size="$q.platform.is.desktop ? 'lg' : 'md'"
+          @click="FishMonger_handler('next')"
+          >繼續說</q-btn
+        >
+        <q-btn
+          class="fishmonger-dialog-button"
+          id="nextIntroduceBox"
+          color="cyan-8"
+          :size="$q.platform.is.desktop ? 'lg' : 'md'"
+          @click="FishMonger_handler('end')"
+          >了解，謝謝</q-btn
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -250,6 +249,7 @@ export default {
           this.fishmonger_dialog_content_index = 0;
           this.fishmonger_dialog_content_show_available = false;
           this.fishmonger_sequence = 0;
+          // this.$store.commit("resetmarketChangeState");
           break;
         default:
           console.log("No condition fit");
@@ -265,7 +265,7 @@ export default {
   // // background-color: antiquewhite;
 
   &-movement {
-    background-color: orange;
+    // background-color: orange;
     opacity: 0.3;
     width: 20vw;
     height: 33vh;
@@ -276,10 +276,10 @@ export default {
   }
   &-direction {
     z-index: 101;
-    background-color: orange;
+    // background-color: orange;
     opacity: 0.3;
     width: 20vw;
-    height: 50vh;
+    height: 100vh;
     position: fixed;
     right: 0px;
   }
@@ -295,7 +295,7 @@ export default {
     width: 25%;
     position: absolute;
     bottom: 0;
-    margin-left: 10%;
+    left: 10%;
   }
   &-dialog {
     max-width: 50vw;
@@ -361,29 +361,31 @@ export default {
     }
     &-button-group {
       // background-color: cornflowerblue;
-      display: block;
-      left: 8%; //trial and error
+      display: flex;
+      top: -20px;
+      justify-content: space-between;
+      left: -16vw;
       width: 50vw;
-      position: absolute;
+      position: relative;
       @media screen and (min-width: 1024px) {
-        top: 35vw;
+        left: -3vw; //trial and error
       }
-      bottom: 7vw;
     }
     &-button {
-      // justify-content:space-around;
+      justify-content: space-around;
 
       @media screen and (min-width: 1024px) {
         margin-right: 5%;
         margin-left: 5%;
         height: 60px;
-        min-width: 200px;
+        min-width: 20vw;
         border-radius: 50px;
+        left: -10%;
       }
       margin-right: 10%;
       margin-left: 10%;
       height: 50px;
-      min-width: 100px;
+      min-width: 150px;
       border-radius: 50px;
     }
   }

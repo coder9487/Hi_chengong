@@ -18,13 +18,17 @@ export default {
       showingFlag: true,
       AnimationEnable: false,
       poleDirection: reactive({ x: 0, y: 0 }),
+      OptionArray: reactive({}),
     };
   },
   mounted() {
-    this.initThree(this.loadingCallbacks, this.poleDirection,this.option);
+    this.initThree(this.loadingCallbacks, this.poleDirection, this.option);
   },
   props: [""],
   computed: {
+    detetctShootFishAvailable() {
+      return this.$store.state.swordfishShoottimes;
+    },
     poleDirectionDetect() {
       return this.$store.state.poleDirection;
     },
@@ -33,6 +37,14 @@ export default {
     },
   },
   watch: {
+    detetctShootFishAvailable: function () {
+      // let threeObj = document.getElementById("three");
+      // threeObj.style.opacity = 0.3;
+      // setTimeout(() => {
+      //  threeObj = document.getElementById("three");
+      //   threeObj.style.opacity = 1;
+      // }, 3000);
+    },
     shoot: function () {
       this.shootPoleByVuex();
     },
@@ -50,20 +62,15 @@ export default {
 
     //     poleDirection =
     // },
-    option(setPoleGo)
-    {
-
-    },
+    option(setPoleGo) {},
     shootPoleByVuex() {
       console.log("shoot:");
-      document.getElementById('three').click();
-
-
+      document.getElementById("three").click();
     },
     loadingCallbacks(val) {
       console.log("Loaded:", val);
     },
-    initThree(loadingCallbacks, outer_poleDirection,option) {
+    initThree(loadingCallbacks, outer_poleDirection, OptionArray) {
       let poleGo = false;
       let scene, camera, renderer, canvas;
       let controls;
@@ -80,11 +87,11 @@ export default {
       let pole, pole_head, plane, origin, posit, direct, man;
       let readyForOBJanimation = false;
       let fish;
-      let animation0, animation1, animation2, animation3, animation4;
-      let animation5, animation6, animation7, animation8, animation9;
-      let animation10, animation11, animation12, animation13, animation14;
-      let animation15, animation16, animation17, animation18, animation19;
-      let animation20, animation21, animation22, animation23, animation24;
+      let animationGroup = [];
+      for (let i = 0; i <= 24; i++) {
+        animationGroup.push(new Object());
+      }
+
       let mouse = new THREE.Vector2();
       const raycaster = new THREE.Raycaster();
       {
@@ -118,6 +125,20 @@ export default {
         camera.position.y = 7;
         camera.position.z = 0;
         camera.lookAt(-5, 0.5, 0);
+        const listener = new THREE.AudioListener();
+        camera.add(listener);
+
+        // create a global audio source
+        const sound = new THREE.Audio(listener);
+
+        // load a sound and set it as the Audio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load("sound/sea.mp3", function (buffer) {
+          sound.setBuffer(buffer);
+          sound.setLoop(true);
+          sound.setVolume(0.5);
+          sound.play();
+        });
 
         const axesHelper = new THREE.AxesHelper(5);
         scene.add(axesHelper);
@@ -256,37 +277,10 @@ export default {
             pole = obj.getObjectByName("spear");
             man = obj.getObjectByName("Armature001");
             pole_head = pole.children[0];
-            animation0 = mixer.clipAction(obj.animations[0]).play();
-            animation1 = mixer.clipAction(obj.animations[1]).play();
-            animation2 = mixer.clipAction(obj.animations[2]).play();
-            animation3 = mixer.clipAction(obj.animations[3]).play();
-            animation4 = mixer.clipAction(obj.animations[4]).play();
-
-            animation5 = mixer.clipAction(obj.animations[5]).play();
-            animation6 = mixer.clipAction(obj.animations[6]).play();
-            animation7 = mixer.clipAction(obj.animations[7]).play();
-            animation8 = mixer.clipAction(obj.animations[8]).play();
-            animation9 = mixer.clipAction(obj.animations[9]).play();
-
-            // animation10 = mixer.clipAction(obj.animations[10]).play() // shooter
-            animation11 = mixer.clipAction(obj.animations[11]).play();
-            animation12 = mixer.clipAction(obj.animations[12]).play();
-            animation13 = mixer.clipAction(obj.animations[13]).play();
-            animation14 = mixer.clipAction(obj.animations[14]).play();
-
-            animation15 = mixer.clipAction(obj.animations[15]).play();
-            animation16 = mixer.clipAction(obj.animations[16]).play();
-            animation17 = mixer.clipAction(obj.animations[17]).play();
-            animation18 = mixer.clipAction(obj.animations[18]).play();
-            animation19 = mixer.clipAction(obj.animations[19]).play();
-
-            animation20 = mixer.clipAction(obj.animations[20]).play();
-            animation21 = mixer.clipAction(obj.animations[21]).play();
-            animation22 = mixer.clipAction(obj.animations[22]).play();
-            animation23 = mixer.clipAction(obj.animations[23]).play();
-            animation24 = mixer.clipAction(obj.animations[24]).play();
-            
-            
+            for (let i = 0; i <= 25; i++) {
+              if (i != 10)
+                animationGroup[i] = mixer.clipAction(obj.animations[i]).play();
+            }
           },
           // called when loading is in progresses
           function (xhr) {
@@ -343,12 +337,15 @@ export default {
       else {
         mouse = outer_poleDirection;
       }
-      function animate() {
+
+      function animate(OptionArray) {
         let AnimationEnable = true;
         if (window.innerHeight > window.innerWidth) {
           AnimationEnable = false;
         }
+
         if (1) {
+          // console.log(store.state.animateEnable)
           if (isMobile) {
           }
 
@@ -360,6 +357,7 @@ export default {
 
           sea.moveWaves();
           Lowersea.moveWaves();
+          if (!AnimationEnable) return;
           requestAnimationFrame(animate);
           raycaster.setFromCamera(mouse, camera);
           if (readyForOBJanimation) {
@@ -397,8 +395,10 @@ export default {
 
               let dis = pohe.distanceTo(fish_position);
               if (dis < 3) {
-                alert("你成功了");
-              } else if (pohe.y < -5) {
+                store.commit("swordfishShootTimes");
+                pole.position.set(0.17277, 0.53, -0.04074);
+                poleGo = false;
+              } else if (pohe.y < -4) {
                 pole.position.set(0.17277, 0.53, -0.04074);
                 poleGo = false;
               }
@@ -406,15 +406,13 @@ export default {
           }
           if (controls.enabled) controls.update();
           // if (isMobile) controls.mobileMove();
-          if (isMobile)
-          sea.mesh.position.x += 1;
-          else
-          sea.mesh.position.x += 0.5;
+          if (isMobile) sea.mesh.position.x += 0.2;
+          else sea.mesh.position.x += 0.2;
           // sea.mesh.position.z -= 0.02;
         }
       }
 
-      animate(outer_poleDirection);
+      animate(outer_poleDirection, OptionArray);
     },
   },
 };

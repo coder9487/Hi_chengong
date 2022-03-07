@@ -41,8 +41,7 @@ export default defineComponent({
       if (this.loading >= 98) {
         setTimeout(() => {
           this.showingFlag = true;
-          this.audio= new Audio("/sound/sound.mp3");
-          this.audio.play();
+
 
 
         }, 5000);
@@ -97,7 +96,7 @@ export default defineComponent({
 .loadingPage {
   width: 100vw;
   height: 100vh;
-  background-color: cadetblue;
+  // background-color: cadetblue;
   &-mask {
     // opacity: 0.3;
     position: fixed;
