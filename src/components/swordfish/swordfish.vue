@@ -142,7 +142,7 @@ export default {
           1000
         );
         camera.position.x = 5;
-        camera.position.y = 6;
+        camera.position.y = 7;
         camera.position.z = 0;
         camera.lookAt(-5, 0.5, 0);
         const listener = new THREE.AudioListener();
@@ -172,7 +172,7 @@ export default {
             "images/sky_neg_z.jpg",
             "images/sky_pos_z.jpg",
           ]);
-        scene.fog = new THREE.Fog(0x4ca7e6, 400, 800);
+        // scene.fog = new THREE.Fog(0x4ca7e6, 400, 800);
       }
 
       {
@@ -290,14 +290,14 @@ export default {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
-            // console.log(obj)
+            console.log(obj)
             fish = obj.children[4];
             mixer = new THREE.AnimationMixer(obj);
 
             pole = obj.getObjectByName("spear");
             man = obj.getObjectByName("Armature001");
             pole_head = pole.children[0];
-            for (let i = 0; i <= 24; i++) {
+            for (let i = 0; i <= 25; i++) {
               if (i != 10)
                 animationGroup[i] = mixer.clipAction(obj.animations[i]).play();
             }
@@ -305,10 +305,10 @@ export default {
           // called when loading is in progresses
           function (xhr) {
             // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            //  console.log(xhr.loaded)
+             console.log(xhr.loaded)
             loadingCallbacks(xhr.loaded);
 
-            if (xhr.loaded / 7944053 == 1) sword_fish_loaded = true;
+            if (xhr.loaded / 8287578 == 1) sword_fish_loaded = true;
             // console.log(xhr.loaded / 4732415) *100
           }
         );
@@ -316,7 +316,7 @@ export default {
         let mat = new THREE.MeshBasicMaterial({
           color: 0x000000,
           side: THREE.DoubleSide,
-          opacity: 0.1,
+          opacity: 0.9,
         });
         plane = new THREE.Mesh(geo, mat);
         plane.position.set(0, 10, 0);
@@ -382,7 +382,7 @@ export default {
           raycaster.setFromCamera(mouse, camera);
           if (readyForOBJanimation) {
             renderer.render(scene, camera);
-            mixer.update(0.016);
+            mixer.update(0.01);
 
             let intersects = raycaster.intersectObjects(objects);
             if (intersects.length > 0) {
@@ -414,11 +414,11 @@ export default {
               let fish_position = fish.getWorldPosition(new THREE.Vector3());
 
               let dis = pohe.distanceTo(fish_position);
-              if (dis < 1) {
+              if (dis < 3) {
                 store.commit("swordfishShootTimes");
                 pole.position.set(0.17277, 0.53, -0.04074);
                 poleGo = false;
-              } else if (pohe.y < -2) {
+              } else if (pohe.y < -4) {
                 pole.position.set(0.17277, 0.53, -0.04074);
                 poleGo = false;
               }

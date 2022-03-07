@@ -20,9 +20,9 @@ export default {
   },
   watch: {},
   methods: {
-    loading_callbacks(val) {
-       console.log('Pass into callbacks ',val.loaded)
-      this.$emit('loadingProgress',(val.loaded/111343412).toFixed(2))
+    loading_callbacks(val){
+      //  console.log('Pass into callbacks ',val.loaded)
+      this.$emit('loadingProgress',(val.loaded/131887127).toFixed(2))
     },
     initThree(callbacks) {
       ///DiningTable
@@ -259,7 +259,7 @@ export default {
             obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
-            // console.log(obj)
+            console.log(obj)
             controls.colliders = obj;
             a_kon_start = obj.getObjectByName("a_kon_start");
             sheet_power_normal = obj.getObjectByName("sheet_power_normal");
@@ -301,18 +301,18 @@ export default {
             monger4_hover.visible = false;
             mixer = new THREE.AnimationMixer(obj);
 
-            animation_car = mixer.clipAction(obj.animations[0]);
-            animation_tier01 = mixer.clipAction(obj.animations[1]);
-            animation_tier02 = mixer.clipAction(obj.animations[2]);
+            animation_car = mixer.clipAction(obj.animations[13]);
+            animation_tier01 = mixer.clipAction(obj.animations[14]);
+            animation_tier02 = mixer.clipAction(obj.animations[15]);
             animation_car.setLoop(THREE.LoopOnce);
             animation_tier01.setLoop(THREE.LoopOnce);
             animation_tier02.setLoop(THREE.LoopOnce);
             animation_car.clampWhenFinished = true;
             animation_tier01.clampWhenFinished = true;
             animation_tier02.clampWhenFinished = true;
-            animation_kick_man_arm = mixer.clipAction(obj.animations[3]);
-            animation_kick_man_leg = mixer.clipAction(obj.animations[4]);
-            animation_kick_box = mixer.clipAction(obj.animations[5]);
+            animation_kick_man_arm = mixer.clipAction(obj.animations[0]);
+            animation_kick_man_leg = mixer.clipAction(obj.animations[1]);
+            animation_kick_box = mixer.clipAction(obj.animations[7]);
             animation_kick_man_arm.setLoop(THREE.LoopOnce);
             animation_kick_man_leg.setLoop(THREE.LoopOnce);
             animation_kick_box.setLoop(THREE.LoopOnce);
@@ -320,19 +320,19 @@ export default {
             animation_kick_man_leg.clampWhenFinished = true;
             animation_kick_box.clampWhenFinished = true;
 
-            animation_fish = mixer.clipAction(obj.animations[6]);
+            animation_fish = mixer.clipAction(obj.animations[2]);
             animation_fish.setLoop(THREE.LoopOnce);
             animation_fish.clampWhenFinished = true;
 
-            animation_drag_man_body = mixer.clipAction(obj.animations[7])
+            animation_drag_man_body = mixer.clipAction(obj.animations[8])
             // animation_drag_man_calf_L = mixer.clipAction(obj.animations[8]).play()
             // animation_drag_man_calf_R = mixer.clipAction(obj.animations[9]).play()
             // animation_drag_man_leg_L = mixer.clipAction(obj.animations[10]).play()
             // animation_drag_man_leg_R = mixer.clipAction(obj.animations[11]).play()
-            animation_drag_man_calf_L = mixer.clipAction(obj.animations[8])
+            animation_drag_man_calf_L = mixer.clipAction(obj.animations[11])
             animation_drag_man_calf_R = mixer.clipAction(obj.animations[9])
-            animation_drag_man_leg_L = mixer.clipAction(obj.animations[10])
-            animation_drag_man_leg_R = mixer.clipAction(obj.animations[11])
+            animation_drag_man_leg_L = mixer.clipAction(obj.animations[12])
+            animation_drag_man_leg_R = mixer.clipAction(obj.animations[10])
             animation_drag_man_body.setLoop(THREE.LoopOnce)
             animation_drag_man_calf_L.setLoop(THREE.LoopRepeat)
             animation_drag_man_calf_R.setLoop(THREE.LoopRepeat)
@@ -343,10 +343,10 @@ export default {
             // animation_drag_man_calf_R.clampWhenFinished = true;
             // animation_drag_man_leg_L.clampWhenFinished = true;
             // animation_drag_man_leg_R.clampWhenFinished = true;
-            animation_arrow1 = mixer.clipAction(obj.animations[12]);
-            animation_arrow2 = mixer.clipAction(obj.animations[13]);
-            animation_arrow3 = mixer.clipAction(obj.animations[14]);
-            animation_arrow4 = mixer.clipAction(obj.animations[15]);
+            animation_arrow1 = mixer.clipAction(obj.animations[3]);
+            animation_arrow2 = mixer.clipAction(obj.animations[4]);
+            animation_arrow3 = mixer.clipAction(obj.animations[5]);
+            animation_arrow4 = mixer.clipAction(obj.animations[6]);
             passerby01 = obj.getObjectByName("passerby01")
             passerby02 = obj.getObjectByName("passerby02")
             passerby03 = obj.getObjectByName("passerby03")
@@ -362,9 +362,9 @@ export default {
           },
           // called when loading is in progresses
           function (xhr) {
-            //  console.log(xhr.loaded)
+             console.log(xhr.loaded)
             callbacks(xhr)
-            if (xhr.loaded / 111343412  == 1) {
+            if (xhr.loaded / 131887127  == 1) {
               market_loaded = true;
             }
           }
@@ -445,12 +445,12 @@ export default {
         }
       }
       function flip_a_kon_pos(obj) {
-        if (obj.rotation.z < Math.PI / 2) {
+        if (obj.rotation.z < Math.PI / 2 + 0.022) {  //不知道是不是模型調整的關係，阿公突然不會轉，我就硬調了一個會轉的數值
           obj.rotation.z += 0.05;
         }
       }
       function flip_a_kon_neg(obj) {
-        if (obj.rotation.z > -Math.PI / 2) {
+        if (obj.rotation.z > -Math.PI / 2 - 0.022) {  //不會轉回來?????
           obj.rotation.z -= 0.05;
         }
       }
@@ -532,7 +532,8 @@ export default {
             });
             if (start_display) {
               flip_a_kon_pos(a_kon_start);
-            } else {
+              console.log(a_kon_start.rotation.z)
+            } else if(disTo_a_kon_start > 3) {
               flip_a_kon_neg(a_kon_start);
             }
             if (start_display) {
@@ -654,10 +655,14 @@ export default {
             animation_kick_man_leg.play();
             animation_kick_box.play();
           }
-          if(disTo_fish < 5){
+          if(disTo_fish < 10){
             animation_fish.play();
+            flipPositive(passerby07)
+          }else{
+            flipNegative(passerby07)
+          
             }
-            // console.log(drag_man_body.position.z)
+           
           if(disTo_dragman < 5 & drag_man_body.position.z < 1.3){
             animation_drag_man_calf_L.play();
             animation_drag_man_calf_R.play();
@@ -702,15 +707,15 @@ export default {
           } else {
             flipNegative(passerby06);
           }
-          if (disTo_passerby07 < 4.5) {
-            flipPositive(passerby07);
-          } else {
-            flipNegative(passerby07);
-          }
-          if (disTo_passerby08 < 4.5) {
-            flipPositive(passerby08);
-          } else {
-            flipNegative(passerby08);
+          // if(disTo_passerby07 < 4.5){
+          //   flipPositive(passerby07)
+          // }else{
+          //   flipNegative(passerby07)
+          // }
+          if(disTo_passerby08 < 4.5){
+            flipPositive(passerby08)
+          }else{
+            flipNegative(passerby08)
           }
           if (disTo_passerby09 < 4.5) {
             flipPositive(passerby09);
