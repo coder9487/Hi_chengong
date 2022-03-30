@@ -1,0 +1,30 @@
+
+const routes = [
+  {
+    path: '/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+
+      {path: '', component: () => import('pages/Index.vue')},
+      {path: '/lab01', component: () => import('src/pages/Lab/lab01')},
+      {path: '/DiningTable', component: () => import('pages/DiningTablePage.vue')},
+      {path: '/Pisirian', component: () => import('src/pages/Pisirian.vue')},
+       {path: '/Market', component: () => import('src/pages/Market.vue')},
+      {path: '/Swordfish', component: () => import('src/pages/Swordfish.vue')},
+      {path: '/lottie', component: () => import('src/pages/Lab/lottie.vue')},
+
+
+
+
+    ]
+  },
+
+  // Always leave this as last one,
+  // but you can also remove it
+  {
+    path: '/:catchAll(.*)*',
+    component: () => import('pages/Error404.vue')
+  }
+]
+
+export default routes
