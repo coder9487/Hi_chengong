@@ -6,7 +6,7 @@
 
 <script>
 import * as THREE from "three/build/three.module.js";
-import { FirstPersonCameraControl_ForSwordfish } from "../../Library/FirstPersonCameraControlsForSwordfish";
+import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
 import store from "../../store/index";
 import { ref, reactive } from "vue";
 
@@ -70,7 +70,7 @@ export default {
     // },
     option(setPoleGo) {},
          openFullscreen() {
-      var elem = document.getElementById("three");
+      var elem = document.getElementById("id-webglcanvas");
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
       } else if (elem.mozRequestFullScreen) { /* Firefox */
@@ -141,10 +141,10 @@ export default {
           0.01,
           1000
         );
-        camera.position.x = 5;
-        camera.position.y = 7;
+        camera.position.x = -6.3;
+        camera.position.y = 8.5;
         camera.position.z = 0;
-        camera.lookAt(-5, 0.5, 0);
+        camera.lookAt(-18, 0.5, 0);
         const listener = new THREE.AudioListener();
         camera.add(listener);
 
@@ -260,7 +260,7 @@ export default {
         this.mesh.geometry.attributes.position.needsUpdate = true;
       };
 
-      {
+     if(0) {
         sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
         scene.add(sea.mesh);
         objects.push(sea.mesh);
@@ -270,7 +270,7 @@ export default {
         sea.mesh.receiveShadow = true;
       }
 
-      {
+     if(0) {
         Lowersea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
         scene.add(Lowersea.mesh);
         Lowersea.mesh.position.y = -15;
@@ -287,7 +287,7 @@ export default {
           "models/swordfish.json",
           // called when resource is loaded
           function (obj) {
-            obj.scale.set(10, 10, 10);
+            // obj.scale.set(10, 10, 10);
             obj.position.set(0, 0, 0);
             scene.add(obj);
             console.log(obj)
@@ -295,12 +295,12 @@ export default {
             mixer = new THREE.AnimationMixer(obj);
 
             pole = obj.getObjectByName("spear");
-            man = obj.getObjectByName("Armature001");
+            man = obj.getObjectByName("monger_armature");
             pole_head = pole.children[0];
-            for (let i = 0; i <= 17; i++) {
-              // if (i != 10)
-              //   animationGroup[i] = mixer.clipAction(obj.animations[i]).play();
-            }
+            // for (let i = 0; i <= 24; i++) {
+            //   if (i != 10)
+            //     animationGroup[i] = mixer.clipAction(obj.animations[i]).play();
+            // }
           },
           // called when loading is in progresses
           function (xhr) {
@@ -308,7 +308,7 @@ export default {
              console.log(xhr.loaded)
             loadingCallbacks(xhr.loaded);
 
-            if (xhr.loaded / 16366831 >= 1) sword_fish_loaded = true;
+            if (xhr.loaded / 16367069 == 1) sword_fish_loaded = true;
             // console.log(xhr.loaded / 4732415) *100
           }
         );
@@ -336,7 +336,7 @@ export default {
         }
       }
       {
-        controls = new FirstPersonCameraControl_ForSwordfish(camera, document.body);
+        controls = new FirstPersonCameraControl(camera, document.body);
         controls.enabled = true;
         controls.applyGravity = false;
         controls.applyCollision = false;
@@ -374,9 +374,11 @@ export default {
             model_loaded = true;
             delayForAnimate();
           }
-
+ if(0){
           sea.moveWaves();
           Lowersea.moveWaves();
+ }
+
           if (!AnimationEnable) return;
           requestAnimationFrame(animate);
           raycaster.setFromCamera(mouse, camera);
@@ -426,8 +428,8 @@ export default {
           }
           if (controls.enabled) controls.update();
           // if (isMobile) controls.mobileMove();
-          if (isMobile) sea.mesh.position.x += 0.2;
-          else sea.mesh.position.x += 0.2;
+          // if (isMobile) sea.mesh.position.x += 0.2;
+          // else sea.mesh.position.x += 0.2;
           // sea.mesh.position.z -= 0.02;
         }
       }

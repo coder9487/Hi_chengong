@@ -1,43 +1,77 @@
 <template>
-  <div class="fullViewPage_table">
-    <MarketTable id="MarketTable"></MarketTable>
-    <NavigateMarketTable id="Navigate_MarketTable"></NavigateMarketTable>
+  <div>
+    <loading
+      id="loading"
+      :LoadingProgress="returnloadingProgress"
+      v-if="!showAvailable"
+    ></loading>
+
+    <DiningTable3D
+      id="swordfish3D"
+      @loadingProgress="getLoadingProgress"
+    ></DiningTable3D>
+    <DiningTable2D v-if="0"></DiningTable2D>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-
-import MarketTable from "../components/DiningTable/DiningTable3D.vue";
-import NavigateMarketTable from "../components/DiningTable/DiningTable2D.vue";
-
-
-export default defineComponent({
-  name: "DiningTable",
-  components: {
-    MarketTable: MarketTable,
-    NavigateMarketTable: NavigateMarketTable,
-  },
+import DiningTable3D from "../components/DiningTable/DiningTable3D.vue";
+import DiningTable2D from "../components/DiningTable/DiningTable2D.vue";
+import loading from "../components/loadingView.vue";
+import { ref } from "vue";
+import gsap from "gsap";
+export default {
+  name: "three",
+  components: { DiningTable3D, DiningTable2D, loading },
   setup() {
-
-
-  },
-  watch: {},
-  data() {
+    let windowsObject;
     return {
-      progressPercent: ref(0),
+      windowsObject,
     };
   },
-  computed: {},
-  methods: {},
-});
+  data() {
+    return {
+      loadingProgress: 0,
+      showAvailable: ref(false),
+    };
+  },
+  mounted() {},
+  computed: {
+    returnloadingProgress() {
+      return this.loadingProgress;
+    },
+  },
+  watch: {
+    loadingProgress: function () {
+      if (this.loadingProgress >= 1) {
+        gsap.to("#loading", {
+          opacity: 0,
+          duration: 0.5,
+          onComplete: () => {
+            this.showAvailable = true;
+          },
+        });
+        gsap.to("#Pisirian3D", { opacity: 1, duration: 2 });
+        gsap.to("#Pisirian2D", { opacity: 1, duration: 2 });
+      }
+    },
+  },
+  methods: {
+    getLoadingProgress(val) {
+      this.loadingProgress = val;
+    },
+  },
+};
 </script>
-<style lang="scss">
-#MarketTable {
-  z-index: 2;
-  position: relative;
+
+<style scoped>
+#loading {
+  position: fixed;
+  z-index: 200;
+  height: 100vh;
+  width: 100vw;
 }
-.fullViewPage_table {
-  position: relative;
+#Pisirian3D #Pisirian2D {
+  opacity: 0;
 }
 </style>

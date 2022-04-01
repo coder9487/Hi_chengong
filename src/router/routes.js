@@ -6,6 +6,7 @@ const routes = [
     children: [
 
       {path: '', component: () => import('pages/Index.vue')},
+      {path: '/swordfish_pre', component: () => import('src/pages/Lab/Swordfish3D_previous')},
       {path: '/lab01', component: () => import('src/pages/Lab/lab01')},
       {path: '/DiningTable', component: () => import('pages/DiningTablePage.vue')},
       {path: '/Pisirian', component: () => import('src/pages/Pisirian.vue')},

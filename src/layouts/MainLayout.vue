@@ -54,6 +54,16 @@
                   >lottie</q-item-section
                 >
               </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section @click="this.$router.push('/swordfish_pre')"
+                  >swordfish</q-item-section
+                >
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section @click="this.$router.push('/Lab01')"
+                  >Lab01</q-item-section
+                >
+              </q-item>
             </q-list>
           </q-menu>
         </q-tab>

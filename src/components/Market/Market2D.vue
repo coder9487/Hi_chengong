@@ -27,8 +27,10 @@
 
       <q-img class="navigate-lottie-content" :src="lottie.dialogBox" ></q-img>
     </div> -->
-    <div class="navigate-lottie" v-show="lottieShowEnable">
-      <q-img class="navigate-lottie-content" :src="lottie"></q-img>
+    <div id="navigate-lottie">
+      <div id="loading-video-container" v-show="lottieShowEnable" ></div>
+      <div id="loading-video-container" v-show="lottieShowEnable"></div>
+      <div id="loading-video-container" v-show="lottieShowEnable"></div>
     </div>
 
     <q-card class="navigate-dialog">
@@ -81,10 +83,16 @@
 <script>
 import { ref, reactive } from "vue";
 import store from "../../store/index";
+import lottie from "lottie-web";
 export default {
+  mounted() {
+    this.changeLottie();
+  },
   setup() {
     let state = 0;
     let NextTutorial = ref(false);
+    let WindowObject = window;
+    let lottieAnimation;
     window.addEventListener("mousedown", (e) => {
       state = 1;
     });
@@ -98,11 +106,12 @@ export default {
     window.addEventListener("mouseup", (e) => {
       if (state === 2) {
         if (store.state.tutorialIndex == 0)
-         store.commit("IncreaseTutorialDialog");
+          store.commit("IncreaseTutorialDialog");
       }
     });
     return {
       NextTutorial,
+      lottieAnimation,
     };
   },
   // setup() {
@@ -153,6 +162,7 @@ export default {
   // },
   data() {
     return {
+      lottie_conetnt: ["", "mouse_drag", "arrow", "double_click"],
       A_kon_dialogContent: [
         "lottie",
         "lottie",
@@ -181,21 +191,12 @@ export default {
   },
   watch: {
     tutorialIndex: function () {
-      if (this.tutorialIndex == 1 ) this.A_kon_chatbox_handle();
-      else if(this.tutorialIndex == 2)
-      {
-        this.A_kon_chatbox_handle();
-
-      }
-            else if(this.tutorialIndex == 4)
-      {
-        this.A_kon_chatbox_handle();
-
-      }
-                  else if(this.tutorialIndex == 5)
-      {
-        this.A_kon_chatbox_handle();
-
+      switch (this.tutorialIndex) {
+        case 1:
+        case 2:
+        case 4:
+        case 5:
+          this.A_kon_chatbox_handle();
       }
     },
     fuzzyavailable: function () {
@@ -238,8 +239,10 @@ export default {
     tutorialIndex() {
       return this.$store.state.tutorialIndex;
     },
-    lottie() {
-      return `../../images/tutorial_${this.lottie_counter}.png`;
+    lottiePath() {
+      return `../../images/market/${
+        this.lottie_conetnt[this.lottie_counter]
+      }.json`;
     },
     fuzzyavailable() {
       return (
@@ -266,8 +269,7 @@ export default {
   methods: {
     A_kon_chatbox_handle(passInStr) {
       this.navigate_dialog_content_index++;
-      if(this.navigate_dialog_content_index == 10)
-      this.$router.push("/")
+      if (this.navigate_dialog_content_index == 10) this.$router.push("/");
 
       console.log(this.navigate_dialog_content_index);
       if (this.A_kon_dialogContent[this.navigate_dialog_content_index] == "") {
@@ -279,9 +281,9 @@ export default {
         this.lottie_counter++;
         this.lottieShowEnable = true;
         this.navigate_dialog_content_show_availbale = false;
-        if(this.lottie_counter == 3)
-        {
-         store.commit("IncreaseTutorialDialog");
+        this.changeLottie();
+        if (this.lottie_counter == 3) {
+          store.commit("IncreaseTutorialDialog");
         }
       } else {
         this.navigate_dialog_content_show_availbale = true;
@@ -336,6 +338,17 @@ export default {
       this.fishMonger_image_path.fishMonger = this.fishMonger_charactor_path();
       this.fishMonger_image_path.dialogBox = this.fishMonger_dialogBox_path();
     },
+    changeLottie() {
+
+      this.lottieAnimation = lottie.loadAnimation({
+        container: document.getElementById("loading-video-container"),
+        renderer: "canvas", // 渲染方式:svg、canvas
+        loop: true, //循环播放，默认：false
+        autoplay: true, //自动播放 ，默认true
+        path: this.lottiePath, // json 路径
+      });
+      this.lottieAnimation.play();
+    },
   },
 };
 </script>
@@ -363,19 +376,23 @@ export default {
     right: 0px;
   }
 }
-
+#navigate {
+  &-lottie {
+    position: absolute;
+    // background-color: chocolate;
+    //  z-index: 30;
+    width: 50vw;
+    height: 20vh;
+    bottom: 10vh;
+    right: 25vw;
+  }
+}
 .navigate {
   * {
     display: inline;
     float: left;
   }
-  &-lottie {
-    position: absolute;
-    width: 50vw;
-    height: 20vh;
-    bottom: 5vh;
-    right: 25vw;
-  }
+
   &-dialog {
     position: absolute;
     max-width: 50vw;
@@ -383,7 +400,7 @@ export default {
     left: 25%;
     bottom: 5vh;
     border-radius: 20px;
-    // background-color: chocolate;
+
     &-lottie {
       width: 40vw;
       height: 20vh;
@@ -406,7 +423,7 @@ export default {
       }
     }
     &-button {
-      bottom:2vh;
+      bottom: 2vh;
       position: relative;
       border-radius: 20px;
       margin-left: 60%;

@@ -265,7 +265,8 @@ export default {
             z: -1.21,
             onComplete: () => {
               console.log(this.camera.quaternion);
-              gsap.to(this.camera.quaternion, {
+
+              this.walkingGsap = gsap.to(this.camera.quaternion, {
                 duration: 2,
                 x: -0.08298404039588662,
                 y: 0.14694035867619534,
@@ -518,6 +519,7 @@ export default {
         this.camera.position.distanceTo(new THREE.Vector3(-44.4, 1.65, -4.12)) <
         this.akonList[1].toggleDistance
       ) {
+        this.walkingGsap.kill()
         gsap.to(this.camera.position, {
           duration: 2,
           x: -41.87,
@@ -546,7 +548,7 @@ export default {
         if (this.KickMan.DoOnce == true) {
           this.KickMan.DoOnce = false;
           let currentQuaternion = this.camera.position.clone();
-
+          this.walkingGsap.kill()
           gsap.to(this.camera.position, {
             duration: 1,
             repeat: 0,
@@ -636,6 +638,7 @@ export default {
       }
     },
     onMouseMove() {
+      if (this.LoadMarketFinish != true) return;
       this.RaycasterHandler(this.casterList);
       for (let i = 0; i < this.fishmongerList.length; i++) {
         if (this.RaycasterPool.includes(`monger${i + 1}`)) {

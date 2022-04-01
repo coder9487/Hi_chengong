@@ -30,6 +30,17 @@ export function marketSetting(passInScene) {
   });
 }
 
+export function sceneSetting(passInScene){
+  passInScene.traverse((child) => {
+    if (child.isMesh) {
+      child.material.alphaTest = 0.1;
+      child.material.transparent = true;
+
+      }
+  })
+
+}
+
 export function collectObject(passInMarket) {
   let keywrodList = ["monger", "ground","tutorial_click","sheet"];
   let intersectObjectList = new Array();

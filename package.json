@@ -20,6 +20,7 @@
     "core-js": "^3.6.5",
     "flipbook-vue": "^0.10.4",
     "gsap": "^3.9.1",
+    "js": "^0.1.0",
     "lottie-web": "^5.9.1",
     "lottie-web-vue": "^2.0.6",
     "package.json": "^2.0.1",

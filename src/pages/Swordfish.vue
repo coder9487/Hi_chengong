@@ -47,8 +47,8 @@ export default {
     loadingProgress: function () {
       if (this.loadingProgress >= 1) {
         gsap.to("#loading", {opacity:0, duration: 0.5,onComplete:()=>{this.showAvailable = true;}});
-        gsap.to("#Pisirian3D", {opacity:1, duration: 2,})
-        gsap.to("#Pisirian2D", {opacity:1, duration: 2,})
+        gsap.to("#swordfish3D", {opacity:1, duration: 2,})
+        gsap.to("#swordfish2D", {opacity:1, duration: 2,})
       }
     },
   },

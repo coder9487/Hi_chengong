@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <canvas id="three"></canvas>
   </div>
 </template>
@@ -9,13 +8,12 @@ import * as THREE from "three/build/three.module.js";
 import { Sea } from "../../Library/Sea";
 import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { marketSetting, collectObject } from "../../Library/LoadObject";
+import { sceneSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
-
-
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export default {
-  name:"Pisirian3D",
+  name: "Pisirian3D",
   setup() {
     const Document = document;
     const Window = window;
@@ -42,16 +40,12 @@ export default {
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
-  watch: {
-
-  },
-  computed: {
-
-  },
+  watch: {},
+  computed: {},
   methods: {
     loading_callbacks(val) {
-      console.log("Pass into callbacks ", (val.loaded / 16302870).toFixed(2));
-      this.$emit("loadingProgress", (val.loaded / 16302870).toFixed(2));
+      console.log("Pass into callbacks ", (val.loaded / 3819854).toFixed(2));
+      this.$emit("loadingProgress", (val.loaded / 3819854).toFixed(2));
     },
     Init_Three() {
       this.raycaster = new THREE.Raycaster();
@@ -72,10 +66,10 @@ export default {
       this.camera = new THREE.PerspectiveCamera(
         50,
         window.innerWidth / window.innerHeight,
-        0.1,
+        0.01,
         400
       );
-      this.camera.position.set(-4,7,0);
+      this.camera.position.set(-4, 7, 0);
       this.camera.lookAt(-5, 0.5, 0);
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
 
@@ -117,15 +111,13 @@ export default {
         ]);
 
       // load a resource
-      this.loadTable();
 
-       this.createSea();
+      this.createSea();
+      this.loadTable();
 
       // this.pin = this.createPointer();w
     },
     Animation_Three() {
-
-
       this.controls.update();
       this.sea.moveWaves();
       this.composer.render();
@@ -143,41 +135,41 @@ export default {
 
     async loadTable() {
       console.clear();
-      const loader = new THREE.ObjectLoader();
-      this.islandModel = await loader.loadAsync(
-        "../models/swordfish.json",
+      const loader = new GLTFLoader().setPath("models/");
+      this.swordfish = await loader.loadAsync(
+        "swordfish.gltf",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
       );
+      let model = this.swordfish.scene;
+      this.scene.add(this.swordfish.scene);
+      this.swordfish.scene.scale.set(10, 10, 10);
 
-      this.islandModel.scale.set(10, 10, 10);
-      this.islandModel.position.set(0, 0, 0);
+      this.mixer = new THREE.AnimationMixer(model);
+      for (let i = 0; i <= 2; i++)
+        this.mixer.clipAction(this.swordfish.animations[i]).play();
 
-      marketSetting(this.islandModel);
-
-      // this.casterList = collectObject(this.islandModel);
-      this.scene.add(this.islandModel);
-      // this.setupAinmation();
-      this.controls.colliders = this.islandModel;
-      this.LoadMarketFinish = true;
+      sceneSetting(this.swordfish.scene)
+      console.log(this.swordfish)
+      this.LoadModelFinish = true;
     },
-        createSea() {
+    createSea() {
       let seaVertices = 100;
       let seaAmp = 0.8;
-
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
       this.sea.init();
       this.sea.mesh.name = "Sea";
       this.scene.add(this.sea.mesh);
       this.sea.mesh.position.y = 0;
-      // this.sea.mesh.castShadow = true;
-      // this.sea.mesh.receiveShadow = true;
+
     },
-    updateAnimation(){
+    updateAnimation() {
+      if(!this.LoadModelFinish)return
+      this.mixer.update(0.01)
+      let monger
 
-    }
-
-  }
-}
+    },
+  },
+};
 </script>
