@@ -7,7 +7,9 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "build:ssg": "quasar ssg generate",
+    "serve:ssg": "quasar ssg serve dist/ssg"
   },
   "dependencies": {
     "@babylonjs/core": "^4.2.1",
@@ -39,7 +41,8 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^2.4.0",
-    "prerender-spa-plugin": "^3.4.0"
+    "prerender-spa-plugin": "^3.4.0",
+    "quasar-app-extension-ssg": "^3.4.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

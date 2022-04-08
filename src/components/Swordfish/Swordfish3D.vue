@@ -11,7 +11,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { sceneSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-
+import gsap from "gsap";
 export default {
   name: "Pisirian3D",
   setup() {
@@ -44,12 +44,12 @@ export default {
   computed: {},
   methods: {
     loading_callbacks(val) {
-      console.log("Pass into callbacks ", (val.loaded / 3819854).toFixed(2));
-      this.$emit("loadingProgress", (val.loaded / 3819854).toFixed(2));
+      console.log("Pass into callbacks ", (val.loaded / 3246875).toFixed(2));
+      this.$emit("loadingProgress", (val.loaded / 3246875).toFixed(2));
     },
     Init_Three() {
       this.raycaster = new THREE.Raycaster();
-      this.raycaster.far = 10;
+      // this.raycaster.far = 50;
       this.pointer = new THREE.Vector2();
 
       this.scene = new THREE.Scene();
@@ -64,13 +64,14 @@ export default {
       });
 
       this.camera = new THREE.PerspectiveCamera(
-        50,
+        70,
         window.innerWidth / window.innerHeight,
-        0.01,
-        400
+        0.001,
+        200
       );
+
       this.camera.position.set(-4, 7, 0);
-      this.camera.lookAt(-5, 0.5, 0);
+      this.camera.lookAt(-10, 5, 0);
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
 
       /**
@@ -78,7 +79,6 @@ export default {
        */
       switch (this.controllerMode) {
         case "0":
-          console.log(this.Document);
           this.controls = new FirstPersonCameraControl(
             this.camera,
             this.Document.body
@@ -114,6 +114,7 @@ export default {
 
       this.createSea();
       this.loadTable();
+      // this.createSurface();
 
       // this.pin = this.createPointer();w
     },
@@ -127,7 +128,7 @@ export default {
     },
     AddEnentListener() {
       this.Window = window;
-      this.Window.addEventListener("pointermove", this.onPointerMove);
+      // this.Window.addEventListener("pointermove", this.onPointerMove);
       this.Window.addEventListener("resize", this.onWindowResize);
       this.Window.addEventListener("dblclick", this.onDblclick);
       this.Window.addEventListener("mousemove", this.onMouseMove);
@@ -136,22 +137,40 @@ export default {
     async loadTable() {
       console.clear();
       const loader = new GLTFLoader().setPath("models/");
-      this.swordfish = await loader.loadAsync(
-        "swordfish.gltf",
-        (xhr) => {
-          this.loading_callbacks(xhr);
-        }
-      );
+      this.swordfish = await loader.loadAsync("swordfish.gltf", (xhr) => {
+        this.loading_callbacks(xhr);
+      });
       let model = this.swordfish.scene;
       this.scene.add(this.swordfish.scene);
       this.swordfish.scene.scale.set(10, 10, 10);
+      this.mongerSkeleton = model.getObjectByName("monger_armature");
+      this.spear = model.getObjectByName("spear");
+      console.log("Monger skeleton system ", this.mongerSkeleton);
+      console.log("Scene ", this.scene.children[2]);
+      this.raycasterList = [];
+      // this.raycasterList.push(
+      //   this.swordfish.scene.getObjectByName("sailfish_Armature")
+      // );
+      this.raycasterList.push(this.scene.children[2]);
+      console.log(this.scene);
+      //
+      //this.scene.children[2]
 
       this.mixer = new THREE.AnimationMixer(model);
       for (let i = 0; i <= 2; i++)
         this.mixer.clipAction(this.swordfish.animations[i]).play();
 
-      sceneSetting(this.swordfish.scene)
-      console.log(this.swordfish)
+      sceneSetting(this.swordfish.scene);
+
+      // gsap.to(this.mongerSkeleton.rotation, 3, {
+      //   y: -Math.PI,
+      //   yoyo: true,
+      //   repeat: -1,
+
+      this.hand = this.mongerSkeleton.getObjectByName("palm01R")
+      const arrowHelper = new THREE.ArrowHelper(this.hand.up.clone() ,this.hand.position.clone(), 5, 0xffff00);
+      this.scene.add(arrowHelper); // });
+
       this.LoadModelFinish = true;
     },
     createSea() {
@@ -161,14 +180,44 @@ export default {
       this.sea.init();
       this.sea.mesh.name = "Sea";
       this.scene.add(this.sea.mesh);
-      this.sea.mesh.position.y = 0;
+      this.sea.mesh.position.y = -20
+    },
+    createSurface() {
+      const geometry = new THREE.PlaneGeometry(2000, 2000, 200, 200);
+      const material = new THREE.MeshBasicMaterial({
+        color: 0x00066e,
+        side: THREE.DoubleSide,
+      });
+      geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
+      const plane = new THREE.Mesh(geometry, material);
+      plane.position.y = -20;
+      this.scene.add(plane);
+    },
+    onMouseMove(event) {
+      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(this.pointer, this.camera);
 
+      const intersects = this.raycaster.intersectObjects(this.raycasterList);
+      if (intersects[0] != undefined) {
+        this.mongerSkeleton.lookAt(intersects[0].point);
+        this.spear.position.set (this.hand.position.x,this.hand.position.y,this.hand.position.z)
+         this.spear.position.multiplyScalar(10)
+        // this.spear.lookAt(intersects[0].point)
+        //  console.log(this.spear)
+      }
+    },
+    onDblclick() {},
+    onWindowResize() {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
     updateAnimation() {
-      if(!this.LoadModelFinish)return
-      this.mixer.update(0.01)
-      let monger
+      if (!this.LoadModelFinish) return;
+      this.mixer.update(0.001);
 
+      // this.mongerSkeleton.rotation.y = Math.sin(-performance.now()*0.001)
     },
   },
 };

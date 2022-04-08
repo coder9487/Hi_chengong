@@ -5,12 +5,13 @@
       :LoadingProgress="returnloadingProgress"
       v-if="!showAvailable"
     ></loading>
+      <swordfish2D v-if="1"></swordfish2D>
 
     <swordfish3D
     id="swordfish3D"
       @loadingProgress="getLoadingProgress"
     ></swordfish3D>
-    <swordfish2D v-if="0"></swordfish2D>
+
 
   </div>
 </template>
