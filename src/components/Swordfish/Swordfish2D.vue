@@ -4,42 +4,51 @@
       <div id="progressbar-line"></div>
     </div>
   </div>
-  <div class="charactor" v-show="dialogContent_Array[dialogContent_Index] != ''? true:false">
+  <div
+    class="charactor"
+    v-show="dialogContent_Array[dialogContent_Index] == 'lottie' ? false : true"
+  >
     <q-img class="charactor-image" src="images/a_kon_hi.png"></q-img>
   </div>
-  <div class="dialog"  v-show="dialogContent_Array[dialogContent_Index] != ''? true:false">
+  <div
+    class="dialog"
+    v-show="dialogContent_Array[dialogContent_Index] != '' && dialogContent_Array[dialogContent_Index] != 'lottie'? true : false"
+  >
     <div class="dialog-content">
       <div
         class="dialog-content-text"
         v-html="dialogContent_Array[dialogContent_Index]"
-
       ></div>
-              <q-btn
-      color="orange"
-      class="dialog-button"
-      @click="dialogContent_Index++"
-      >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
-    >
+      <q-btn
+        color="orange"
+        class="dialog-button"
+        @click="dialogContent_Index++"
+        >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
+      >
     </div>
-
-
   </div>
 </template>
 <script>
 export default {
   setup() {},
-  mounted() {
-    let progressNum = 0;
-    let progressElement = document.querySelector("#progressbar-line ");
+  mounted() {},
+  watch: {
+    dialogContent_Index: function () {
+      console.log(this.dialogContent_Index);
+      if (this.dialogContent_Index == 2) {
+        let progressNum = 0;
+        let progressElement = document.querySelector("#progressbar-line ");
+        this.timeoutProgressID = window.setInterval(() => {
+          progressNum += 0.1;
+          progressElement.style.width = progressNum + "%";
+          if (progressNum > 100) {
+            window.clearInterval(this.timeoutProgressID);
+            this.dialogContent_Index++;
 
-    // this.timeoutProgressID = window.setInterval(() => {
-    //   progressNum += 0.1;
-    //   progressElement.style.width = progressNum + "%";
-    //   if (progressNum > 100) {
-    //     window.clearInterval(this.timeoutProgressID);
-    //     console.log(progressNum);
-    //   }
-    // }, 33);
+          }
+        }, 33);
+      }
+    },
   },
   data() {
     return {
@@ -47,8 +56,10 @@ export default {
       dialogContent_Array: [
         '來，阿公跟你說，<b style="color: #FEA30B;">鏢旗魚</b>是成功鎮特有的<b style="color: #FEA30B;">傳統技法</b>，從日治時期就傳入台灣囉~',
         '阿公先帶你練習一次，認真學喔!旗魚的<b style="color: #FEA30B;">價值不斐</b>，你鏢中越多，越會有意想不到的<b style="color: #FEA30B;">收穫</b>喔!',
-        "",
+        'lottie',
         '很好，待會旗魚可不會游得這麼慢喔! 你有<b style="color: #FEA30B;">30秒</b>的體驗時間，把握機會，旗魚可是不等人的喔!',
+        '',
+        '',
       ],
       dialogButton_Content: ["這~麼厲害", "我準備好了", "", "開始體驗"],
     };
@@ -85,9 +96,8 @@ export default {
   }
 
   &-button {
-
-   left: 35%;
-   top:20px;
+    left: 35%;
+    top: 20px;
     justify-content: space-around;
     width: 180px;
     position: relative;
@@ -115,7 +125,7 @@ export default {
   }
   &-line {
     background-color: #ffa400;
-    width: 1%;
+    width: 0%;
     /* Adjust with JavaScript */
     height: $progressbar_height;
     border-radius: $progressbar_border_radius;

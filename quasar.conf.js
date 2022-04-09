@@ -199,6 +199,9 @@ module.exports = configure(function (ctx) {
 
         appId: 'threejs_quasar'
       },
+      ssg: {
+        routes: ["/", "/Swordfish", "/Market", "Pisirian",]
+      },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpackMain (chain) {

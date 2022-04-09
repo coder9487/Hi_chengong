@@ -39,7 +39,7 @@ export default defineComponent({
     {
         if(this.clickEnable)
         {
-          this.$router.push('market-page')
+          this.$router.push('Market')
         }
     }
 ,

@@ -268,10 +268,10 @@ export default {
 
               this.walkingGsap = gsap.to(this.camera.quaternion, {
                 duration: 2,
-                x: -0.08298404039588662,
-                y: 0.14694035867619534,
-                z: 0.01237210301254816,
-                w: 0.9855805959426818,
+                x: 0.09896519624587782,
+                y: -0.3003743331603951,
+                z: -0.03135204681765772,
+                w: -0.9481551555894248,
                 onComplete: () => {
                   this.EnableControl = true;
                   this.PlayerState = 1;
@@ -519,19 +519,21 @@ export default {
         this.camera.position.distanceTo(new THREE.Vector3(-44.4, 1.65, -4.12)) <
         this.akonList[1].toggleDistance
       ) {
-        this.walkingGsap.kill()
+        this.walkingGsap.kill();
+        console.log(this.camera.quaternion);
+        this.akonList[1].toggleDistance = 1000;
         gsap.to(this.camera.position, {
           duration: 2,
           x: -41.87,
           z: -3.85,
-          onComplete: (tween) => {
+          onComplete: () => {
             gsap.to(this.camera.quaternion, {
               duration: 0.5,
-              w: 0.755506,
-              x: -0.04841,
-              y: 0.652011,
-              z: 0.041785,
-              onComplete: (tween) => {
+              x: 0.039719355081779,
+              y: -0.7478140956181748,
+              z: -0.04492276599848267,
+              w: -0.6611946735430532,
+              onComplete: () => {
                 this.PlayerState = 3;
                 if (this.$store.state.tutorialIndex == 4)
                   this.$store.commit("IncreaseTutorialDialog");
@@ -548,7 +550,7 @@ export default {
         if (this.KickMan.DoOnce == true) {
           this.KickMan.DoOnce = false;
           let currentQuaternion = this.camera.position.clone();
-          this.walkingGsap.kill()
+          this.walkingGsap.kill();
           gsap.to(this.camera.position, {
             duration: 1,
             repeat: 0,

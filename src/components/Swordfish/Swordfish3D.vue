@@ -137,7 +137,7 @@ export default {
     async loadTable() {
       console.clear();
       const loader = new GLTFLoader().setPath("models/");
-      this.swordfish = await loader.loadAsync("swordfish.gltf", (xhr) => {
+      this.swordfish = await loader.loadAsync("swordfish_old.gltf", (xhr) => {
         this.loading_callbacks(xhr);
       });
       let model = this.swordfish.scene;
@@ -200,14 +200,30 @@ export default {
 
       const intersects = this.raycaster.intersectObjects(this.raycasterList);
       if (intersects[0] != undefined) {
-        this.mongerSkeleton.lookAt(intersects[0].point);
-        this.spear.position.set (this.hand.position.x,this.hand.position.y,this.hand.position.z)
-         this.spear.position.multiplyScalar(10)
+        // this.mongerSkeleton.lookAt(intersects[0].point);
+
+
+
+    let dis = this.camera.position.clone().distanceToSquared(intersects[0].point);
+    let originVector = this.camera.position
+      .clone()
+      .sub(intersects[0].point.clone())
+      .normalize();
+    let crossVector = originVector.cross(new THREE.Vector3(0, 1, 0));
+    this.mongerSkeleton.lookAt(crossVector.multiplyScalar(dis));
+
+
+
+        // this.spear.position.set (this.hand.position.x,this.hand.position.y,this.hand.position.z)
+        //  this.spear.position.multiplyScalar(10)
         // this.spear.lookAt(intersects[0].point)
         //  console.log(this.spear)
       }
     },
-    onDblclick() {},
+    onDblclick() {
+
+
+    },
     onWindowResize() {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
@@ -215,7 +231,7 @@ export default {
     },
     updateAnimation() {
       if (!this.LoadModelFinish) return;
-      this.mixer.update(0.001);
+      this.mixer.update(0.016);
 
       // this.mongerSkeleton.rotation.y = Math.sin(-performance.now()*0.001)
     },

@@ -28,12 +28,12 @@
       <q-img class="navigate-lottie-content" :src="lottie.dialogBox" ></q-img>
     </div> -->
     <div id="navigate-lottie">
-      <div id="loading-video-container" v-show="lottieShowEnable" ></div>
-      <div id="loading-video-container" v-show="lottieShowEnable"></div>
-      <div id="loading-video-container" v-show="lottieShowEnable"></div>
+      <div id="loading-video-container_1" v-show="lottieShowEnableFunc(1)"></div>
+      <div id="loading-video-container_2" v-show="lottieShowEnableFunc(2)"></div>
+      <div id="loading-video-container_3" v-show="lottieShowEnableFunc(3)"></div>
     </div>
 
-    <q-card class="navigate-dialog">
+    <div class="navigate-dialog">
       <div
         class="navigate-dialog-content"
         v-show="navigate_dialog_content_show_availbale"
@@ -49,7 +49,7 @@
           我知道了
         </q-btn>
       </div>
-    </q-card>
+    </div>
   </div>
 
   <div class="fishmonger" v-show="fishmonger_dialog_content_show_available">
@@ -162,7 +162,7 @@ export default {
   // },
   data() {
     return {
-      lottie_conetnt: ["", "mouse_drag", "arrow", "double_click"],
+      lottie_conetnt: ["", "mouse_drag", "click_move", "double_click"],
       A_kon_dialogContent: [
         "lottie",
         "lottie",
@@ -240,9 +240,7 @@ export default {
       return this.$store.state.tutorialIndex;
     },
     lottiePath() {
-      return `../../images/market/${
-        this.lottie_conetnt[this.lottie_counter]
-      }.json`;
+      return `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
     },
     fuzzyavailable() {
       return (
@@ -267,9 +265,13 @@ export default {
     },
   },
   methods: {
+    lottieShowEnableFunc(passIn) {
+      if (passIn == this.lottie_counter && this.lottieShowEnable == true) return true;
+      else return false;
+    },
     A_kon_chatbox_handle(passInStr) {
       this.navigate_dialog_content_index++;
-      if (this.navigate_dialog_content_index == 10) this.$router.push("/");
+      if (this.navigate_dialog_content_index == 10) this.$router.push("/Swordfish");
 
       console.log(this.navigate_dialog_content_index);
       if (this.A_kon_dialogContent[this.navigate_dialog_content_index] == "") {
@@ -339,9 +341,10 @@ export default {
       this.fishMonger_image_path.dialogBox = this.fishMonger_dialogBox_path();
     },
     changeLottie() {
-
       this.lottieAnimation = lottie.loadAnimation({
-        container: document.getElementById("loading-video-container"),
+        container: document.getElementById(
+          "loading-video-container_" + this.lottie_counter
+        ),
         renderer: "canvas", // 渲染方式:svg、canvas
         loop: true, //循环播放，默认：false
         autoplay: true, //自动播放 ，默认true
@@ -398,8 +401,9 @@ export default {
     max-width: 50vw;
     height: 20vh;
     left: 25%;
-    bottom: 5vh;
+    bottom: 8vh;
     border-radius: 20px;
+    background-color: aliceblue;
 
     &-lottie {
       width: 40vw;
@@ -412,10 +416,12 @@ export default {
         line-height: 50px;
       }
       $content-border-gap: 20px;
-      margin-left: 7%;
-      margin-right: 7%;
-      margin-top: 6%;
-      margin-bottom: 7%;
+
+      // margin-left: 7%;
+      // margin-right: 7%;
+      // margin-top: 6%;
+      // margin-bottom: 7%;
+      margin: 5%;
 
       color: rgb(18, 89, 74);
       &-b {
@@ -427,6 +433,7 @@ export default {
       position: relative;
       border-radius: 20px;
       margin-left: 60%;
+      top:10px;
       width: 40%;
       @media screen and (min-width: 1024px) {
         margin-left: 38%;

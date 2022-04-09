@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <canvas id="three"></canvas>
   </div>
 </template>
@@ -12,7 +11,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { marketSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
 import gsap from "gsap";
-
 
 export default {
   setup() {
@@ -41,16 +39,19 @@ export default {
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
-  watch: {
-
-  },
-  computed: {
-
-  },
+  watch: {},
+  computed: {},
   methods: {
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 105909244).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 105909244).toFixed(2));
+    },
+    AddEnentListener() {
+      this.Window = window;
+      this.Window.addEventListener("mousemove", this.onPointerMove);
+      this.Window.addEventListener("resize", this.onWindowResize);
+      this.Window.addEventListener("dblclick", this.onDblclick);
+      // this.Window.addEventListener("mousemove", this.onMouseMove);
     },
     Init_Three() {
       this.raycaster = new THREE.Raycaster();
@@ -119,26 +120,17 @@ export default {
       // load a resource
       this.loadTable();
 
-       this.createSea();
+      this.createSea();
 
       // this.pin = this.createPointer();w
     },
     Animation_Three() {
-
-
       this.controls.update();
       this.sea.moveWaves();
       this.composer.render();
       this.updateAnimation();
 
       requestAnimationFrame(this.Animation_Three);
-    },
-    AddEnentListener() {
-      this.Window = window;
-      this.Window.addEventListener("pointermove", this.onPointerMove);
-      this.Window.addEventListener("resize", this.onWindowResize);
-      this.Window.addEventListener("dblclick", this.onDblclick);
-      this.Window.addEventListener("mousemove", this.onMouseMove);
     },
 
     async loadTable() {
@@ -159,10 +151,11 @@ export default {
       // this.casterList = collectObject(this.tableModel);
       this.scene.add(this.tableModel);
       // this.setupAinmation();
+      this.initRaycaster();
       this.controls.colliders = this.tableModel;
       this.LoadMarketFinish = true;
     },
-        createSea() {
+    createSea() {
       let seaVertices = 100;
       let seaAmp = 0.8;
 
@@ -174,10 +167,44 @@ export default {
       // this.sea.mesh.castShadow = true;
       // this.sea.mesh.receiveShadow = true;
     },
-    updateAnimation(){
+    initRaycaster() {
+      let objectNameList = [
+        "hai_di_ca",
+        "sashimi",
+        "mahi_fish",
+        "miso_soup",
+        "orange",
+        "wan_que",
+        // "a_kon_normal",
+        // "a_kon_hover",
+      ];
+      this.raycasterObjectList = new Array();
+      objectNameList.forEach((elem) => {
+        this.raycasterObjectList.push(this.tableModel.getObjectByName(elem));
+      });
+      console.log("Raycaster list ",this.raycasterObjectList)
+    },
+    updateAnimation() {},
+    onPointerMove(event) {
+      if (this.LoadMarketFinish != true) return;
+      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.raycaster.setFromCamera(this.pointer, this.camera);
 
-    }
+      // 计算物体和射线的焦点
+      const intersects = this.raycaster.intersectObjects(
+        this.raycasterObjectList
+      );
 
-  }
-}
+      for (let i = 0; i < intersects.length; i++) {
+        console.log(intersects);
+      }
+    },
+    onWindowResize() {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+    },
+  },
+};
 </script>
