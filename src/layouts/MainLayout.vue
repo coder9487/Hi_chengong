@@ -129,7 +129,7 @@ export default {
   watch: {},
   data() {
     return {
-      showDebugTab: true,
+      showDebugTab: false,
       showInterpreter: ref(false),
     };
   },

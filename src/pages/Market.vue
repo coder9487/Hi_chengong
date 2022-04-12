@@ -2,43 +2,79 @@
   <div class="loadingPage" v-if="!showingFlag">
     <img class="loadingPage-mask" src="../../public/loading/loading.png" />
     <div class="loadingPage-loading-video" id="loading-video">
-      <video src="../../public/loading/wave.mp4" autoplay muted playsinline loop style="display: inline;"></video>
+      <video
+        src="../../public/loading/wave.mp4"
+        autoplay
+        muted
+        playsinline
+        loop
+        style="display: inline"
+      ></video>
     </div>
   </div>
-
-  <Market3D
-    id="marketTest"
-    @loadingProgress="loadingProgressPercentage"
-    @scene="sceneRecieve"
-    v-if="1"
-    v-show="showingFlag"
-  ></Market3D>
-  <Market2D id="Navigate" v-if="showingFlag"></Market2D>
-
+  <div id="colorSlide">
+    <Market3D
+      id="swordfish3D"
+      @loadingProgress="loadingProgressPercentage"
+      @scene="sceneRecieve"
+      v-if="1"
+      v-show="showingFlag"
+    ></Market3D>
+    <Market2D
+      id="Navigate"
+      v-if="showingFlag && 1"
+      @lightBoxEffect="lightBoxEffect"
+    ></Market2D>
+  </div>
 </template>
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
 import Market3D from "../components/Market/Market3D.vue";
 import Market2D from "../components/Market/Market2D.vue";
+import gsap from "gsap";
 
 export default defineComponent({
-  name: "MarketPage",
+  name: "SwordfishPage",
   components: {
     Market3D,
     Market2D,
   },
   setup() {},
   mounted() {
-
     let vid = document.getElementById("loading-video");
     vid.canplay = function () {
       vid.style.display = "show";
     };
-
   },
 
   watch: {
+    lightBoxEffectMode: function () {
+      switch (this.lightBoxEffectMode) {
+        case "on":
+          gsap.fromTo(
+            "#swordfish3D",
+            { webkitFilter: "brightness(1)", filter: "brightness(1)" },
+            {
+              webkitFilter: "brightness(0)",
+              filter: "brightness(0)",
+              duration: 1,
+            }
+          );
+          break;
+        case "off":
+          gsap.fromTo(
+            "#swordfish3D",
+            { webkitFilter: "brightness(0)", filter: "brightness(0)" },
+            {
+              webkitFilter: "brightness(1)",
+              filter: "brightness(1)",
+              duration: 1,
+            }
+          );
+          break;
+      }
+    },
     loading: function () {
       // console.log("loading progress ", this.loading);
       let loadingWave = document.getElementById("loading-video");
@@ -49,15 +85,13 @@ export default defineComponent({
         }, 5000);
       }
     },
-    sceneObject: function(){
-
-    }
+    sceneObject: function () {},
   },
   computed: {},
   data() {
     return {
       audio: null,
-      sceneObject:null,
+      sceneObject: null,
       loading: ref(0),
       showingFlag: false,
       MobileMoving: reactive({}),
@@ -65,15 +99,18 @@ export default defineComponent({
       showEnable: ref(true),
       DEBUG: 1,
       golbalEvent: { dblclick: false },
+      lightBoxEffectMode: 0,
     };
   },
   methods: {
-
     loadingProgressPercentage(val) {
       this.loading = (val * 99).toFixed(2);
     },
     sceneRecieve(val) {
       this.sceneObject = val;
+    },
+    lightBoxEffect(val) {
+      this.lightBoxEffectMode = val;
     },
     //111356897
   },
@@ -137,7 +174,7 @@ export default defineComponent({
     z-index: 8;
   }
 }
-#marketTest {
+#swordfish3D {
   position: fixed;
   background-color: #35909c;
 }
@@ -149,5 +186,8 @@ export default defineComponent({
   z-index: 100;
   width: 100vw;
   height: 100vh;
+}
+#colorSlide {
+  background-color: black;
 }
 </style>

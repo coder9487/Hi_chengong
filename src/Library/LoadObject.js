@@ -35,6 +35,7 @@ export function sceneSetting(passInScene){
     if (child.isMesh) {
       child.material.alphaTest = 0.1;
       child.material.transparent = true;
+      child.frustumCulled = false;
 
       }
   })

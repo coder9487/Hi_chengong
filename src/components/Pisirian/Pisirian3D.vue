@@ -169,6 +169,21 @@ export default {
     onPointerMove(event) {
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     },
     onWindowResize() {
       this.camera.aspect = window.innerWidth / window.innerHeight;

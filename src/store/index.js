@@ -1,13 +1,30 @@
 import { createStore } from "vuex";
 import state from "./module-example/state";
 
+
+const Market = {
+  state: () => ({  }),
+  mutations: {  },
+  actions: {  },
+  getters: {  }
+}
+
+const moduleB = {
+  state: () => ({  }),
+  mutations: {  },
+  actions: {  }
+}
+
+
+
+
+
+
+
+
 export default createStore({
   state: {
-    Forward: false,
-    Right: false,
-    Left: false,
-    Lookup: false,
-    Lookdown: false,
+
 
     MobileMovement: { x: 0, y: 0 },
     MobileDirection: { hori: 0, vert: 0 },
@@ -18,27 +35,19 @@ export default createStore({
     marketLoaded: false,
     questionMarketDisplay: false,
     questionMarketTableDisplay: false,
-    poleDirection: { x: 0, y: 0 },
+
     marketDisplay: [{ id: "None", display: false }],
-    FoodDisplay: [{ id: "0", display: false }],
-    pisirianDisplay: [{ id: "None", display: false }],
-    ThreeInterpreter:[{command:"",result:""}],
-    swordfishShoottimes: 0,
     tutorialIndex:0,
+    pisirianDisplay: [{ id: "None", display: false }],
+
+    swordfishShoottimes: 0,
+    poleDirection: { x: 0, y: 0 },
     animateEnable:false,
     Fozzy3D:false,
   },
   mutations: {
 
-    setScene(state,sceneVal)
-    {
-        state.scene = sceneVal
-    },
 
-    setCommand(state,commandArr)
-    {
-      state.ThreeInterpreter.command = commandArr[0]
-    },
     ///
     setFozzyFram(state,available){
         state.Fozzy3D = available
@@ -49,6 +58,7 @@ export default createStore({
     marketChangeState(state, person) {
       state.marketDisplay.splice(0, 1, person);
     },
+
     FoodChangeState(state, cate) {
       state.FoodDisplay.splice(0, 1, cate);
     },
@@ -85,14 +95,7 @@ export default createStore({
     swordfishShootTimes(state) {
       state.swordfishShoottimes ++;
     },
-    controlAnimateTrue(state)
-    {
-      state.animateEnable = true;
-    },
-    controlAnimateFalse(state)
-    {
-      state.animateEnable = false;
-    }
+
   },
   actions: {},
   modules: {},
