@@ -28,7 +28,7 @@
     <div id="lottie-container-a_kon">
       <div
         id="lottie-container-a_kon_hover"
-        @click="dialogContent_Index++"
+        @click.stop="dialogContent_Index++"
         v-show="!showAkonHover"
       ></div>
       <!-- <div id="lottie-container-a_kon_normal" v-show="!showAkonHover"></div> -->
@@ -66,7 +66,7 @@
       <q-btn
         color="orange"
         class="dialog-button"
-        @click="dialogContent_Index++"
+        @click.stop="dialogContent_Index++"
         >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
       >
     </div>
@@ -84,7 +84,7 @@
     <q-btn
       color="orange"
       class="hearvest-content-button"
-      @click="dialogContent_Index++"
+      @click.stop="dialogContent_Index++"
       >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
     >
   </div>
@@ -97,11 +97,16 @@ import gsap from "gsap";
 export default {
   setup() {
     return {
-      debug: true,
+      debug: false,
     };
+  },
+  compute: {
+
   },
   mounted() {},
   watch: {
+
+
     dialogContent_Index: function () {
       if (this.dialogContent_Index == 4) {
         this.changeLottie("swordfish_tutorial");
@@ -109,6 +114,7 @@ export default {
         this.changeLottie("a_kon_normal");
       }
       if (this.dialogContent_Index == 6) {
+        this.$store.commit("Swordfish/ToggleGame");
         let progressNum = 0;
         let progressElement = document.querySelector("#progressbar-line ");
         let timeInter = 33;
@@ -124,6 +130,7 @@ export default {
         }, timeInter);
       }
       if (this.dialogContent_Index == 7) {
+        this.$store.commit("Swordfish/ToggleGame");
         this.showVideo = true;
         this.$emit("lightBoxEffect", "on");
         let videoObj = document.getElementById("FinishVideo");
@@ -150,9 +157,8 @@ export default {
           });
         };
       }
-      if (this.dialogContent_Index == 11)
-      {
-          this.$router.push("DiningTable")
+      if (this.dialogContent_Index == 11) {
+        this.$router.push("DiningTable");
       }
     },
   },
@@ -172,7 +178,7 @@ export default {
         "video",
         "hearvest",
         '哇!不愧是我的孫子，阿公送你一張<b style="color: #FEA30B;">成功折價卷</b>，等體驗結束後記得到櫃檯領取喔!',
-        '辛苦後的結晶總是特別香甜，阿公帶你去吃一頓「<b style="color: #FEA30B;">成功大餐</b>」，都是成功道地料理喔!'
+        '辛苦後的結晶總是特別香甜，阿公帶你去吃一頓「<b style="color: #FEA30B;">成功大餐</b>」，都是成功道地料理喔!',
       ],
       dialogButton_Content: [
         "這~麼厲害",
@@ -185,7 +191,7 @@ export default {
         "",
         "哇!好棒",
         "這~麼厲害",
-        '想吃!走吧!'
+        "想吃!走吧!",
       ],
     };
   },
@@ -194,9 +200,9 @@ export default {
       console.log("Toggle toggleshowAkonHover");
       this.showAkonHover = !this.showAkonHover;
     },
-    imagesrc(index){
-      let array = ["cupon.jpg","table.png"]
-      return `../../images/swordfish/${array[index]}`
+    imagesrc(index) {
+      let array = ["cupon.jpg", "table.png"];
+      return `../../images/swordfish/${array[index]}`;
     },
     changeLottie(str) {
       this.lottieAnimation = lottie.loadAnimation({

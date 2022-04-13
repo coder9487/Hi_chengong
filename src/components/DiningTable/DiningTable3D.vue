@@ -26,6 +26,8 @@ export default {
     this.Init_Three();
     this.AddEnentListener();
     this.Animation_Three();
+    console.log("%cBlue! %cGreen", "color: blue; font-size:15px;", "color: green; font-size:12px;");
+
   },
   onBeforeUnmount() {},
   data() {

@@ -22,7 +22,7 @@
     ></swordfish3D>
     <swordfish2D
       id="Navigate"
-      v-if="showingFlag && 0"
+      v-if="showingFlag && 1"
       @lightBoxEffect="lightBoxEffect"
     ></swordfish2D>
   </div>

@@ -1,36 +1,21 @@
 <template>
-  <!-- <div
-    v-if="detectPaltform"
-    class="controlPannel-movement"
-    v-touch-pan.prevent.mouse="movement"
-    v-show="
-      !navigate_dialog_content_show_availbale &&
-      !fishmonger_dialog_content_show_available
-    "
-  >
 
-  </div>
-  <div
-    v-if="detectPaltform"
-    class="controlPannel-direction"
-    v-touch-pan.prevent.mouse="direciton"
-    v-show="
-      !navigate_dialog_content_show_availbale &&
-      !fishmonger_dialog_content_show_available
-    "
-  >
-
-  </div> -->
 
   <div class="navigate">
-    <!-- <div class="navigate-lottie">
 
-      <q-img class="navigate-lottie-content" :src="lottie.dialogBox" ></q-img>
-    </div> -->
     <div id="navigate-lottie">
-      <div id="loading-video-container_1" v-show="lottieShowEnableFunc(1)"></div>
-      <div id="loading-video-container_2" v-show="lottieShowEnableFunc(2)"></div>
-      <div id="loading-video-container_3" v-show="lottieShowEnableFunc(3)"></div>
+      <div
+        id="loading-video-container_1"
+        v-show="lottieShowEnableFunc(1)"
+      ></div>
+      <div
+        id="loading-video-container_2"
+        v-show="lottieShowEnableFunc(2)"
+      ></div>
+      <div
+        id="loading-video-container_3"
+        v-show="lottieShowEnableFunc(3)"
+      ></div>
     </div>
 
     <div class="navigate-dialog">
@@ -82,17 +67,11 @@
 </template>
 <script>
 import { ref, reactive } from "vue";
-import store from "../../store/index";
 import lottie from "lottie-web";
 export default {
   mounted() {
     this.changeLottie();
-  },
-  setup() {
     let state = 0;
-    let NextTutorial = ref(false);
-    let WindowObject = window;
-    let lottieAnimation;
     window.addEventListener("mousedown", (e) => {
       state = 1;
     });
@@ -105,10 +84,16 @@ export default {
 
     window.addEventListener("mouseup", (e) => {
       if (state === 2) {
-        if (store.state.tutorialIndex == 0)
-          store.commit("IncreaseTutorialDialog");
+        if (this.$store.state.Market.tutorialIndex == 0)
+          this.$store.commit("Market/IncreaseTutorialDialog");
       }
     });
+  },
+  setup() {
+    let NextTutorial = ref(false);
+    let WindowObject = window;
+    let lottieAnimation;
+
     return {
       NextTutorial,
       lottieAnimation,
@@ -200,7 +185,7 @@ export default {
       }
     },
     fuzzyavailable: function () {
-      this.$store.commit("setFozzyFram", this.fuzzyavailable);
+      this.$store.commit("Market/setFozzyFram", this.fuzzyavailable);
     },
 
     // moving: {
@@ -237,7 +222,7 @@ export default {
   },
   computed: {
     tutorialIndex() {
-      return this.$store.state.tutorialIndex;
+      return this.$store.state.Market.tutorialIndex;
     },
     lottiePath() {
       return `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
@@ -249,7 +234,7 @@ export default {
       );
     },
     marketPersonDisplay() {
-      return this.$store.state.marketDisplay[0]["id"];
+      return this.$store.state.Market.marketDisplay[0]["id"];
     },
     fishmongerPhoto() {
       return this.fishMonger_image_path.fishMonger;
@@ -266,12 +251,14 @@ export default {
   },
   methods: {
     lottieShowEnableFunc(passIn) {
-      if (passIn == this.lottie_counter && this.lottieShowEnable == true) return true;
+      if (passIn == this.lottie_counter && this.lottieShowEnable == true)
+        return true;
       else return false;
     },
     A_kon_chatbox_handle(passInStr) {
       this.navigate_dialog_content_index++;
-      if (this.navigate_dialog_content_index == 10) this.$router.push("/Swordfish");
+      if (this.navigate_dialog_content_index == 10)
+        this.$router.push("/Swordfish");
 
       console.log(this.navigate_dialog_content_index);
       if (this.A_kon_dialogContent[this.navigate_dialog_content_index] == "") {
@@ -285,7 +272,7 @@ export default {
         this.navigate_dialog_content_show_availbale = false;
         this.changeLottie();
         if (this.lottie_counter == 3) {
-          store.commit("IncreaseTutorialDialog");
+          this.$store.commit("Market/IncreaseTutorialDialog");
         }
       } else {
         this.navigate_dialog_content_show_availbale = true;
@@ -433,7 +420,7 @@ export default {
       position: relative;
       border-radius: 20px;
       margin-left: 60%;
-      top:10px;
+      top: 10px;
       width: 40%;
       @media screen and (min-width: 1024px) {
         margin-left: 38%;

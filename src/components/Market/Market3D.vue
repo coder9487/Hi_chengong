@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import * as THREE from "three/build/three.module.js";
+import * as THREE from "three";
 import { Sea } from "../../Library/Sea";
 import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     tutorialIndex() {
-      return this.$store.state.tutorialIndex;
+      return this.$store.state.Market.tutorialIndex;
     },
   },
   methods: {
@@ -281,14 +281,14 @@ export default {
           });
           break;
         case "fishmonger":
-          this.$store.commit("marketChangeState", {
+          this.$store.commit("Market/marketChangeState", {
             id: this.VuexDataPool.id,
             display: this.VuexDataPool.display,
           });
           this.VuexDataPool = { id: "", display: "" };
           break;
         case "sheet":
-          this.$store.commit("IncreaseTutorialDialog");
+          this.$store.commit("Market/IncreaseTutorialDialog");
           break;
       }
       this.dbClickEvent.eventName = "";
@@ -535,8 +535,8 @@ export default {
               w: -0.6611946735430532,
               onComplete: () => {
                 this.PlayerState = 3;
-                if (this.$store.state.tutorialIndex == 4)
-                  this.$store.commit("IncreaseTutorialDialog");
+                if (this.$store.state.Market.tutorialIndex == 4)
+                  this.$store.commit("Market/IncreaseTutorialDialog");
               },
             });
 
@@ -627,8 +627,8 @@ export default {
           this.akonArrowList[0].object.visible = false;
           let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
           yellow_arrow.visible = false;
-          if (this.$store.state.tutorialIndex == 1)
-            this.$store.commit("IncreaseTutorialDialog");
+          if (this.$store.state.Market.tutorialIndex == 1)
+            this.$store.commit("Market/IncreaseTutorialDialog");
           break;
         case 2:
           this.akonList[0].FilpOption(1);

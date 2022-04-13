@@ -12,6 +12,7 @@ import { sceneSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import gsap from "gsap";
+import {ref} from "vue"
 export default {
   name: "Pisirian3D",
   setup() {
@@ -31,7 +32,7 @@ export default {
   onBeforeUnmount() {},
   data() {
     return {
-      UpdateTime: 0.01,
+      UpdateTime: ref(0.01),
       PostProcessingEnable: true,
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
@@ -41,8 +42,17 @@ export default {
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
-  watch: {},
-  computed: {},
+  watch: {
+    GameEnable: function () {
+      console.log("GameEnable ", this.GameEnable);
+
+    },
+  },
+  computed: {
+    GameEnable() {
+      return this.$store.state.Swordfish.gameEnable;
+    },
+  },
   methods: {
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 3246875).toFixed(2));
@@ -213,7 +223,7 @@ export default {
       this.lowersea.mesh.position.y = -10;
     },
     createSurface() {
-      const geometry = new THREE.PlaneGeometry(2000, 2000, 500, 500);
+      const geometry = new THREE.PlaneGeometry(8000, 8000, 500, 500);
       const material = new THREE.MeshBasicMaterial({
         color: 0x00066e,
         side: THREE.DoubleSide,
@@ -299,8 +309,7 @@ export default {
           let swordfishPos = new THREE.Vector3();
           this.swordfishbody.getWorldPosition(swordfishPos);
           if (swordfishPos.distanceTo(spearWorldPos) < 2) {
-            alert("hit")
-            this.$store.commit("swordfishShootTimes");
+            this.$store.commit("Swordfish/ShootSwordfish");
             for (let i = 0; i <= 2; i++)
               this.mixer.clipAction(this.swordfish.animations[i]).reset();
             this.spear_direct_vector.times = 101;
