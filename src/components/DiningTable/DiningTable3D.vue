@@ -26,8 +26,11 @@ export default {
     this.Init_Three();
     this.AddEnentListener();
     this.Animation_Three();
-    console.log("%cBlue! %cGreen", "color: blue; font-size:15px;", "color: green; font-size:12px;");
-
+    console.log(
+      "%c住手!  %c不要給我亂開這個",
+      "color: red; font-size:120px;",
+      "color: green; font-size:30px;"
+    );
   },
   onBeforeUnmount() {},
   data() {
@@ -45,8 +48,8 @@ export default {
   computed: {},
   methods: {
     loading_callbacks(val) {
-      console.log("Pass into callbacks ", (val.loaded / 105909244).toFixed(2));
-      this.$emit("loadingProgress", (val.loaded / 105909244).toFixed(2));
+      console.log("Pass into callbacks ", (val.loaded / 90009244).toFixed(2));
+      this.$emit("loadingProgress", (val.loaded / 90009244).toFixed(2));
     },
     AddEnentListener() {
       this.Window = window;
@@ -77,9 +80,9 @@ export default {
         0.1,
         400
       );
-      this.camera.position.set(-48.36, 1.2, -0.3);
+      this.camera.position.set(-48.36, 1.5, 0.2);
 
-      this.camera.lookAt(-48.36, 1.1, -0.16);
+      this.camera.lookAt(-48.36, 1.4, 0);
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
 
       /**
@@ -154,8 +157,11 @@ export default {
       this.scene.add(this.tableModel);
       // this.setupAinmation();
       this.initRaycaster();
+      this.initAnimation();
       this.controls.colliders = this.tableModel;
       this.LoadMarketFinish = true;
+
+      console.log(this.tableModel);
     },
     createSea() {
       let seaVertices = 100;
@@ -169,6 +175,23 @@ export default {
       // this.sea.mesh.castShadow = true;
       // this.sea.mesh.receiveShadow = true;
     },
+    initAnimation() {
+      let objectNameList = [
+        "hai_di_ca",
+        "sashimi",
+        "mahi_fish",
+        "miso_soup",
+        "orange",
+        "wan_que",
+      ];
+      this.animationObjectList = new Array();
+      objectNameList.forEach((elem) => {
+        this.animationObjectList.push(
+          this.tableModel.getObjectByName("" + elem)
+        );
+      });
+      console.log("animationObjectList list ", this.animationObjectList);
+    },
     initRaycaster() {
       let objectNameList = [
         "hai_di_ca",
@@ -177,16 +200,23 @@ export default {
         "miso_soup",
         "orange",
         "wan_que",
-        // "a_kon_normal",
-        // "a_kon_hover",
+        "table",
       ];
       this.raycasterObjectList = new Array();
       objectNameList.forEach((elem) => {
-        this.raycasterObjectList.push(this.tableModel.getObjectByName(elem));
+        this.raycasterObjectList.push(
+          this.tableModel.getObjectByName("box_" + elem)
+        );
       });
-      console.log("Raycaster list ",this.raycasterObjectList)
+
+      console.log("Raycaster list ", this.raycasterObjectList);
     },
-    updateAnimation() {},
+    updateAnimation() {
+      if (this.RotationObjerct != null)
+        if (this.RotationObjerct != "box_table") {
+          this.RotationObjerct.rotation.y += 0.005;
+        }
+    },
     onPointerMove(event) {
       if (this.LoadMarketFinish != true) return;
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -197,10 +227,22 @@ export default {
       const intersects = this.raycaster.intersectObjects(
         this.raycasterObjectList
       );
+      if (intersects.length > 0) {
 
-      for (let i = 0; i < intersects.length; i++) {
-        console.log(intersects);
+        // this.RotationObjerct = intersects[0].object;
+        if (intersects[0].object.name != "box_table") {
+          const found = this.animationObjectList.find(
+            (element) => "box_" + element.name == intersects[0].object.name
+          );
+           this.RotationObjerct = found
+        }
+
+        // console.log(found);
       }
+      else{
+        this.RotationObjerct = null
+      }
+      // console.log(" this.RotationObjerct", this.RotationObjerct)
     },
     onWindowResize() {
       this.camera.aspect = window.innerWidth / window.innerHeight;

@@ -156,7 +156,7 @@ export default {
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market3.json",
+        "../models/market2-1.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
@@ -172,6 +172,7 @@ export default {
       this.setupAinmation();
       this.controls.colliders = this.marketModel;
       this.LoadMarketFinish = true;
+      console.log(this.marketModel)
     },
 
     createSea() {

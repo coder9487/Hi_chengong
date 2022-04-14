@@ -51,10 +51,28 @@ const Swordfish = {
   }
 };
 
+
+const DiningTable = {
+  namespaced:true,
+  state: () => ({
+
+
+  }),
+  mutations: {
+
+  },
+  actions: {},
+  getters:{
+
+
+  }
+};
+
 export default createStore({
   modules: {
     Market: Market,
-    Swordfish:Swordfish
+    Swordfish:Swordfish,
+    DiningTable:DiningTable
   },
 });
 

@@ -100,13 +100,9 @@ export default {
       debug: false,
     };
   },
-  compute: {
-
-  },
+  compute: {},
   mounted() {},
   watch: {
-
-
     dialogContent_Index: function () {
       if (this.dialogContent_Index == 4) {
         this.changeLottie("swordfish_tutorial");

@@ -12,7 +12,7 @@
     >
   </div>
   <video id="startUpVedio" @ended="videoFinish" @dblclick="videoDblcilck">
-    <source src="../video/open.mp4" type="video/mp4" />
+    <source src="../../public/startupVideo.mp4" type="video/mp4" />
   </video>
   <div></div>
 </template>
@@ -34,6 +34,7 @@ export default defineComponent({
   methods: {
     videoFinish() {
       this.clickEnable = true;
+      this.$router.push('Market')
     },
     videoDblcilck()
     {
