@@ -74,6 +74,7 @@ export default {
         // precision: "lowp",
         powerPreference: "low-power",
       });
+      this.renderer.sortObjects = false;
 
       this.camera = new THREE.PerspectiveCamera(
         90,
@@ -221,6 +222,8 @@ export default {
       this.lowersea.mesh.name = "LowSea";
       this.scene.add(this.lowersea.mesh);
       this.lowersea.mesh.position.y = -10;
+
+      this.sea.renderOrder = 1000;
     },
     createSurface() {
       const geometry = new THREE.PlaneGeometry(8000, 8000, 500, 500);

@@ -48,14 +48,14 @@ export default {
   computed: {},
   methods: {
     loading_callbacks(val) {
-      console.log("Pass into callbacks ", (val.loaded / 90009244).toFixed(2));
+      // console.log("Pass into callbacks ", (val.loaded / 90009244).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 90009244).toFixed(2));
     },
     AddEnentListener() {
       this.Window = window;
       this.Window.addEventListener("mousemove", this.onPointerMove);
       this.Window.addEventListener("resize", this.onWindowResize);
-      this.Window.addEventListener("dblclick", this.onDblclick);
+      this.Window.addEventListener("click", this.onClick);
       // this.Window.addEventListener("mousemove", this.onMouseMove);
     },
     Init_Three() {
@@ -90,7 +90,7 @@ export default {
        */
       switch (this.controllerMode) {
         case "0":
-          console.log(this.Document);
+          // console.log(this.Document);
           this.controls = new FirstPersonCameraControl(
             this.camera,
             this.Document.body
@@ -208,13 +208,16 @@ export default {
           this.tableModel.getObjectByName("box_" + elem)
         );
       });
+              this.raycasterObjectList.push(
+          this.tableModel.getObjectByName("a_kon_normal")
+        );
 
       console.log("Raycaster list ", this.raycasterObjectList);
     },
     updateAnimation() {
-      if (this.RotationObjerct != null)
-        if (this.RotationObjerct != "box_table") {
-          this.RotationObjerct.rotation.y += 0.005;
+      if (this.RotationObject != null)
+        if (this.RotationObject != "box_table") {
+          this.RotationObject.rotation.y += 0.005;
         }
     },
     onPointerMove(event) {
@@ -228,26 +231,31 @@ export default {
         this.raycasterObjectList
       );
       if (intersects.length > 0) {
-
-        // this.RotationObjerct = intersects[0].object;
+        // this.RotationObject = intersects[0].object;
         if (intersects[0].object.name != "box_table") {
           const found = this.animationObjectList.find(
             (element) => "box_" + element.name == intersects[0].object.name
           );
-           this.RotationObjerct = found
+          this.RotationObject = found;
         }
 
         // console.log(found);
+      } else {
+        this.RotationObject = null;
       }
-      else{
-        this.RotationObjerct = null
-      }
-      // console.log(" this.RotationObjerct", this.RotationObjerct)
+      // console.log(" this.RotationObject", this.RotationObject)
     },
     onWindowResize() {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
+    },
+    onClick() {
+      let touchObj = this.RotationObject.name;
+      if (touchObj != undefined) {
+        this.$store.commit("DiningTable/SelectDish", touchObj);
+        console.log("Result", this.$store.state.DiningTable.dish);
+      }
     },
   },
 };

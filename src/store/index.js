@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import state from "./module-example/state";
 
 const Market = {
   namespaced: true,
@@ -55,15 +56,28 @@ const Swordfish = {
 const DiningTable = {
   namespaced:true,
   state: () => ({
+    dish:'',
+    lightboxEnable:false
 
 
   }),
   mutations: {
+    SelectDish(state,dish){
+      state.dish = dish
+    },
+    TogglelightboxEnable(){
+      state.lightboxEnable = ! state.lightboxEnable
+    },
+    resetDish(state)
+    {
+      state.dish = ""
+    }
 
   },
   actions: {},
   getters:{
 
+    getDish: state => state.dish,
 
   }
 };
