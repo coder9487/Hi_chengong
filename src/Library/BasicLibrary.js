@@ -41,14 +41,14 @@ export class GlobalScene {
   }
   AddLight() {
     let LightArray = new Array();
-    // LightArray.push(new THREE.AmbientLight(0xffffff,4));
+     LightArray.push(new THREE.AmbientLight(0xffffff,3));
 
-    LightArray.push(new THREE.HemisphereLight(0x00aeff, 0x080820, 3.1));
-    LightArray.push(new THREE.RectAreaLight(0xff6969, 4.1, 100, 100));
+    // LightArray.push(new THREE.HemisphereLight(0x00aeff, 0x080820, 3.1));
+    // LightArray.push(new THREE.RectAreaLight(0xff6969, 4.1, 100, 100));
 
-    LightArray[1].position.set(0, 50, 0);
+    // LightArray[1].position.set(0, 50, 0);
 
-    LightArray[1].lookAt(LightArray[1].position.x, 0, LightArray[1].position.z);
+    // LightArray[1].lookAt(LightArray[1].position.x, 0, LightArray[1].position.z);
 
     // LightArray.push(new THREE.PointLight(0x060075, 4.1, 100));
     // LightArray[2].position.set(0, 30, 0);

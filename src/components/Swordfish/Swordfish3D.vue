@@ -12,7 +12,7 @@ import { sceneSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import gsap from "gsap";
-import {ref} from "vue"
+import { ref } from "vue";
 export default {
   name: "Pisirian3D",
   setup() {
@@ -32,12 +32,12 @@ export default {
   onBeforeUnmount() {},
   data() {
     return {
-      UpdateTime: ref(0.01),
+      UpdateTime: ref(0.005),
       PostProcessingEnable: true,
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
       dbClickEvent: { eventName: "", eventObject: {} },
-      controllerMode: "2",
+      controllerMode: "0",
       PlayerState: 0,
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
@@ -45,7 +45,6 @@ export default {
   watch: {
     GameEnable: function () {
       console.log("GameEnable ", this.GameEnable);
-
     },
   },
   computed: {
@@ -54,6 +53,7 @@ export default {
     },
   },
   methods: {
+
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 3246875).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 3246875).toFixed(2));
@@ -71,7 +71,7 @@ export default {
         canvas,
         antialias: true,
         alpha: true,
-        // precision: "lowp",
+        precision: "lowp",
         powerPreference: "low-power",
       });
       this.renderer.sortObjects = false;
@@ -133,11 +133,13 @@ export default {
 
       this.createSea();
       this.loadTable();
+      // this.createSurface()
 
       // this.pin = this.createPointer();w
     },
     Animation_Three() {
-      // this.controls.update();
+      if(this.controllerMode <= "1")
+      this.controls.update();
       this.sea.moveWaves();
       this.lowersea.moveWaves();
       this.composer.render();
@@ -154,11 +156,31 @@ export default {
     },
 
     async loadTable() {
+      let GLTF_LOADER = 1;
+
       console.clear();
-      const loader = new GLTFLoader().setPath("models/");
-      this.swordfish = await loader.loadAsync("swordfish_old.gltf", (xhr) => {
-        this.loading_callbacks(xhr);
-      });
+      if (GLTF_LOADER) {
+        const loader = new GLTFLoader().setPath("models/");
+        this.swordfish = await loader.loadAsync("swordfish_old.gltf", (xhr) => {
+          this.loading_callbacks(xhr);
+        });
+      } else {
+        this.swordfish = new Object();
+        const loader = new THREE.ObjectLoader();
+        this.swordfish.scene = await loader.loadAsync(
+          "../models/swordfish_old.json",
+          (xhr) => {
+            this.loading_callbacks(xhr);
+          }
+        );
+        // this.swordfish.animations = this.swordfish.scene.animations;
+      }
+
+      console.log("this.swordfish.scene", this.swordfish.scene);
+      if (!GLTF_LOADER) {
+        // this.swordfish.animations = this.swordfish.scene.children[4].animations;
+        console.log("Animation:", this.swordfish.animations);
+      }
       let model = this.swordfish.scene;
       this.scene.add(this.swordfish.scene);
       this.swordfish.scene.traverse(function (object) {
@@ -176,7 +198,7 @@ export default {
       this.swordfishbody = model.getObjectByName("sailfish_Armature");
       this.boat = model.getObjectByName("boat");
 
-      this.swordfishbody.position.y = 0;
+      this.swordfishbody.position.y = 5;
       this.spear = model.getObjectByName("spear");
       console.log("Monger skeleton system ", this.mongerSkeleton);
       console.log("Scene ", this.scene.children[2]);
@@ -187,8 +209,11 @@ export default {
       console.log(this.scene);
 
       this.mixer = new THREE.AnimationMixer(model);
-      for (let i = 0; i <= 2; i++)
-        this.mixer.clipAction(this.swordfish.animations[i]).play();
+      for (let i = 0; i <= 2; i++) {
+        if (!GLTF_LOADER)
+          this.mixer.clipAction(this.swordfish.scene.animations[i]).play();
+        else this.mixer.clipAction(this.swordfish.animations[i]).play();
+      }
 
       sceneSetting(this.swordfish.scene);
 
@@ -210,30 +235,32 @@ export default {
     },
     createSea() {
       let seaVertices = 100;
-      let seaAmp = 1;
-      this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.7, 0, 0);
+      let seaAmp = 1.2;
+      this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.9, 0, 0);
       this.sea.init();
       this.sea.mesh.name = "Sea";
       this.scene.add(this.sea.mesh);
-      this.sea.mesh.position.y = 0;
+      this.sea.mesh.position.y = -5;
 
-      this.lowersea = new Sea(seaAmp, seaVertices, seaVertices, 0.7, 0, 0);
+      this.lowersea = new Sea(seaAmp, seaVertices, seaVertices, 0.9, 0, 0);
       this.lowersea.init();
       this.lowersea.mesh.name = "LowSea";
       this.scene.add(this.lowersea.mesh);
       this.lowersea.mesh.position.y = -10;
-
-      this.sea.renderOrder = 1000;
     },
     createSurface() {
       const geometry = new THREE.PlaneGeometry(8000, 8000, 500, 500);
-      const material = new THREE.MeshBasicMaterial({
+      const material = new THREE.MeshStandardMaterial({
         color: 0x00066e,
         side: THREE.DoubleSide,
+        opacity:0.5,
+      //         depthWrite: false,
+      // depthTest: false,
+        transparent: true,
       });
       geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
       const plane = new THREE.Mesh(geometry, material);
-      plane.position.y = -20;
+      plane.position.y = -2;
       this.scene.add(plane);
     },
     onMouseMove(event) {
@@ -263,9 +290,9 @@ export default {
       }
     },
     onDblclick() {
-      console.log("arrowHelper ", this.arrowHelper);
+      // console.log("arrowHelper ", this.arrowHelper);
       if (this.castToSea) {
-        console.log("Spera eular ", this.spear.rotation);
+        // console.log("Spera eular ", this.spear.rotation);
         this.spear_direct_vector.vector = new THREE.Vector3();
 
         this.spear_direct_vector.vector = this.spear.getWorldDirection(
@@ -311,8 +338,10 @@ export default {
           this.spearAim.getWorldPosition(spearWorldPos);
           let swordfishPos = new THREE.Vector3();
           this.swordfishbody.getWorldPosition(swordfishPos);
-          if (swordfishPos.distanceTo(spearWorldPos) < 2) {
+          if (swordfishPos.distanceTo(spearWorldPos) < 5) {
+
             this.$store.commit("Swordfish/ShootSwordfish");
+            console.log("this.$store.state.Swordfish.swordfish",this.$store.state.Swordfish.swordfish)
             for (let i = 0; i <= 2; i++)
               this.mixer.clipAction(this.swordfish.animations[i]).reset();
             this.spear_direct_vector.times = 101;
@@ -337,6 +366,7 @@ export default {
       this.mixer.update(this.UpdateTime);
 
       this.sea.mesh.position.x += 0.1;
+      this.lowersea.mesh.position.x += 0.1;
       this.mongerSkeleton.position.y = this.boat.position.y =
         Math.sin(Date.now() / 500) * 0.05;
       this.boat.position.y += 0.22;

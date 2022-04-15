@@ -10,6 +10,15 @@ import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { marketSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import gsap from "gsap";
+import {
+  PasserBy,
+  FishMonger,
+  AnimateObject,
+  HoverCharacter,
+  Akon,
+} from "../../Library/AnimationLibrary";
 
 export default {
   name: "Pisirian3D",
@@ -30,17 +39,22 @@ export default {
   onBeforeUnmount() {},
   data() {
     return {
+      DO_ONCE_DONE: false,
       PostProcessingEnable: true,
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
       dbClickEvent: { eventName: "", eventObject: {} },
       controllerMode: "0",
-      PlayerState: 0,
+      togglePasserby: 0,
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
-  watch: {},
-  computed: {},
+  watch: { detectSowrdfish: function () {} },
+  computed: {
+    detectSowrdfish() {
+      return this.$store.state.Pisirian.toggledPasserby;
+    },
+  },
   methods: {
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 65211482).toFixed(2));
@@ -66,7 +80,7 @@ export default {
         50,
         window.innerWidth / window.innerHeight,
         0.1,
-        400
+        800
       );
       this.camera.position.set(48.69, 30, -0.3);
 
@@ -109,13 +123,15 @@ export default {
           "images/sky_neg_z.jpg",
           "images/sky_pos_z.jpg",
         ]);
+      this.scene.background.mapping = THREE.CubeRefractionMapping;
+      this.scene.background.minFilter = THREE.LinearFilter;
 
       // load a resource
+      this.pin = this.createPointer();
+      this.createSea();
       this.loadTable();
 
-      this.createSea();
-
-      // this.pin = this.createPointer();w
+      console.log(this.scene);
     },
     Animation_Three() {
       this.controls.update();
@@ -129,19 +145,19 @@ export default {
       this.Window = window;
       this.Window.addEventListener("pointermove", this.onPointerMove);
       this.Window.addEventListener("resize", this.onWindowResize);
-      this.Window.addEventListener("dblclick", this.onDblclick);
+      this.Window.addEventListener("dblclick", this.onClick);
       this.Window.addEventListener("mousemove", this.onMouseMove);
     },
 
     async loadTable() {
       console.clear();
-      const loader = new THREE.ObjectLoader();
-      this.islandModel = await loader.loadAsync(
-        "../models/pisirian.json",
-        (xhr) => {
-          this.loading_callbacks(xhr);
-        }
-      );
+      const loader = new GLTFLoader().setPath("models/");
+      this.islandModel = new Object();
+      this.gltf_islandModel = await loader.loadAsync("pisirian.gltf", (xhr) => {
+        this.loading_callbacks(xhr);
+      });
+
+      this.islandModel = this.gltf_islandModel.scene;
 
       this.islandModel.scale.set(10, 10, 10);
       this.islandModel.position.set(0, 0, 0);
@@ -152,6 +168,47 @@ export default {
       this.scene.add(this.islandModel);
       // this.setupAinmation();
       this.controls.colliders = this.islandModel;
+
+      this.passerbyList = new Array();
+      for (let i = 1; i <= 4; i++) {
+        let objTemp = this.islandModel.getObjectByName(`par_passerby0${i}`);
+        if (i == 3)
+          this.passerbyList.push(new PasserBy(this.camera, objTemp, 3));
+        else this.passerbyList.push(new PasserBy(this.camera, objTemp, 2));
+      }
+      this.AkonObject = new PasserBy(
+        this.camera,
+        this.islandModel.getObjectByName(`a_kon_body`),
+        3
+      );
+
+      this.raycasterList = new Array();
+      this.raycasterList.push(this.islandModel.getObjectByName("ground"));
+      this.raycasterList.push(this.islandModel.getObjectByName("end_wall"));
+
+      console.log("raycasterList", this.raycasterList);
+
+      this.mixer = new THREE.AnimationMixer(this.islandModel);
+      for (let i = 0; i < 2; i++) {
+        let a = this.mixer.clipAction(this.gltf_islandModel.animations[i]);
+        a.play();
+      }
+
+      this.swordfishJump = null;
+
+      this.swordfishJump = new AnimateObject(
+        this.islandModel.getObjectByName("par_passerby03"),
+        3,
+        this.camera
+      );
+      const clip = THREE.AnimationClip.findByName(
+        this.gltf_islandModel.animations,
+        "act_swordfish"
+      );
+      this.swordfishJump.AppendAnimation(this.mixer.clipAction(clip));
+
+      console.log(this.swordfishJump);
+
       this.LoadMarketFinish = true;
     },
     createSea() {
@@ -167,30 +224,134 @@ export default {
       // this.sea.mesh.receiveShadow = true;
     },
     onPointerMove(event) {
+      if (this.LoadMarketFinish != true) return;
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      // console.log(this.passerbyList);
+      this.RaycasterHandler();
     },
     onWindowResize() {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
-    updateAnimation() {},
+    updateAnimation() {
+      if (this.LoadMarketFinish != true) return;
+      this.mixer.update(0.01);
+      for (let i = 0; i < this.passerbyList.length; i++) {
+        this.passerbyList[i].Filp();
+        this.passerbyList[i].watchMe();
+      }
+    },
+    RaycasterHandler() {
+      this.raycaster.setFromCamera(this.pointer, this.camera);
+
+      const intersects = this.raycaster.intersectObjects(this.raycasterList);
+
+      if (intersects.length > 0) {
+        if (intersects[0].object.name == "ground") {
+          this.pin.position.x = intersects[0].point.x;
+          this.pin.position.z = intersects[0].point.z;
+          this.pin.position.y = intersects[0].point.y + 0.3;
+          this.pin.lookAt(this.camera.position);
+        }
+      }
+    },
+    createPointer() {
+      const texture = new THREE.TextureLoader().load("../images/pin.png");
+
+      // immediately use the texture for material creation
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+        transparent: true,
+        alphaTest: 0.1,
+      });
+      const geometry = new THREE.PlaneGeometry(0.7, 0.7);
+      const plane = new THREE.Mesh(geometry, material);
+      plane.position.y += 0.35;
+      this.scene.add(plane);
+      plane.name = "pin_pointer";
+      return plane;
+    },
+    onClick() {
+
+      gsap.to(this.camera.position, {
+        duration: 1.5,
+        repeat: 0,
+        x: this.pin.position.x,
+        z: this.pin.position.z,
+        onComplete: () => {
+          console.log(this.camera.position, this.camera.quaternion);
+
+          if (this.AkonObject.isApproach()) {
+            gsap.to(this.camera.position, {
+              duration: 0.5,
+              x: 26.960382,
+              z: -1.871433,
+              onComplete: () => {
+                gsap.to(this.camera.quaternion, {
+                  duration: 0.9,
+                  w: 0.7067715186504848,
+                  x: 0.07662949140912478,
+                  y: 0.6991818787607907,
+                  z: -0.07580660844146339,
+                                        onComplete:()=>{
+                                          this.$store.commit("Pisirian/toEnd");
+
+                      }
+                });
+              },
+            });
+
+          }
+
+          for (let i = 0; i < 4; i++)
+            if (this.passerbyList[i].isApproach()) {
+              this.$store.commit("Pisirian/setTogglePasserby", i);
+              if (this.DO_ONCE_DONE == false) {
+                gsap.to(this.camera.position, {
+                  x: 37.7748,
+                  z: -1.264,
+                  duration: 0.2,
+                  onComplete: () => {
+                    this.$store.commit("Pisirian/setTogglePasserby", 2);
+                    i = 2;
+                    gsap.to(this.camera.quaternion, {
+                      x: 0.0041123,
+                      y: 0.994159,
+                      z: 0.099748,
+                      w: -0.04098,
+                      duration: 0.8,
+
+                    });
+                  },
+                });
+                this.passerbyList[2].toggleDistance = 2;
+              }
+              if (i == 3 - 1 && this.swordfishJump.DoOnce) {
+                if (this.DO_ONCE_DONE == false) {
+                   this.DO_ONCE_DONE = true;
+                  this.timeout = setTimeout(() => {
+                    this.swordfishJump.PlayAnimation();
+
+                    clearTimeout(this.timeout);
+                  }, 1300);
+                } else {
+                  this.swordfishJump.PlayAnimation();
+                }
+
+                this.swordfishJump.DoOnce = false;
+              } else if (!this.swordfishJump.DoOnce) {
+                this.swordfishJump.DoOnce = true;
+                this.swordfishJump.ResetAnimation();
+              }
+            }
+        },
+      });
+    },
   },
 };
 </script>
+
+{x: 26.960382, y: 28.490637273707723, z: -1.871433, _gsap: GSCache}

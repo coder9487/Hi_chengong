@@ -1,12 +1,30 @@
 <template>
   <div>
     <div class="introduceBox" >
-      <img  class="introduceBox-photo" :src="imagepath" />
+      <img class="introduceBox-photo" :src="imagepath" />
       <img
         class="introduceBox-close"
         src="../../../public/images/diningtable/icon_close.png"
         @click.stop="resetShowenable"
       />
+    </div>
+    <div class="Akon" >
+      <div>
+        <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
+      </div>
+      <div class="dialogArea">
+        <img
+          class="dialogArea-photo"
+          src="../../../public/images/diningtable/pisirian.png"
+        />
+        <div class="dialogArea-dialog">
+          成功的食材「尚青」！吃飽了嗎?阿公帶你去<b>三仙台</b>走走如何?今天天氣不錯，<b>海景</b>一定很漂亮!
+        </div>
+        <div class="dialogArea-group">
+          <div @click.stop="jumpToprisirian" class="button color-orange">好啊！走吧</div>
+          <div @click.stop="setAkonState(false)" class="button color-cyan">等一下</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -19,14 +37,48 @@ export default {
     return {
       showEnable: false,
       imagepath: ref(""),
+      showAkon: false,
     };
   },
   computed: {
     getDish() {
       return this.$store.state.DiningTable.dish;
     },
+    toggleAkon() {
+      return this.$store.state.DiningTable.akonEnable;
+    },
   },
   watch: {
+    toggleAkon: function () {
+      {
+        this.showAkon = !this.showAkon;
+
+
+      if (this.showAkon == true)
+        gsap.fromTo(
+          ".Akon",
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.5,
+          }
+        );
+      else {
+        gsap.fromTo(
+          ".Akon",
+          { opacity: 1 },
+          {
+            opacity: 0,
+            duration: 0.5,
+          }
+        );
+      }
+
+
+
+
+      }
+    },
     getDish: function () {
       if (this.getDish != "") {
         this.showEnable = true;
@@ -58,10 +110,9 @@ export default {
   },
   methods: {
     getimagepath() {
-
-       let imagesUrl = (`../../images/diningtable/${this.getDish}.png`)
-       console.log("calling path ",imagesUrl)
-       return imagesUrl
+      let imagesUrl = `../../images/diningtable/${this.getDish}.png`;
+      console.log("calling path ", imagesUrl);
+      return imagesUrl;
 
       return `../../../public/images/diningtable/${this.imagepath}.png`;
     },
@@ -69,6 +120,13 @@ export default {
       this.showEnable = false;
       this.$store.commit("DiningTable/resetDish");
     },
+    setAkonState(state){
+      this.$store.commit("DiningTable/toggleAkon",state);
+    },
+    jumpToprisirian()
+    {
+      this.$router.push("Pisirian")
+    }
   },
 };
 </script>
@@ -77,7 +135,7 @@ export default {
   opacity: 0;
   &-photo {
     position: absolute;
-    z-index: 300;
+    // z-index: 300;
     top: 17vh;
     left: 13vw;
     width: 73vw;
@@ -92,6 +150,100 @@ export default {
     width: 3vw;
     &:hover {
       opacity: 0.6;
+    }
+  }
+}
+
+.Akon {
+  opacity: 0;
+  &-charactor {
+    // width: 40vw;
+    z-index: 10;
+    height: 70vh;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+  }
+}
+$content-text-size-pc: 1.5vw;
+.dialogArea {
+  // background-color: aqua;
+  position: fixed;
+  width: 60vw;
+  height: 60vh;
+  left: 15vw;
+  bottom: 20vh;
+  & *{
+     pointer-events: all;
+
+  }
+  &-photo {
+    position: relative;
+    width: 45vw;
+    left: 7.5vw;
+    top:-3%;
+  }
+  &-dialog {
+    position: relative;
+    width: 45vw;
+    height: 20vh;
+    left: 7.5vw;
+    background-color: aliceblue;
+    border-radius: 30px;
+    padding: 2vw;
+    font-size: 1.5vw;
+    color: #276A70;
+    @media screen and (min-width: 1024px) {
+      font-size: $content-text-size-pc;
+      line-height: $content-text-size-pc * 1.8;
+      letter-spacing: $content-text-size-pc * 0.2;
+    }
+
+    & > b{
+      color: #FEA30B;
+      font-weight:bolder;
+    }
+  }
+  &-group {
+    position: relative;
+    width: 45vw;
+    height: 10vh;
+    // background-color: aquamarine;
+    left: 7.5vw;
+    top: -5%;
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+.button {
+  z-index: 11;
+  width: 10vw;
+  height: 7vh;
+  // background-color: cornflowerblue;
+  border-radius: 20px;
+  padding: 2%;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+  color: white;
+  font-weight:bolder;
+}
+
+.color {
+  &-orange {
+    background-color: #fea30b;
+    &:hover {
+      background-color: #ff7a00;
+    }
+  }
+
+  &-cyan {
+    background-color: #1ab5c1;
+    &:hover {
+      background-color: #0098a4;
     }
   }
 }

@@ -51,21 +51,23 @@ export default defineComponent({
   watch: {
     lightBoxEffectMode: function () {
       switch (this.lightBoxEffectMode) {
-        case "on":
+
+        case true:
           gsap.fromTo(
             "#swordfish3D",
             { webkitFilter: "brightness(1)", filter: "brightness(1)" },
             {
-              webkitFilter: "brightness(0)",
-              filter: "brightness(0)",
+              webkitFilter: "brightness(0.5)",
+              filter: "brightness(0.5)",
               duration: 1,
             }
           );
           break;
-        case "off":
+
+        case false:
           gsap.fromTo(
             "#swordfish3D",
-            { webkitFilter: "brightness(0)", filter: "brightness(0)" },
+            { webkitFilter: "brightness(0.5)", filter: "brightness(0.5)" },
             {
               webkitFilter: "brightness(1)",
               filter: "brightness(1)",
@@ -79,7 +81,7 @@ export default defineComponent({
       // console.log("loading progress ", this.loading);
       let loadingWave = document.getElementById("loading-video");
       loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 98 * this.DEBUG) {
+      if (this.loading >= 70 * this.DEBUG) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);
@@ -87,7 +89,11 @@ export default defineComponent({
     },
     sceneObject: function () {},
   },
-  computed: {},
+  computed: {
+    lightBoxEffectMode() {
+      return this.$store.state.Fozzy3D;
+    },
+  },
   data() {
     return {
       audio: null,
@@ -99,7 +105,6 @@ export default defineComponent({
       showEnable: ref(true),
       DEBUG: 1,
       golbalEvent: { dblclick: false },
-      lightBoxEffectMode: 0,
     };
   },
   methods: {

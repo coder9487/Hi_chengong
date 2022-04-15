@@ -42,11 +42,15 @@ export  class Sea {
       opacity: this.waveOpacity,
       map: textWaves,
       side: THREE.DoubleSide,
+
+
+
+      // depthWrite:true,
     });
     this.mesh = new THREE.Mesh(geomWaves, matWaves);
 
     geomWaves.applyMatrix4(
-      new THREE.Matrix4().makeRotationX(-Math.PI / 2)
+      new THREE.Matrix4().makeRotationX(Math.PI / 2)
     );
     // // geomWaves.mergeVertices();
     let positionAttribute = this.mesh.geometry.getAttribute("position");

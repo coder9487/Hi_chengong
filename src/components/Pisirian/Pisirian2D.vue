@@ -1,280 +1,266 @@
 <template>
-  <div id="navigator_group" v-if="!debug">
-    <q-icon class="text-dark systemIcon" size="sm" @click="BackComicBook">
-      <img src="icons/meum_icon.png" />
-    </q-icon>
-    <img src="images/npc.png" class="navigator_image" alt="" v-if="ShowNPC()" />
-
-    <div class="navigator_chatbox">
-      <q-card id="chat_card_2" class="chat_card" v-if="this.textIndex == 0">
-        <q-card-section>
-          <img src="/images/UI/text_6_icon.png" class="text_size chat_icon" />
-          <img src="/images/UI/text_6.svg" class="text_size" id="chat_text_2" />
-          <q-btn
-            class="chatContentButton"
-            flat
-            round
-            size="lg"
-            icon="clear"
-            @click="changeText()"
-          />
-        </q-card-section>
-      </q-card>
+  <div class="Akon">
+    <div>
+      <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
+    </div>
+    <div class="dialogArea">
+      <img
+        class="dialogArea-photo"
+        src="../../../public/images/pisirian/pastcard.png"
+      />
+      <div class="dialogArea-dialog">
+        恭喜你離成功更近一步，記錄你的<b>成功之旅</b>或對自己的<b>成功期許</b>，讓阿公幫你<b>成功寄出</b>吧！一定很漂亮!
+      </div>
+      <div class="dialogArea-group">
+        <div @click.stop="" class="button color-orange">下次成功見!</div>
+      </div>
     </div>
   </div>
-  <div v-if="$q.platform.is.mobilexl">
+  <div class="PasserbydialogArea" v-if="umount">
     <div
-      class="control_pannle"
-      v-if="this.textIndex > 1"
-      v-touch-pan.prevent.mouse="handlePan"
+      class="PasserbydialogArea-dialog"
+      v-html="contentList.content[contentListIndex]"
     ></div>
-  </div>
-  <div class="introduceTextBox">
-    <img
-      class="introduceText"
-      :src="dishImagePath(showControl.displayIndex)"
-      v-if="showControl.isDisplay"
-    />
-    <img
-      class="icon"
-      src="images/diningtable/icon_close.png"
-      v-if="showControl.isDisplay"
-      @click="showControl.isDisplay = false"
-    />
+    <div class="PasserbydialogArea-group">
+      <div @click.stop="dialogHandler(false)" class="button color-cyan">
+        {{ contentList.button[contentListIndex] }}
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { ref, reactive } from "vue";
-import { store } from "../../store";
-
+import gsap from "gsap";
+import {ref} from "vue";
 export default {
-  setup() {
-    const info = ref(null);
-    const panning = ref(false);
-    let showControl = reactive({ isDisplay: false, displayIndex: 0 });
-    return {
-      debug: 0,
-      showControl,
-      info,
-      panning,
-      handlePan({ evt, ...newInfo }) {
-        info.value = newInfo;
-
-        // native Javascript event
-        // console.log("newInfo.offset.y:",newInfo.offset.y);
-        if (panning.value) {
-          if (newInfo.offset.x > 0) {
-            //go right
-            console.log(this.$ref.nav.go_forward());
-            //this.right_rotate();
-          } else if (newInfo.offset.x < 10) {
-            //go left
-            //this.left_rotate();
-          }
-          if (newInfo.offset.y < -10) {
-            //go forward
-            //this.go_forward();
-          }
-        }
-        if (newInfo.isFinal) {
-          //this.clearAll();
-          console.log("STOP");
-        }
-
-        if (newInfo.isFirst) {
-          console.log("Start");
-          panning.value = true;
-        } else if (newInfo.isFinal) {
-          panning.value = false;
-        }
-      },
-    };
-  },
+  setup() {},
   computed: {
-    // fishman(){
-    //   return store.state.display1
-    // },
-    // grandpa(){
-    //   return store.state.display2
-    // }
-    DishToDisPlay() {
-      return this.$store.state.FoodDisplay[0];
+    toggleDialog() {
+      return this.$store.state.Pisirian.toggledPasserby;
+    },
+    endDialog() {
+      return this.$store.state.Pisirian.end;
     },
   },
   watch: {
-    DishToDisPlay: function () {
-      let obj = this.DishToDisPlay;
-      this.showControl.isDisplay = 1;
-      this.showControl.displayIndex=obj.id;
-      //console.log(obj.id);
+    toggleDialog: function () {
+      this.contentListIndex = this.toggleDialog;
+      this.dialogHandler(true);
+      console.log(this.contentListIndex);
+    },
+    endDialog: function () {
+      if (this.endDialog == true) {
+        this.$store.commit("setFozzyFram",true)
+        gsap.fromTo(
+          ".Akon",
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.5,
+          }
+        );
+      }
     },
   },
   data() {
     return {
-      dishImageUrl: [
-        "hai_di_ca",
-        "orange",
-        "sashimi",
-        "miso_soup",
-        "mahi_fish",
-        "wan_que",
-      ], //
-
-      talkContent: [
-        "./images/UI/text_1.svg",
-        "./images/UI/text_2.svg",
-        "",
-        "/images/UI/text_2.svg",
-      ],
-      textIndex: 0,
-      direction: {
-        forward: false,
-        backword: false,
-        right: false,
-        left: false,
+      showDialog: false,
+      umount:ref(false),
+      contentListIndex: 0,
+      contentList: {
+        content: [
+          "有些漁法容易<b>誤捕</b>導致破壞生態，保存成功的<b>鏢旗魚</b>技法是很重要的，哇!你看，有旗魚！",
+          "三仙台的<b>由來</b>是因為有呂洞賓、李鐵拐、何仙姑在此休息，島上有一個<b>許願郵筒</b>很有名喔!",
+          "你聽，<b>海的聲音</b>好紓壓，我可以靜靜地聽一整天，每次有煩惱的時候我都會來~",
+          "大家要做好保育工作，把成功獨特的<b>鏢旗魚</b>文化傳承下去，一起守護<b>成功的海</b>！",
+        ],
+        button: ["運氣真好", "好酷！", "好療癒~", "沒錯！"],
       },
     };
   },
   methods: {
-    dishImagePath(index) {
-      let returnStr = `images/diningtable/${this.dishImageUrl[index-1]}.png`;
-      console.log(returnStr);
-      return returnStr;
-    },
+    dialogHandler(state) {
+      if (state == true)
+      {
+        this.showDialog = true
+        gsap.fromTo(
+          ".PasserbydialogArea",
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.5,
+          }
+        );
+      }
 
-    BackComicBook() {
-      this.$router.push("/ComicBook");
-    },
-    changeText() {
-      this.textIndex++;
-      //if (this.textIndex + 1 > this.talkContent.length) this.textIndex = 0;
-      console.log("return " + this.talkContent[this.textIndex]);
-
-      // return talkContent[textIndex]
-    },
-    textContentAccess(index) {
-      return this.talkContent[index];
-    },
-    ShowNPC() {
-      if (this.textIndex == 0) return true;
-    },
-
-    // right_rotate() {
-    //   this.$store.commit("setRotationRightTrue");
-    //   this.$store.commit("setRotationLeftFalse");
-    // },
-    // left_rotate() {
-    //   this.$store.commit("setRotationLeftTrue");
-    //   this.$store.commit("setRotationRightFalse");
-    // },
-    // go_forward() {
-    //   this.$store.commit("setForwardTrue");
-    // },
-    // go_stop() {
-    //   this.$store.commit("setForwardFalse");
-    // },
-    // clearAll() {
-    //   this.$store.commit("setRotationRightFalse");
-    //   this.$store.commit("setRotationLeftFalse");
-    //   this.$store.commit("setForwardFalse");
-    // },
-
-    debug_message(msg) {
-      console.log("message:", msg);
+      else {
+        this.showDialog = false
+        gsap.fromTo(
+          ".PasserbydialogArea",
+          { opacity: 1 },
+          {
+            opacity: 0,
+            duration: 0.5,
+          }
+        );
+      }
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-@media screen and (max-device-width: 768px) {
-  .view {
-    width: 400px;
+$content-text-size-pc: 1.4vw;
+
+.Akon {
+
+  opacity: 0;
+  &-charactor {
+    // width: 40vw;
+    z-index: 10;
+    height: 70vh;
+    position: fixed;
+    right: 0;
+    bottom: 0;
   }
 }
-.introduceTextBox {
-  z-index: 50;
+
+.dialogArea {
+  // background-color: aqua;
   position: fixed;
-  bottom: 15%;
-  left: 10%;
-}
-.introduceTextBox * {
-  width: 80%;
+  width: 60vw;
+  height: 60vh;
+  left: 15vw;
+  bottom: 20vh;
+  & * {
+    pointer-events: all;
+  }
+  &-photo {
+    position: relative;
+    width: 45vw;
+    left: 7.5vw;
+    top: -3%;
+  }
+  &-dialog {
+    position: relative;
+    width: 45vw;
+    height: 20vh;
+    left: 7.5vw;
+    background-color: aliceblue;
+    border-radius: 30px;
+    padding: 2.2vw;
+    font-size: 1.5vw;
+    color: #276a70;
+    @media screen and (min-width: 1024px) {
+      font-size: $content-text-size-pc;
+      line-height: $content-text-size-pc * 1.8;
+      letter-spacing: $content-text-size-pc * 0.2;
+    }
+
+    & > b {
+      color: #fea30b;
+      font-weight: bolder;
+    }
+  }
+  &-group {
+    position: relative;
+    width: 45vw;
+    height: 10vh;
+    // background-color: aquamarine;
+    left: 7.5vw;
+    top: -5%;
+    display: flex;
+    justify-content: space-around;
+  }
 }
 
-.icon {
-  width: 40px;
-  margin-left: -7%;
-  margin-bottom: 35%;
-}
+.PasserbydialogArea {
+  opacity: 0;
+  position: absolute;
+  width: 60vw;
+  height: 20vh;
+  left: 15vw;
+  bottom: 10vh;
+  & * {
+    pointer-events: all;
+  }
+  &-photo {
+    position: relative;
+    width: 45vw;
+    left: 7.5vw;
+    top: -3%;
+  }
+  &-dialog {
+    position: relative;
+    width: 45vw;
+    height: 20vh;
+    left: 7.5vw;
+    background-color: aliceblue;
 
-.navigator_image {
-  width: auto;
-  height: 38%;
-  z-index: 50;
-  right: 6%;
-  bottom: 0;
-  position: fixed;
+    border-radius: 30px;
+    padding: 2.5vw;
+    font-size: 1.5vw;
+    color: #276a70;
+    @media screen and (min-width: 1024px) {
+      font-size: $content-text-size-pc;
+      line-height: $content-text-size-pc * 1.8;
+      letter-spacing: $content-text-size-pc * 0.2;
+    }
+    ::v-deep b {
+      color: #fea30b;
+      font-weight: bolder;
+    }
+  }
+  &-group {
+    position: relative;
+    width: 45vw;
+    height: 10vh;
+    // background-color: aquamarine;
+    left: 7.5vw;
+    top: -10%;
+    display: flex;
+    justify-content: space-around;
+  }
 }
-.navigator_chatbox {
-  z-index: 49;
-  right: 20%;
-  bottom: 0%;
-  width: 26%;
-  height: 40%;
-  size: 15px;
-  position: fixed;
+b {
+  color: #fea30b;
+  font-weight: bolder;
 }
-.chat_card {
+.button {
+  z-index: 11;
+  width: 10vw;
+  height: 7vh;
+  // background-color: cornflowerblue;
   border-radius: 20px;
-  display: inline-block;
-}
-.chatContentButton {
-  margin-top: -50px;
-  margin-left: 80%;
-}
-
-#chat_card_2 {
-  float: left;
-  margin-left: 20px;
-  margin-top: 10%;
-}
-
-#chat_text_2 {
-  width: 65%;
-  height: auto;
-}
-.text_size {
-  width: 80%;
-  margin-top: 5%;
-}
-.chat_icon {
-  width: 15%;
-  margin-bottom: 30px;
-  margin-right: 30px;
-}
-
-.control_pannle {
-  position: fixed;
-  right: 5%;
-  bottom: 5%;
-  z-index: 40;
-  width: 20%;
-  height: 20%;
-  background: fuchsia;
-}
-
-#systemIcon_group {
-  display: block;
-  position: fixed;
+  padding: 2%;
+  display: flex;
+  align-content: center;
+  align-items: center;
   justify-content: center;
-  bottom: 5%;
-  left: 3%;
+  font-size: larger;
+  color: white;
+  font-weight: bolder;
 }
 
-.systemIcon {
-  z-index: 50;
-  position: fixed;
-  bottom: 5%;
-  left: 3%;
+.color {
+  &-orange {
+    background-color: #fea30b;
+    &:hover {
+      background-color: #ff7a00;
+    }
+  }
+
+  &-cyan {
+    background-color: #1ab5c1;
+    &:hover {
+      background-color: #0098a4;
+    }
+  }
+}
+* {
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 </style>

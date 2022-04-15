@@ -28,65 +28,98 @@ const Market = {
 };
 
 const Swordfish = {
-  namespaced:true,
+  namespaced: true,
   state: () => ({
-    swordfish:0,
-    gameEnable:false,
-
+    swordfish: 0,
+    gameEnable: false,
+    Fozzy3D: false,
   }),
   mutations: {
-    ShootSwordfish(state){
+    setFozzyFram(state, available) {
+      state.Fozzy3D = available;
+    },
+    ShootSwordfish(state) {
       state.swordfish++;
     },
-    ToggleGame(state)
-    {
+    ToggleGame(state) {
       state.gameEnable = !state.gameEnable;
-    }
+    },
   },
   actions: {},
-  getters:{
+  getters: {
     GameEnable: (state) => {
-      return state.gameEnable
-    }
-
-  }
+      return state.gameEnable;
+    },
+  },
 };
 
-
 const DiningTable = {
-  namespaced:true,
+  namespaced: true,
   state: () => ({
-    dish:'',
-    lightboxEnable:false
-
-
+    dish: "",
+    lightboxEnable: false,
+    akonEnable: false,
+    Fozzy3D: false,
   }),
   mutations: {
-    SelectDish(state,dish){
-      state.dish = dish
+    setFozzyFram(state, available) {
+      state.Fozzy3D = available;
     },
-    TogglelightboxEnable(){
-      state.lightboxEnable = ! state.lightboxEnable
+    SelectDish(state, dish) {
+      state.dish = dish;
     },
-    resetDish(state)
-    {
-      state.dish = ""
-    }
-
+    TogglelightboxEnable() {
+      state.lightboxEnable = !state.lightboxEnable;
+    },
+    resetDish(state) {
+      state.dish = "";
+    },
+    toggleAkon(state, enable) {
+      state.akonEnable = enable;
+    },
   },
   actions: {},
-  getters:{
+  getters: {
+    getDish: (state) => state.dish,
+  },
+};
 
-    getDish: state => state.dish,
-
-  }
+const Pisirian = {
+  namespaced: true,
+  state: () => ({
+    toggledPasserby: "",
+    end: false,
+    Fozzy3D: false,
+  }),
+  mutations: {
+    setFozzyFram(state, available) {
+      state.Fozzy3D = available;
+    },
+    setTogglePasserby(state, sequen) {
+      state.toggledPasserby = sequen;
+    },
+    toEnd(state) {
+      state.end = true;
+    },
+  },
+  actions: {},
+  getters: {},
 };
 
 export default createStore({
+  state: {
+    Fozzy3D: false,
+  },
+  mutations: {
+    setFozzyFram(state, available) {
+      state.Fozzy3D = available;
+    },
+  },
   modules: {
     Market: Market,
-    Swordfish:Swordfish,
-    DiningTable:DiningTable
+    Swordfish: Swordfish,
+    DiningTable: DiningTable,
+    Pisirian: Pisirian,
   },
 });
 

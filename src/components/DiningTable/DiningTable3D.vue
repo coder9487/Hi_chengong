@@ -208,11 +208,17 @@ export default {
           this.tableModel.getObjectByName("box_" + elem)
         );
       });
-              this.raycasterObjectList.push(
-          this.tableModel.getObjectByName("a_kon_normal")
-        );
+      this.raycasterObjectList.push(
+        this.tableModel.getObjectByName("a_kon_normal")
+      );
+      this.akonList = new Array();
+      this.akonList.push(this.tableModel.getObjectByName("a_kon_normal"));
+      this.akonList.push(this.tableModel.getObjectByName("a_kon_hover"));
+      this.akonList[1].visible = false;
+      console.log(this.akonList);
 
       console.log("Raycaster list ", this.raycasterObjectList);
+
     },
     updateAnimation() {
       if (this.RotationObject != null)
@@ -232,15 +238,26 @@ export default {
       );
       if (intersects.length > 0) {
         // this.RotationObject = intersects[0].object;
-        if (intersects[0].object.name != "box_table") {
+        // if (intersects[0].object.name != "box_table")
+        if (intersects[0].object.name != "a_kon_normal") {
           const found = this.animationObjectList.find(
             (element) => "box_" + element.name == intersects[0].object.name
           );
           this.RotationObject = found;
+          this.akonList[1].visible = false;
+          this.akonList[0].visible = true;
+          this.castAkon = false;
+        } else {
+          this.akonList[1].visible = true;
+          this.akonList[0].visible = false;
+          this.castAkon = true;
         }
 
         // console.log(found);
       } else {
+        this.akonList[1].visible = false;
+        this.akonList[0].visible = true;
+        this.castAkon = false;
         this.RotationObject = null;
       }
       // console.log(" this.RotationObject", this.RotationObject)
@@ -251,9 +268,16 @@ export default {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
     onClick() {
-      let touchObj = this.RotationObject.name;
-      if (touchObj != undefined) {
-        this.$store.commit("DiningTable/SelectDish", touchObj);
+
+      if(this.castAkon)
+      {
+         this.$store.commit("DiningTable/toggleAkon",true);
+         console.log("akon enable",this.$store.state.DiningTable.akonEnable)
+      }
+      else if (this.RotationObject != undefined)
+      if (this.RotationObject.name != undefined)
+      {
+        this.$store.commit("DiningTable/SelectDish", this.RotationObject.name);
         console.log("Result", this.$store.state.DiningTable.dish);
       }
     },

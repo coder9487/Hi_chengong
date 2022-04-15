@@ -19,7 +19,7 @@ export function marketSetting(passInScene) {
       }
       if(child.name.includes("cloud") )
       {
-        child.material.side = THREE.BackSide;
+        child.material.side = THREE.DoubleSide;
         // console.log(child)
       }
 

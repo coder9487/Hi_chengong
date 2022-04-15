@@ -30,7 +30,16 @@ export class AnimateObject {
   }
   PlayAnimation() {
     for (let i = 0; i < this.animationList.length; i++) {
+      this.animationList[i].reset();
+
       this.animationList[i].play();
+      // console.log(this.animationList[i]," now is playing.")
+    }
+  }
+  ResetAnimation(){
+    for (let i = 0; i < this.animationList.length; i++) {
+      // this.animationList[i].reset();
+      this.animationList[i].paused = true;
       // console.log(this.animationList[i]," now is playing.")
     }
   }
@@ -120,6 +129,18 @@ export class PasserBy {
     if(this.toggle )
     return
     this.object.lookAt(this.camera.position);
+  }
+  watchMyC() {
+    let pos = this.object.position
+    if(this.toggle )
+    return
+    let dis = this.camera.position.clone().distanceToSquared(pos);
+    let originVector = this.camera.position
+      .clone()
+      .sub(pos.clone())
+      .normalize();
+    let crossVector = originVector.cross(new THREE.Vector3(0, 1, 0));
+    this.object.lookAt(crossVector.multiplyScalar(dis));
   }
   watchMyCrossVector(pos) {
     if(this.toggle )

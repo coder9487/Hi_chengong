@@ -1,6 +1,11 @@
 <template>
   <video v-show="showVideo" id="FinishVideo">
-    <source src="../../../public/hitVideo.mp4" type="video/mp4" />
+    <source
+      v-if="getMountofSwordfish > 1"
+      src="../../../public/hitVideo.mp4"
+      type="video/mp4"
+    />
+    <source v-else src="../../../public/failHitVideo.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
@@ -74,11 +79,17 @@
   <div class="hearvest" v-show="dialogContent_Index == 8 ? true : false">
     <div class="hearvest-content">
       <img
+        v-if="getMountofSwordfish > 1"
         class="hearvest-content-image"
         src="../../../public/images/swordfish/result.png"
       />
-      <div class="hearvest-content-money">{{ 123456 }}</div>
-      <div class="hearvest-content-voluem">{{ 12 }}</div>
+      <img
+        v-else
+        class="hearvest-content-image"
+        src="../../../public/images/swordfish/fail.png"
+      />
+      <div v-if="getMountofSwordfish > 1" class="hearvest-content-money">{{ hearvest * 10000 }}</div>
+      <div v-if="getMountofSwordfish > 1" class="hearvest-content-voluem">{{ hearvest }}</div>
     </div>
 
     <q-btn
@@ -97,12 +108,19 @@ import gsap from "gsap";
 export default {
   setup() {
     return {
-      debug: false,
+      debug: true,
     };
   },
-  compute: {},
+  computed: {
+    getMountofSwordfish() {
+      return this.$store.state.Swordfish.swordfish;
+    },
+  },
   mounted() {},
   watch: {
+    getMountofSwordfish: function () {
+      console.log("getMountofSwordfish", this.getMountofSwordfish);
+    },
     dialogContent_Index: function () {
       if (this.dialogContent_Index == 4) {
         this.changeLottie("swordfish_tutorial");
@@ -114,7 +132,7 @@ export default {
         let progressNum = 0;
         let progressElement = document.querySelector("#progressbar-line ");
         let timeInter = 33;
-        if (this.debug) timeInter = 1000;
+        if (this.debug) timeInter = 0.1;
 
         this.timeoutProgressID = window.setInterval(() => {
           progressNum += 0.1;
@@ -126,6 +144,7 @@ export default {
         }, timeInter);
       }
       if (this.dialogContent_Index == 7) {
+        this.calcResult();
         this.$store.commit("Swordfish/ToggleGame");
         this.showVideo = true;
         this.$emit("lightBoxEffect", "on");
@@ -160,6 +179,7 @@ export default {
   },
   data() {
     return {
+      hearvest: 0,
       showVideo: ref(false),
       showAkonHover: ref(false),
       dialogContent_Index: 0,
@@ -192,6 +212,9 @@ export default {
     };
   },
   methods: {
+    calcResult() {
+      this.hearvest = this.$store.state.Swordfish.swordfish;
+    },
     toggleshowAkonHover() {
       console.log("Toggle toggleshowAkonHover");
       this.showAkonHover = !this.showAkonHover;
