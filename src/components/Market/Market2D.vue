@@ -444,7 +444,8 @@ export default {
     position: absolute;
     bottom: 0;
     right: 5%;
-    width: 25%;
+    height: 90vh;
+    right: -10vw;
   }
   &-dialog {
     width: 65vw;
