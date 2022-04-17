@@ -66,7 +66,7 @@ export default {
       this.pointer = new THREE.Vector2();
 
       this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color("#ffffff");
+         this.scene.background =   new THREE.Color( 0x3CC4D0 );
       let canvas = document.querySelector("#three");
       this.renderer = new THREE.WebGLRenderer({
         canvas,
@@ -115,16 +115,16 @@ export default {
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();
-      this.scene.background = new THREE.CubeTextureLoader()
-        .setPath("../")
-        .load([
-          "images/sky_pos_x.jpg",
-          "images/sky_neg_x.jpg",
-          "images/sky_pos_y.jpg",
-          "images/sky_neg_y.jpg",
-          "images/sky_neg_z.jpg",
-          "images/sky_pos_z.jpg",
-        ]);
+      // this.scene.background = new THREE.CubeTextureLoader()
+      //   .setPath("../")
+      //   .load([
+      //     "images/sky_pos_x.jpg",
+      //     "images/sky_neg_x.jpg",
+      //     "images/sky_pos_y.jpg",
+      //     "images/sky_neg_y.jpg",
+      //     "images/sky_neg_z.jpg",
+      //     "images/sky_pos_z.jpg",
+      //   ]);
       this.scene.background.mapping = THREE.CubeRefractionMapping;
       this.scene.background.minFilter = THREE.LinearFilter;
 
@@ -239,7 +239,7 @@ export default {
     },
     updateAnimation() {
       if (this.LoadMarketFinish != true) return;
-      this.mixer.update(0.01);
+      this.mixer.update(0.016);
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
         this.passerbyList[i].watchMe();

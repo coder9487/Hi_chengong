@@ -71,14 +71,15 @@ export default {
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color("#ffffff");
       let canvas = document.querySelector("#three");
+
       this.renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: true,
-        alpha: true,
+        // alpha: true,
         precision: "lowp",
         powerPreference: "low-power",
       });
-
+      this.renderer.setClearColor(new THREE.Color("#ffffff"), 0);
       this.camera = new THREE.PerspectiveCamera(
         50,
         window.innerWidth / window.innerHeight,
@@ -116,16 +117,18 @@ export default {
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();
-      this.scene.background = new THREE.CubeTextureLoader()
-        .setPath("../")
-        .load([
-          "images/sky_pos_x.jpg",
-          "images/sky_neg_x.jpg",
-          "images/sky_pos_y.jpg",
-          "images/sky_neg_y.jpg",
-          "images/sky_neg_z.jpg",
-          "images/sky_pos_z.jpg",
-        ]);
+      // this.scene.background = new THREE.CubeTextureLoader()
+      //   .setPath("../")
+      //   .load([
+      //     "images/sky_pos_x.jpg",
+      //     "images/sky_neg_x.jpg",
+      //     "images/sky_pos_y.jpg",
+      //     "images/sky_neg_y.jpg",
+      //     "images/sky_neg_z.jpg",
+      //     "images/sky_pos_z.jpg",
+      //   ]);
+     this.scene.background =   new THREE.Color( 0x3CC4D0 );
+
 
       // load a resource
       this.loadMarket();
@@ -640,7 +643,7 @@ export default {
         }
       }
 
-      this.mixer.update(0.016);
+      this.mixer.update(0.03);
     },
     handlePlayerState() {
       switch (this.PlayerState) {

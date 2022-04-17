@@ -376,12 +376,13 @@ $content-text-size-pc: 1.4vw;
 
   &-a_kon {
     position: fixed;
-    right: -10vw;
+    right:0px;
     bottom: 0vh;
     // background-color: beige;
 
-    &_normal &_hover > canvas {
-      height: 100vh;
+    &_normal &_hover  {
+      height: auto;
+      width: 500px;
     }
     // &_normal {
 

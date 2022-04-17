@@ -397,7 +397,7 @@ $content-text-size-pc: 1.4vw;
     //  z-index: 30;
     width: 30vw;
     height: 20vh;
-    bottom: 10vh;
+    bottom: 2vh;
     transform: translateX(50%);
     right: 50vw;
   }

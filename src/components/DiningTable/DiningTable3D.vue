@@ -111,16 +111,17 @@ export default {
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();
-      this.scene.background = new THREE.CubeTextureLoader()
-        .setPath("../")
-        .load([
-          "images/sky_pos_x.jpg",
-          "images/sky_neg_x.jpg",
-          "images/sky_pos_y.jpg",
-          "images/sky_neg_y.jpg",
-          "images/sky_neg_z.jpg",
-          "images/sky_pos_z.jpg",
-        ]);
+      // this.scene.background = new THREE.CubeTextureLoader()
+      //   .setPath("../")
+      //   .load([
+      //     "images/sky_pos_x.jpg",
+      //     "images/sky_neg_x.jpg",
+      //     "images/sky_pos_y.jpg",
+      //     "images/sky_neg_y.jpg",
+      //     "images/sky_neg_z.jpg",
+      //     "images/sky_pos_z.jpg",
+      //   ]);
+         this.scene.background =   new THREE.Color( 0x3CC4D0 );
 
       // load a resource
       this.loadTable();

@@ -32,7 +32,7 @@ export default {
   onBeforeUnmount() {},
   data() {
     return {
-      UpdateTime: ref(0.005),
+      UpdateTime: ref(0.016),
       PostProcessingEnable: true,
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
@@ -118,16 +118,17 @@ export default {
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();
-      this.scene.background = new THREE.CubeTextureLoader()
-        .setPath("../")
-        .load([
-          "images/sky_pos_x.jpg",
-          "images/sky_neg_x.jpg",
-          "images/sky_pos_y.jpg",
-          "images/sky_neg_y.jpg",
-          "images/sky_neg_z.jpg",
-          "images/sky_pos_z.jpg",
-        ]);
+         this.scene.background =   new THREE.Color( 0x3CC4D0 );
+      // this.scene.background = new THREE.CubeTextureLoader()
+      //   .setPath("../")
+      //   .load([
+      //     "images/sky_pos_x.jpg",
+      //     "images/sky_neg_x.jpg",
+      //     "images/sky_pos_y.jpg",
+      //     "images/sky_neg_y.jpg",
+      //     "images/sky_neg_z.jpg",
+      //     "images/sky_pos_z.jpg",
+      //   ]);
 
       // load a resource
 
@@ -338,7 +339,7 @@ export default {
           this.spearAim.getWorldPosition(spearWorldPos);
           let swordfishPos = new THREE.Vector3();
           this.swordfishbody.getWorldPosition(swordfishPos);
-          if (swordfishPos.distanceTo(spearWorldPos) < 5) {
+          if (swordfishPos.distanceTo(spearWorldPos) < 2) {
 
             this.$store.commit("Swordfish/ShootSwordfish");
             console.log("this.$store.state.Swordfish.swordfish",this.$store.state.Swordfish.swordfish)
