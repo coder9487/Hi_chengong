@@ -104,7 +104,6 @@ export default defineComponent({
       progressPercent: ref(0),
       showEnable: ref(true),
       DEBUG: 1,
-      golbalEvent: { dblclick: false },
     };
   },
   methods: {

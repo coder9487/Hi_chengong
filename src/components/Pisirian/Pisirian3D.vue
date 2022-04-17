@@ -275,7 +275,6 @@ export default {
       return plane;
     },
     onClick() {
-
       gsap.to(this.camera.position, {
         duration: 1.5,
         repeat: 0,
@@ -296,46 +295,44 @@ export default {
                   x: 0.07662949140912478,
                   y: 0.6991818787607907,
                   z: -0.07580660844146339,
-                                        onComplete:()=>{
-                                          this.$store.commit("Pisirian/toEnd");
-
-                      }
+                  onComplete: () => {
+                    this.$store.commit("Pisirian/toEnd");
+                  },
                 });
               },
             });
-
           }
 
           for (let i = 0; i < 4; i++)
             if (this.passerbyList[i].isApproach()) {
               this.$store.commit("Pisirian/setTogglePasserby", i);
-              if (this.DO_ONCE_DONE == false) {
-                gsap.to(this.camera.position, {
-                  x: 37.7748,
-                  z: -1.264,
-                  duration: 0.2,
-                  onComplete: () => {
-                    this.$store.commit("Pisirian/setTogglePasserby", 2);
-                    i = 2;
-                    gsap.to(this.camera.quaternion, {
-                      x: 0.0041123,
-                      y: 0.994159,
-                      z: 0.099748,
-                      w: -0.04098,
-                      duration: 0.8,
 
-                    });
-                  },
-                });
-                this.passerbyList[2].toggleDistance = 2;
-              }
               if (i == 3 - 1 && this.swordfishJump.DoOnce) {
                 if (this.DO_ONCE_DONE == false) {
-                   this.DO_ONCE_DONE = true;
+                  gsap.to(this.camera.position, {
+                    x: 37.7748,
+                    z: -1.264,
+                    duration: 0.2,
+                    onComplete: () => {
+                      this.$store.commit("Pisirian/setTogglePasserby", 2);
+                      i = 2;
+                      gsap.to(this.camera.quaternion, {
+                        x: 0.0041123,
+                        y: 0.994159,
+                        z: 0.099748,
+                        w: -0.04098,
+                        duration: 0.8,
+                      });
+                    },
+                  });
+                  this.passerbyList[2].toggleDistance = 2;
+                }
+                if (this.DO_ONCE_DONE == false) {
+                  this.DO_ONCE_DONE = true;
                   this.timeout = setTimeout(() => {
                     this.swordfishJump.PlayAnimation();
-
                     clearTimeout(this.timeout);
+                    alert("fish jump");
                   }, 1300);
                 } else {
                   this.swordfishJump.PlayAnimation();

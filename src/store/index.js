@@ -22,6 +22,7 @@ const Market = {
     marketChangeState(state, person) {
       state.marketDisplay.splice(0, 1, person);
     },
+
   },
   actions: {},
   getters: {},
@@ -44,6 +45,9 @@ const Swordfish = {
     ToggleGame(state) {
       state.gameEnable = !state.gameEnable;
     },
+    clearResult(state){
+      state.swordfish = 0
+    }
   },
   actions: {},
   getters: {

@@ -1,8 +1,5 @@
 <template>
-
-
   <div class="navigate">
-
     <div id="navigate-lottie">
       <div
         id="loading-video-container_1"
@@ -18,7 +15,7 @@
       ></div>
     </div>
 
-    <div class="navigate-dialog">
+    <div class="navigate-dialog" v-if="0">
       <div
         class="navigate-dialog-content"
         v-show="navigate_dialog_content_show_availbale"
@@ -35,9 +32,30 @@
         </q-btn>
       </div>
     </div>
+
+    <div
+      class="PasserbydialogArea"
+      v-show="navigate_dialog_content_show_availbale"
+    >
+      <div
+        class="PasserbydialogArea-dialog"
+        v-html="A_kon_dialogContent[navigate_dialog_content_index]"
+      ></div>
+      <div class="PasserbydialogArea-group">
+        <div @click.stop="A_kon_chatbox_handle" class="button color-cyan">
+          我知道了
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="fishmonger" v-show="fishmonger_dialog_content_show_available">
+  <div
+    class="fishmonger"
+    v-show="
+      fishmonger_dialog_content_show_available &&
+      navigate_dialog_content_index <= 10
+    "
+  >
     <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" />
     <div
       class="fishmonger-dialog"
@@ -185,7 +203,12 @@ export default {
       }
     },
     fuzzyavailable: function () {
-      this.$store.commit("Market/setFozzyFram", this.fuzzyavailable);
+      console.log("Set fuzzy", this.fuzzyavailable);
+      if (this.fuzzyavailable == 1 || this.fuzzyavailable == true) {
+        this.$store.commit("setFozzyFram", true);
+      } else {
+        this.$store.commit("setFozzyFram", false);
+      }
     },
 
     // moving: {
@@ -213,7 +236,7 @@ export default {
         this.A_kon_chatbox_handle(this.marketPersonDisplay);
       } else if (this.marketPersonDisplay != "None") {
         console.log(this.marketPersonDisplay.split("monger")[1]);
-
+        // this.$store.commit("setFozzyFram",true)
         this.fishmonger_sequence = this.marketPersonDisplay.split("monger")[1];
         this.FishMonger_handler("next");
         this.fishmonger_dialog_content_show_available = 1;
@@ -343,6 +366,7 @@ export default {
 };
 </script>
 <style lang="scss">
+$content-text-size-pc: 1.4vw;
 .controlPannel {
   // // background-color: antiquewhite;
 
@@ -371,10 +395,11 @@ export default {
     position: absolute;
     // background-color: chocolate;
     //  z-index: 30;
-    width: 50vw;
+    width: 30vw;
     height: 20vh;
     bottom: 10vh;
-    right: 25vw;
+    transform: translateX(50%);
+    right: 50vw;
   }
 }
 .navigate {
@@ -487,5 +512,97 @@ export default {
       border-radius: 50px;
     }
   }
+}
+
+.PasserbydialogArea {
+  opacity: 1;
+  position: absolute;
+  width: 60vw;
+  height: 20vh;
+  left: 20vw;
+  bottom: 10vh;
+  & * {
+    pointer-events: all;
+  }
+  &-photo {
+    position: relative;
+    width: 45vw;
+    left: 7.5vw;
+    top: -3%;
+  }
+  &-dialog {
+    position: relative;
+    width: 45vw;
+    height: 20vh;
+    left: 7.5vw;
+    background-color: aliceblue;
+
+    border-radius: 30px;
+    padding: 2.5vw;
+    font-size: 1.5vw;
+    color: #276a70;
+    @media screen and (min-width: 1024px) {
+      font-size: $content-text-size-pc;
+      line-height: $content-text-size-pc * 1.8;
+      letter-spacing: $content-text-size-pc * 0.2;
+    }
+    ::v-deep b {
+      color: #fea30b;
+      font-weight: bolder;
+    }
+  }
+  &-group {
+    position: relative;
+    width: 45vw;
+    height: 10vh;
+    // background-color: aquamarine;
+    left: 7.5vw;
+    top: -20%;
+    display: flex;
+    justify-content: space-around;
+  }
+}
+b {
+  color: #fea30b;
+  font-weight: bolder;
+}
+.button {
+  z-index: 11;
+  width: 10vw;
+  height: 7vh;
+  // background-color: cornflowerblue;
+  border-radius: 20px;
+  padding: 2%;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+  color: white;
+  font-weight: bolder;
+}
+
+.color {
+  &-orange {
+    background-color: #fea30b;
+    &:hover {
+      background-color: #ff7a00;
+    }
+  }
+
+  &-cyan {
+    background-color: #1ab5c1;
+    &:hover {
+      background-color: #0098a4;
+    }
+  }
+}
+* {
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 </style>

@@ -64,16 +64,17 @@ export default {
   data() {
     return {
       showDialog: false,
-      umount:ref(false),
+      umount:ref(true),
       contentListIndex: 0,
       contentList: {
         content: [
-          "有些漁法容易<b>誤捕</b>導致破壞生態，保存成功的<b>鏢旗魚</b>技法是很重要的，哇!你看，有旗魚！",
+
           "三仙台的<b>由來</b>是因為有呂洞賓、李鐵拐、何仙姑在此休息，島上有一個<b>許願郵筒</b>很有名喔!",
           "你聽，<b>海的聲音</b>好紓壓，我可以靜靜地聽一整天，每次有煩惱的時候我都會來~",
+          "有些漁法容易<b>誤捕</b>導致破壞生態，保存成功的<b>鏢旗魚</b>技法是很重要的，哇!你看，有旗魚！",
           "大家要做好保育工作，把成功獨特的<b>鏢旗魚</b>文化傳承下去，一起守護<b>成功的海</b>！",
         ],
-        button: ["運氣真好", "好酷！", "好療癒~", "沒錯！"],
+        button: [ "好酷！", "好療癒~", "運氣真好","沒錯！"],
       },
     };
   },
@@ -81,6 +82,7 @@ export default {
     dialogHandler(state) {
       if (state == true)
       {
+
         this.showDialog = true
         gsap.fromTo(
           ".PasserbydialogArea",

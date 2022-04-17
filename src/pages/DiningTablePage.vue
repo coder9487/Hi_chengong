@@ -7,10 +7,10 @@
     ></loading>
 
     <DiningTable3D
-      id="swordfish3D"
+      id="DiningTable3D"
       @loadingProgress="getLoadingProgress"
     ></DiningTable3D>
-    <DiningTable2D v-if="1"></DiningTable2D>
+    <DiningTable2D id="DiningTable2D" v-if="1"></DiningTable2D>
   </div>
 </template>
 
@@ -40,6 +40,9 @@ export default {
     returnloadingProgress() {
       return this.loadingProgress;
     },
+            lightBoxEffectMode() {
+      return this.$store.state.Fozzy3D;
+    },
   },
   watch: {
     loadingProgress: function () {
@@ -51,8 +54,34 @@ export default {
             this.showAvailable = true;
           },
         });
-        gsap.to("#Pisirian3D", { opacity: 1, duration: 2 });
-        gsap.to("#Pisirian2D", { opacity: 1, duration: 2 });
+        gsap.to("#DiningTable3D", { opacity: 1, duration: 2 });
+        gsap.to("#DiningTable2D", { opacity: 1, duration: 2 });
+      }
+    },
+        lightBoxEffectMode: function () {
+      switch (this.lightBoxEffectMode) {
+        case true:
+          gsap.fromTo(
+            "#DiningTable3D",
+            { webkitFilter: "brightness(1)", filter: "brightness(1)" },
+            {
+              webkitFilter: "brightness(0.6)",
+              filter: "brightness(0.6)",
+              duration: 1,
+            }
+          );
+          break;
+        case false:
+          gsap.fromTo(
+            "#DiningTable3D",
+            { webkitFilter: "brightness(0.6)", filter: "brightness(0.6)" },
+            {
+              webkitFilter: "brightness(1)",
+              filter: "brightness(1)",
+              duration: 1,
+            }
+          );
+          break;
       }
     },
   },

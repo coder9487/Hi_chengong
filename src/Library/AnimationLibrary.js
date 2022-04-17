@@ -142,6 +142,18 @@ export class PasserBy {
     let crossVector = originVector.cross(new THREE.Vector3(0, 1, 0));
     this.object.lookAt(crossVector.multiplyScalar(dis));
   }
+  watchMyCOppsite() {
+    let pos = this.object.position
+    if(this.toggle )
+    return
+    let dis = this.camera.position.clone().distanceToSquared(pos);
+    let originVector = this.camera.position
+      .clone()
+      .sub(pos.clone())
+      .normalize();
+    let crossVector = originVector.cross(new THREE.Vector3(0, -1, 0));
+    this.object.lookAt(crossVector.multiplyScalar(dis));
+  }
   watchMyCrossVector(pos) {
     if(this.toggle )
     return

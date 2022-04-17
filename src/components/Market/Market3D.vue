@@ -85,9 +85,9 @@ export default {
         0.1,
         400
       );
-      this.camera.position.set(25, 1.5, -3.8);
+      this.camera.position.set(22, 1.5, -2.5);
 
-      this.camera.lookAt(25, 1.5, 3.8);
+      this.camera.lookAt(22, 1.5, 2.5);
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
 
       /**
@@ -130,7 +130,7 @@ export default {
       // load a resource
       this.loadMarket();
       this.createSea();
-      this.createCloud();
+
 
       this.pin = this.createPointer();
     },
@@ -187,7 +187,7 @@ export default {
       // this.sea.mesh.castShadow = true;
       // this.sea.mesh.receiveShadow = true;
     },
-    createCloud() {
+    createCloudManual() {
       const texture = new THREE.TextureLoader().load(
         "../images/cloud/cloud_far01.png"
       );
@@ -226,6 +226,13 @@ export default {
       this.cloud01.position.set(-8, 3, -40);
 
       this.scene.add(this.cloud01);
+    },
+    createCloud(){
+     this.cloudArray = new Array()
+      this.cloudArray.push(this.marketModel.getObjectByName("cloud01"))
+      this.cloudArray.push(this.marketModel.getObjectByName("cloud02"))
+      console.log(this.cloudArray)
+
     },
     onPointerMove(event) {
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -290,6 +297,7 @@ export default {
           break;
         case "sheet":
           this.$store.commit("Market/IncreaseTutorialDialog");
+           this.akonList[0].object.visible = false
           break;
       }
       this.dbClickEvent.eventName = "";
@@ -448,6 +456,7 @@ export default {
           )
         )
       );
+      this.createCloud()
       this.akonList[1].PlayAnimation();
 
       this.CarAnimation = new AnimateObject(
@@ -465,6 +474,7 @@ export default {
         10,
         this.camera
       );
+      this.DragLady.axuobj = (new PasserBy(this.camera, this.marketModel.getObjectByName("par_drag_man"), 6));
       this.KickMan = new AnimateObject(
         this.marketModel.getObjectByName("par_kick_man"),
         10,
@@ -494,8 +504,19 @@ export default {
     },
 
     updateAnimation() {
+
       if (this.LoadMarketFinish != true) return;
 
+
+
+
+
+
+      for(let j = 0; j < 2;j++)
+        this.cloudArray[j].rotation.y += 0.0001
+
+
+        // this.akonArrowList[0].object.lookAt(this.camera.position)
       /** passerby will filp if camera approach them */
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
@@ -513,6 +534,7 @@ export default {
           this.fishmongerArrowList[i].object.visible = false;
         }
       }
+      this.DragLady.axuobj.watchMyCOppsite()
 
       //this.akonList[0].watchMyCrossVector(new THREE.Vector3(17.9, 2.35, -4.03));
       this.akonList[0].watchMe();
@@ -520,7 +542,7 @@ export default {
         this.camera.position.distanceTo(new THREE.Vector3(-44.4, 1.65, -4.12)) <
         this.akonList[1].toggleDistance
       ) {
-        this.walkingGsap.kill();
+        // this.walkingGsap.pause();
         console.log(this.camera.quaternion);
         this.akonList[1].toggleDistance = 1000;
         gsap.to(this.camera.position, {
@@ -551,7 +573,7 @@ export default {
         if (this.KickMan.DoOnce == true) {
           this.KickMan.DoOnce = false;
           let currentQuaternion = this.camera.position.clone();
-          this.walkingGsap.kill();
+          // this.walkingGsap.pause();
           gsap.to(this.camera.position, {
             duration: 1,
             repeat: 0,
@@ -619,7 +641,7 @@ export default {
           }
         }
       }
-      this.cloud01.rotation.y += 0.0003;
+
       this.mixer.update(0.016);
     },
     handlePlayerState() {

@@ -14,7 +14,7 @@
   </div>
   <div id="colorSlide">
     <Market3D
-      id="swordfish3D"
+      id="market3D"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
       v-if="1"
@@ -51,21 +51,21 @@ export default defineComponent({
   watch: {
     lightBoxEffectMode: function () {
       switch (this.lightBoxEffectMode) {
-        case "on":
+        case true:
           gsap.fromTo(
-            "#swordfish3D",
+            "#market3D",
             { webkitFilter: "brightness(1)", filter: "brightness(1)" },
             {
-              webkitFilter: "brightness(0)",
-              filter: "brightness(0)",
+              webkitFilter: "brightness(0.6)",
+              filter: "brightness(0.6)",
               duration: 1,
             }
           );
           break;
-        case "off":
+        case false:
           gsap.fromTo(
-            "#swordfish3D",
-            { webkitFilter: "brightness(0)", filter: "brightness(0)" },
+            "#market3D",
+            { webkitFilter: "brightness(0.6)", filter: "brightness(0.6)" },
             {
               webkitFilter: "brightness(1)",
               filter: "brightness(1)",
@@ -87,7 +87,11 @@ export default defineComponent({
     },
     sceneObject: function () {},
   },
-  computed: {},
+  computed: {
+        lightBoxEffectMode() {
+      return this.$store.state.Fozzy3D;
+    },
+  },
   data() {
     return {
       audio: null,
@@ -98,8 +102,7 @@ export default defineComponent({
       progressPercent: ref(0),
       showEnable: ref(true),
       DEBUG: 1,
-      golbalEvent: { dblclick: false },
-      lightBoxEffectMode: 0,
+      golbalEvent: { dblclick: false }
     };
   },
   methods: {
@@ -174,7 +177,7 @@ export default defineComponent({
     z-index: 8;
   }
 }
-#swordfish3D {
+#market3D {
   position: fixed;
   background-color: #35909c;
 }

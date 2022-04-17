@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="introduceBox" >
+    <div class="introduceBox" v-show="!showAkon">
       <img class="introduceBox-photo" :src="imagepath" />
       <img
         class="introduceBox-close"
@@ -8,7 +8,7 @@
         @click.stop="resetShowenable"
       />
     </div>
-    <div class="Akon" >
+    <div class="Akon">
       <div>
         <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
       </div>
@@ -21,8 +21,12 @@
           成功的食材「尚青」！吃飽了嗎?阿公帶你去<b>三仙台</b>走走如何?今天天氣不錯，<b>海景</b>一定很漂亮!
         </div>
         <div class="dialogArea-group">
-          <div @click.stop="jumpToprisirian" class="button color-orange">好啊！走吧</div>
-          <div @click.stop="setAkonState(false)" class="button color-cyan">等一下</div>
+          <div @click.stop="jumpToprisirian" class="button color-orange">
+            好啊！走吧
+          </div>
+          <div @click.stop="setAkonState(false)" class="button color-cyan">
+            等一下
+          </div>
         </div>
       </div>
     </div>
@@ -53,30 +57,27 @@ export default {
       {
         this.showAkon = !this.showAkon;
 
-
-      if (this.showAkon == true)
-        gsap.fromTo(
-          ".Akon",
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.5,
-          }
-        );
-      else {
-        gsap.fromTo(
-          ".Akon",
-          { opacity: 1 },
-          {
-            opacity: 0,
-            duration: 0.5,
-          }
-        );
-      }
-
-
-
-
+        if (this.showAkon == true) {
+          this.$store.commit("setFozzyFram", true);
+          gsap.fromTo(
+            ".Akon",
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 0.5,
+            }
+          );
+        } else {
+          this.$store.commit("setFozzyFram", false);
+          gsap.fromTo(
+            ".Akon",
+            { opacity: 1 },
+            {
+              opacity: 0,
+              duration: 0.5,
+            }
+          );
+        }
       }
     },
     getDish: function () {
@@ -87,7 +88,8 @@ export default {
         this.showEnable = false;
       }
 
-      if (this.showEnable == true)
+      if (this.showEnable == true) {
+        this.$store.commit("setFozzyFram", true);
         gsap.fromTo(
           ".introduceBox",
           { opacity: 0 },
@@ -96,7 +98,8 @@ export default {
             duration: 0.5,
           }
         );
-      else {
+      } else {
+        this.$store.commit("setFozzyFram", false);
         gsap.fromTo(
           ".introduceBox",
           { opacity: 1 },
@@ -120,13 +123,12 @@ export default {
       this.showEnable = false;
       this.$store.commit("DiningTable/resetDish");
     },
-    setAkonState(state){
-      this.$store.commit("DiningTable/toggleAkon",state);
+    setAkonState(state) {
+      this.$store.commit("DiningTable/toggleAkon", state);
     },
-    jumpToprisirian()
-    {
-      this.$router.push("Pisirian")
-    }
+    jumpToprisirian() {
+      this.$router.push("Pisirian");
+    },
   },
 };
 </script>
@@ -173,15 +175,14 @@ $content-text-size-pc: 1.5vw;
   height: 60vh;
   left: 15vw;
   bottom: 20vh;
-  & *{
-     pointer-events: all;
-
+  & * {
+    pointer-events: all;
   }
   &-photo {
     position: relative;
     width: 45vw;
     left: 7.5vw;
-    top:-3%;
+    top: -3%;
   }
   &-dialog {
     position: relative;
@@ -192,16 +193,16 @@ $content-text-size-pc: 1.5vw;
     border-radius: 30px;
     padding: 2vw;
     font-size: 1.5vw;
-    color: #276A70;
+    color: #276a70;
     @media screen and (min-width: 1024px) {
       font-size: $content-text-size-pc;
       line-height: $content-text-size-pc * 1.8;
       letter-spacing: $content-text-size-pc * 0.2;
     }
 
-    & > b{
-      color: #FEA30B;
-      font-weight:bolder;
+    & > b {
+      color: #fea30b;
+      font-weight: bolder;
     }
   }
   &-group {
@@ -229,7 +230,7 @@ $content-text-size-pc: 1.5vw;
   justify-content: center;
   font-size: larger;
   color: white;
-  font-weight:bolder;
+  font-weight: bolder;
 }
 
 .color {

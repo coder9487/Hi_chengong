@@ -1,11 +1,9 @@
 <template>
-  <video v-show="showVideo" id="FinishVideo">
-    <source
-      v-if="getMountofSwordfish > 1"
-      src="../../../public/hitVideo.mp4"
-      type="video/mp4"
-    />
-    <source v-else src="../../../public/failHitVideo.mp4" type="video/mp4" />
+  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_win">
+    <source src="../../../public/hitVideo.mp4" type="video/mp4" />
+  </video>
+  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_fail">
+    <source src="../../../public/failHitVideo.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
@@ -39,7 +37,7 @@
       <!-- <div id="lottie-container-a_kon_normal" v-show="!showAkonHover"></div> -->
     </div>
   </div>
-  <div v-show="dialogContent_Index >= 9">
+  <div v-show="dialogContent_Index >= 9" >
     <img class="cupon" :src="imagesrc(dialogContent_Index - 9)" />
   </div>
   <div
@@ -79,7 +77,7 @@
   <div class="hearvest" v-show="dialogContent_Index == 8 ? true : false">
     <div class="hearvest-content">
       <img
-        v-if="getMountofSwordfish > 1"
+        v-if="getMountofSwordfish > 0"
         class="hearvest-content-image"
         src="../../../public/images/swordfish/result.png"
       />
@@ -88,8 +86,12 @@
         class="hearvest-content-image"
         src="../../../public/images/swordfish/fail.png"
       />
-      <div v-if="getMountofSwordfish > 1" class="hearvest-content-money">{{ hearvest * 10000 }}</div>
-      <div v-if="getMountofSwordfish > 1" class="hearvest-content-voluem">{{ hearvest }}</div>
+      <div v-if="getMountofSwordfish > 0" class="hearvest-content-money">
+        {{ hearvest * 10000 }}
+      </div>
+      <div v-if="getMountofSwordfish > 0" class="hearvest-content-voluem">
+        {{ hearvest }}
+      </div>
     </div>
 
     <q-btn
@@ -99,6 +101,8 @@
       >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
     >
   </div>
+
+  <div id="hintOfHit">恭喜!你鏢中了!</div>
 </template>
 <script>
 import lottie from "lottie-web";
@@ -109,6 +113,7 @@ export default {
   setup() {
     return {
       debug: true,
+      url: "",
     };
   },
   computed: {
@@ -120,6 +125,9 @@ export default {
   watch: {
     getMountofSwordfish: function () {
       console.log("getMountofSwordfish", this.getMountofSwordfish);
+      if (this.dialogContent_Index == 4)
+      this.$store.commit("Swordfish/clearResult")
+      this.showHitHint();
     },
     dialogContent_Index: function () {
       if (this.dialogContent_Index == 4) {
@@ -148,8 +156,13 @@ export default {
         this.$store.commit("Swordfish/ToggleGame");
         this.showVideo = true;
         this.$emit("lightBoxEffect", "on");
-        let videoObj = document.getElementById("FinishVideo");
+
+        let videoObj = document.getElementById("FinishVideo_fail");
+        if (this.hearvest >= 1)
+          videoObj = document.getElementById("FinishVideo_win");
+
         console.log("videoObj", videoObj);
+
         videoObj.width = window.outerWidth;
         videoObj.height = window.outerHeight;
 
@@ -162,15 +175,33 @@ export default {
         videoObj.onended = () => {
           this.$emit("lightBoxEffect", "off");
           this.dialogContent_Index++;
+          if (this.hearvest >= 1)
+            gsap.to("#FinishVideo_win", {
+              duration: 0.5,
+              brightness: 0,
+              onComplete: () => {
+                videoObj.style.zIndex = "-5";
 
-          gsap.to("#FinishVideo", {
-            duration: 0.5,
-            brightness: 0,
-            onComplete: () => {
-              videoObj.style.zIndex = "-2";
-            },
-          });
+              },
+            });
+          else {
+            gsap.to("#FinishVideo_fail", {
+              duration: 0.5,
+              brightness: 0,
+              onComplete: () => {
+                videoObj.style.zIndex = "-5";
+
+              },
+            });
+          }
         };
+      }
+      if(this.dialogContent_Index == 9)
+      {
+        if(this.getMountofSwordfish == 0)
+        {
+          this.dialogContent_Index = 10
+        }
       }
       if (this.dialogContent_Index == 11) {
         this.$router.push("DiningTable");
@@ -179,6 +210,7 @@ export default {
   },
   data() {
     return {
+      mount_of_swordfish: 0,
       hearvest: 0,
       showVideo: ref(false),
       showAkonHover: ref(false),
@@ -212,6 +244,15 @@ export default {
     };
   },
   methods: {
+    showHitHint() {
+      gsap.to("#hintOfHit", {
+        duration: 0.5,
+        opacity: 1,
+        onComplete: () => {
+          gsap.to("#hintOfHit", { duration: 0.5, opacity: 0 });
+        },
+      });
+    },
     calcResult() {
       this.hearvest = this.$store.state.Swordfish.swordfish;
     },
@@ -232,10 +273,13 @@ export default {
         path: `../../lottie/${str}.json`, // json 路径
       });
     },
+    returnVideoUrl() {},
   },
 };
 </script>
 <style lang="scss" scoped>
+$content-text-size-pc: 1.4vw;
+
 .charactor {
   &-image {
     bottom: 0;
@@ -368,10 +412,11 @@ export default {
   }
 }
 
-#FinishVideo {
+.FinishVideo {
   width: 100vw;
   height: 100vh;
   position: fixed;
+  z-index: -5;
 }
 
 .cupon {
@@ -381,5 +426,25 @@ export default {
   bottom: 35vh;
   background-color: aliceblue;
   left: 30vw;
+}
+
+#hintOfHit {
+  opacity: 0;
+  width: 15vw;
+  height: 6vh;
+  top: 13vh;
+  left: 50vw;
+  border-radius: 20px;
+  transform: translateX(-50%);
+  background-color: white;
+  position: fixed;
+  padding: 10px;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #276a70;
+  font-weight: bolder;
+  font-size: $content-text-size-pc;
 }
 </style>
