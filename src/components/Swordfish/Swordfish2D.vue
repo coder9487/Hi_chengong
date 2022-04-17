@@ -207,7 +207,7 @@ export default {
         }
       }
       if (this.dialogContent_Index == 11) {
-        this.$router.push("DiningTable");
+        this.$router.push("/");
       }
     },
   },

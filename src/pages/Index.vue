@@ -6,7 +6,7 @@
       class="start_btn text-h5 text-weight-bolder"
       text-color="cyan-7"
       color="grey-1"
-      @click="playVideo()"
+      @click='this.$router.push("/Swordfish")'
       :size="$q.platform.is.desktop ? 'lg' : 'md'"
       >走！去成功</q-btn
     >
