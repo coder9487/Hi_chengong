@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import DiningTable3D from "../components/diningTable/DiningTable3D.vue";
-import DiningTable2D from "../components/diningTable/DiningTable2D.vue";
+import DiningTable3D from "../components/DiningTable/DiningTable3D.vue";
+import DiningTable2D from "../components/DiningTable/DiningTable2D.vue";
 import loading from "../components/loadingView.vue";
 import { ref } from "vue";
 import gsap from "gsap";
