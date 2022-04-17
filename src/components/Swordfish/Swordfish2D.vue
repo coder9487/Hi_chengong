@@ -87,7 +87,7 @@
         src="../../../public/images/swordfish/fail.png"
       />
       <div v-if="getMountofSwordfish > 0" class="hearvest-content-money">
-        {{ hearvest * 10000 }}
+        {{ getMoney }}
       </div>
       <div v-if="getMountofSwordfish > 0" class="hearvest-content-voluem">
         {{ hearvest }}
@@ -112,7 +112,7 @@ import gsap from "gsap";
 export default {
   setup() {
     return {
-      debug: true,
+      debug: false,
       url: "",
     };
   },
@@ -120,6 +120,9 @@ export default {
     getMountofSwordfish() {
       return this.$store.state.Swordfish.swordfish;
     },
+    getMoney(){
+      return (this.hearvest * Math.floor(Math.random() * (120000 - 80000) + 80000)).toFixed(0)
+    }
   },
   mounted() {},
   watch: {
@@ -299,6 +302,7 @@ $content-text-size-pc: 1.4vw;
   border-radius: 30px;
   flex-direction: column;
   display: flex;
+  color:#276a70;
 
   &-content {
     margin: 5% 5%;
@@ -364,7 +368,7 @@ $content-text-size-pc: 1.4vw;
 #lottie-container {
   &-swordfish_tutorial {
     width: 40vw;
-    height: 15vh;
+    height: 30vh;
     position: fixed;
     bottom: 5vh;
     left: 30vw;

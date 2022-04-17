@@ -30,6 +30,14 @@ export class AnimateObject {
   }
   PlayAnimation() {
     for (let i = 0; i < this.animationList.length; i++) {
+
+
+      this.animationList[i].play();
+      // console.log(this.animationList[i]," now is playing.")
+    }
+  }
+  PlayAnimationReset() {
+    for (let i = 0; i < this.animationList.length; i++) {
       this.animationList[i].reset();
 
       this.animationList[i].play();

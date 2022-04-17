@@ -37,7 +37,7 @@ export default {
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
       dbClickEvent: { eventName: "", eventObject: {} },
-      controllerMode: "0",
+      controllerMode: "2",
       PlayerState: 0,
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };

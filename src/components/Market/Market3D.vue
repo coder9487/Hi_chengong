@@ -85,9 +85,9 @@ export default {
         0.1,
         400
       );
-      this.camera.position.set(22, 1.5, -2.5);
+      this.camera.position.set(20, 1.5, 0);
 
-      this.camera.lookAt(22, 1.5, 2.5);
+      this.camera.lookAt(20, 1.5, 1);
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
 
       /**
@@ -131,7 +131,6 @@ export default {
       this.loadMarket();
       this.createSea();
 
-
       this.pin = this.createPointer();
     },
     Animation_Three() {
@@ -172,7 +171,7 @@ export default {
       this.setupAinmation();
       this.controls.colliders = this.marketModel;
       this.LoadMarketFinish = true;
-      console.log(this.marketModel)
+      console.log(this.marketModel);
     },
 
     createSea() {
@@ -227,12 +226,11 @@ export default {
 
       this.scene.add(this.cloud01);
     },
-    createCloud(){
-     this.cloudArray = new Array()
-      this.cloudArray.push(this.marketModel.getObjectByName("cloud01"))
-      this.cloudArray.push(this.marketModel.getObjectByName("cloud02"))
-      console.log(this.cloudArray)
-
+    createCloud() {
+      this.cloudArray = new Array();
+      this.cloudArray.push(this.marketModel.getObjectByName("cloud01"));
+      this.cloudArray.push(this.marketModel.getObjectByName("cloud02"));
+      console.log(this.cloudArray);
     },
     onPointerMove(event) {
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -276,10 +274,11 @@ export default {
 
               this.walkingGsap = gsap.to(this.camera.quaternion, {
                 duration: 2,
-                x: 0.09896519624587782,
-                y: -0.3003743331603951,
-                z: -0.03135204681765772,
-                w: -0.9481551555894248,
+                x: 0.09786719758176317,
+                y: -0.19650288234430477,
+                z: -0.0197160522638617,
+                w: -0.9754075589982892,
+                //_x: 0.09786719758176317, _y: -0.19650288234430477, _z: -0.0197160522638617, _w: -0.9754075589982892
                 onComplete: () => {
                   this.EnableControl = true;
                   this.PlayerState = 1;
@@ -297,7 +296,7 @@ export default {
           break;
         case "sheet":
           this.$store.commit("Market/IncreaseTutorialDialog");
-           this.akonList[0].object.visible = false
+          this.akonList[0].object.visible = false;
           break;
       }
       this.dbClickEvent.eventName = "";
@@ -352,6 +351,7 @@ export default {
     },
 
     setupAinmation() {
+      this.createCloud();
       this.mixer = new THREE.AnimationMixer(this.marketModel);
       this.passerbyList = new Array();
       for (let i = 1; i <= 4; i++) {
@@ -413,6 +413,7 @@ export default {
 
         this.akonArrowList.push(arrowTemp);
       });
+      console.log("akonArrowNameList", this.akonArrowList);
 
       this.cuponList = new Array();
       this.cuponList.push(
@@ -456,7 +457,7 @@ export default {
           )
         )
       );
-      this.createCloud()
+
       this.akonList[1].PlayAnimation();
 
       this.CarAnimation = new AnimateObject(
@@ -474,7 +475,11 @@ export default {
         10,
         this.camera
       );
-      this.DragLady.axuobj = (new PasserBy(this.camera, this.marketModel.getObjectByName("par_drag_man"), 6));
+      this.DragLady.axuobj = new PasserBy(
+        this.camera,
+        this.marketModel.getObjectByName("par_drag_man"),
+        6
+      );
       this.KickMan = new AnimateObject(
         this.marketModel.getObjectByName("par_kick_man"),
         10,
@@ -484,11 +489,12 @@ export default {
       for (let j = 0; j < animationArray.length; j++) {
         let animation_name = animationArray[j].name;
         // console.log(animation_name);
-        if (animation_name.includes("car") || animation_name.includes("tire"))
+        if (animation_name.includes("car") || animation_name.includes("tire")) {
           this.CarAnimation.AppendInfiniteAnimation(
             this.mixer.clipAction(this.marketModel.animations[j])
           );
-        else if (animation_name.includes("swordfish"))
+          console.log("this.CarAnimation", this.CarAnimation);
+        } else if (animation_name.includes("swordfish"))
           this.SwordFish.AppendAnimation(
             this.mixer.clipAction(animationArray[j])
           );
@@ -504,19 +510,11 @@ export default {
     },
 
     updateAnimation() {
-
       if (this.LoadMarketFinish != true) return;
 
+      for (let j = 0; j < 2; j++) this.cloudArray[j].rotation.y += 0.0001;
 
-
-
-
-
-      for(let j = 0; j < 2;j++)
-        this.cloudArray[j].rotation.y += 0.0001
-
-
-        // this.akonArrowList[0].object.lookAt(this.camera.position)
+      // this.akonArrowList[0].object.lookAt(this.camera.position)
       /** passerby will filp if camera approach them */
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
@@ -534,7 +532,7 @@ export default {
           this.fishmongerArrowList[i].object.visible = false;
         }
       }
-      this.DragLady.axuobj.watchMyCOppsite()
+      this.DragLady.axuobj.watchMyCOppsite();
 
       //this.akonList[0].watchMyCrossVector(new THREE.Vector3(17.9, 2.35, -4.03));
       this.akonList[0].watchMe();

@@ -82,9 +82,11 @@ export default {
         0.1,
         800
       );
-      this.camera.position.set(48.69, 30, -0.3);
+      this.camera.position.set(54.87, 31.5, -1.5);
+      //this.camera.position.set(54.78, 30, 2.02);
 
-      this.camera.lookAt(48.69, 30, -0.3);
+
+      this.camera.lookAt(-54.87, 31.5, 0.3);
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
 
       /**
@@ -212,7 +214,7 @@ export default {
       this.LoadMarketFinish = true;
     },
     createSea() {
-      let seaVertices = 100;
+      let seaVertices = 1000;
       let seaAmp = 0.8;
 
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
@@ -330,12 +332,11 @@ export default {
                 if (this.DO_ONCE_DONE == false) {
                   this.DO_ONCE_DONE = true;
                   this.timeout = setTimeout(() => {
-                    this.swordfishJump.PlayAnimation();
+                    this.swordfishJump.PlayAnimationReset();
                     clearTimeout(this.timeout);
-                    alert("fish jump");
                   }, 1300);
                 } else {
-                  this.swordfishJump.PlayAnimation();
+                  this.swordfishJump.PlayAnimationReset();
                 }
 
                 this.swordfishJump.DoOnce = false;

@@ -21,7 +21,7 @@
       v-show="showingFlag"
     ></Market3D>
     <Market2D
-      id="Navigate"
+      id="Market2D"
       v-if="showingFlag && 1"
       @lightBoxEffect="lightBoxEffect"
     ></Market2D>
@@ -182,7 +182,7 @@ export default defineComponent({
   background-color: #35909c;
 }
 
-#Navigate {
+#Market2D {
   position: absolute;
   // background-color: chartreuse;
   // opacity: 0.3;

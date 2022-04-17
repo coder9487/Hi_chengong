@@ -12,11 +12,11 @@
         恭喜你離成功更近一步，記錄你的<b>成功之旅</b>或對自己的<b>成功期許</b>，讓阿公幫你<b>成功寄出</b>吧！一定很漂亮!
       </div>
       <div class="dialogArea-group">
-        <div @click.stop="" class="button color-orange">下次成功見!</div>
+        <div @click.stop="this.$router.push('/')" class="button color-orange">下次成功見!</div>
       </div>
     </div>
   </div>
-  <div class="PasserbydialogArea" v-if="umount">
+  <div class="PasserbydialogArea" id="PasserbydialogArea">
     <div
       class="PasserbydialogArea-dialog"
       v-html="contentList.content[contentListIndex]"
@@ -30,7 +30,7 @@
 </template>
 <script>
 import gsap from "gsap";
-import {ref} from "vue";
+import { ref } from "vue";
 export default {
   setup() {},
   computed: {
@@ -49,7 +49,9 @@ export default {
     },
     endDialog: function () {
       if (this.endDialog == true) {
-        this.$store.commit("setFozzyFram",true)
+        let area = document.getElementById("PasserbydialogArea")
+        area.style.bottom = "-100vh"
+        this.$store.commit("setFozzyFram", true);
         gsap.fromTo(
           ".Akon",
           { opacity: 0 },
@@ -64,26 +66,23 @@ export default {
   data() {
     return {
       showDialog: false,
-      umount:ref(true),
+      umount: (true),
       contentListIndex: 0,
       contentList: {
         content: [
-
-          "三仙台的<b>由來</b>是因為有呂洞賓、李鐵拐、何仙姑在此休息，島上有一個<b>許願郵筒</b>很有名喔!",
           "你聽，<b>海的聲音</b>好紓壓，我可以靜靜地聽一整天，每次有煩惱的時候我都會來~",
-          "有些漁法容易<b>誤捕</b>導致破壞生態，保存成功的<b>鏢旗魚</b>技法是很重要的，哇!你看，有旗魚！",
           "大家要做好保育工作，把成功獨特的<b>鏢旗魚</b>文化傳承下去，一起守護<b>成功的海</b>！",
+          "有些漁法容易<b>誤捕</b>導致破壞生態，保存成功的<b>鏢旗魚</b>技法是很重要的，哇!你看，有旗魚！",
+          "三仙台的<b>由來</b>是因為有呂洞賓、李鐵拐、何仙姑在此休息，島上有一個<b>許願郵筒</b>很有名喔!",
         ],
-        button: [ "好酷！", "好療癒~", "運氣真好","沒錯！"],
+        button: ["好酷！", "好療癒~", "運氣真好", "沒錯！"],
       },
     };
   },
   methods: {
     dialogHandler(state) {
-      if (state == true)
-      {
-
-        this.showDialog = true
+      if (state == true) {
+        this.showDialog = true;
         gsap.fromTo(
           ".PasserbydialogArea",
           { opacity: 0 },
@@ -92,10 +91,8 @@ export default {
             duration: 0.5,
           }
         );
-      }
-
-      else {
-        this.showDialog = false
+      } else {
+        this.showDialog = false;
         gsap.fromTo(
           ".PasserbydialogArea",
           { opacity: 1 },
@@ -257,6 +254,7 @@ b {
     }
   }
 }
+
 * {
   user-drag: none;
   -webkit-user-drag: none;

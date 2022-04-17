@@ -20,8 +20,8 @@ export  class Sea {
     this.mesh = new THREE.Object3D();
 
     let geomWaves = new THREE.PlaneBufferGeometry(
-      2000,
-      2000,
+      10000,
+      10000,
       this.vertX,
       this.vertY
     );
