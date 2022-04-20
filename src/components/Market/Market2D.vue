@@ -35,7 +35,8 @@
 
     <div
       class="PasserbydialogArea"
-      v-show="navigate_dialog_content_show_availbale"
+      v-show="navigate_dialog_content_show_availbale && navigate_dialog_content_index <= 10"
+
     >
       <div
         class="PasserbydialogArea-dialog"
@@ -56,12 +57,12 @@
       navigate_dialog_content_index <= 10
     "
   >
-    <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" />
+    <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" preload />
     <div
       class="fishmonger-dialog"
       v-show="fishmonger_dialog_content_show_available"
     >
-      <q-img :src="fishMonger_image_path.dialogBox"> </q-img>
+      <q-img :src="fishMonger_image_path.dialogBox" preload> </q-img>
       <div class="fishmonger-dialog-button-group">
         <q-btn
           class="fishmonger-dialog-button"

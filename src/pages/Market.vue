@@ -172,7 +172,7 @@ export default defineComponent({
     left: 15%;
     bottom: 0%;
     @media screen and (max-device-width: 768px) {
-      bottom: -100%;
+      bottom: -1500%;
     }
     z-index: 8;
   }

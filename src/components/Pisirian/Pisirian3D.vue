@@ -240,7 +240,7 @@ export default {
     },
     updateAnimation() {
       if (this.LoadMarketFinish != true) return;
-      this.mixer.update(0.016);
+      this.mixer.update(0.02);
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
         this.passerbyList[i].watchMe();

@@ -553,7 +553,7 @@ export default {
         this.akonList[1].toggleDistance
       ) {
         // this.walkingGsap.pause();
-        console.log(this.camera.quaternion);
+        // console.log(this.camera.quaternion);
         this.akonList[1].toggleDistance = 1000;
         gsap.to(this.camera.position, {
           duration: 2,
