@@ -32,7 +32,7 @@ export default {
   onBeforeUnmount() {},
   data() {
     return {
-      UpdateTime: ref(0.016),
+      UpdateTime: ref(0.01),
       PostProcessingEnable: true,
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
@@ -44,6 +44,10 @@ export default {
   },
   watch: {
     GameEnable: function () {
+      if(this.GameEnable)
+      this.UpdateTime = 0.02
+      else
+      this.UpdateTime = 0;
       console.log("GameEnable ", this.GameEnable);
     },
   },
@@ -214,6 +218,8 @@ export default {
         if (!GLTF_LOADER)
           this.mixer.clipAction(this.swordfish.scene.animations[i]).play();
         else this.mixer.clipAction(this.swordfish.animations[i]).play();
+
+        console.log(this.swordfish.animations[i])
       }
 
       sceneSetting(this.swordfish.scene);
@@ -291,6 +297,8 @@ export default {
       }
     },
     onDblclick() {
+      if( this.spear_direct_vector.state == "trans")
+      return;
       // console.log("arrowHelper ", this.arrowHelper);
       if (this.castToSea) {
         // console.log("Spera eular ", this.spear.rotation);
@@ -345,6 +353,7 @@ export default {
             console.log("this.$store.state.Swordfish.swordfish",this.$store.state.Swordfish.swordfish)
             for (let i = 0; i <= 2; i++)
               this.mixer.clipAction(this.swordfish.animations[i]).reset();
+
             this.spear_direct_vector.times = 101;
           }
 
@@ -365,6 +374,7 @@ export default {
           break;
       }
       this.mixer.update(this.UpdateTime);
+      if (this.UpdateTime <= 0.01) return;
 
       this.sea.mesh.position.x += 0.1;
       this.lowersea.mesh.position.x += 0.1;

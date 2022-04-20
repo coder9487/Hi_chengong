@@ -49,8 +49,18 @@ export default {
   },
   watch: {
     tutorialIndex: function () {
-      console.log("INDEX", this.tutorialIndex);
-      if (this.tutorialIndex == 3) this.PlayerState = 2;
+      console.log("tutorialIndex:", this.tutorialIndex);
+      switch (this.tutorialIndex) {
+        case 2:
+          this.EnableControl = false;
+          break;
+        case 3:
+          this.PlayerState = 2;
+          break;
+        case 4:
+          this.EnableControl = true;
+          break;
+      }
     },
   },
   computed: {
@@ -127,8 +137,7 @@ export default {
       //     "images/sky_neg_z.jpg",
       //     "images/sky_pos_z.jpg",
       //   ]);
-     this.scene.background =   new THREE.Color( 0x3CC4D0 );
-
+      this.scene.background = new THREE.Color(0x3cc4d0);
 
       // load a resource
       this.loadMarket();
@@ -273,8 +282,6 @@ export default {
             y: 1.5,
             z: -1.21,
             onComplete: () => {
-              console.log(this.camera.quaternion);
-
               this.walkingGsap = gsap.to(this.camera.quaternion, {
                 duration: 2,
                 x: 0.09786719758176317,
@@ -285,6 +292,7 @@ export default {
                 onComplete: () => {
                   this.EnableControl = true;
                   this.PlayerState = 1;
+                  console.log(this.walkingGsap);
                 },
               });
             },
@@ -535,7 +543,8 @@ export default {
           this.fishmongerArrowList[i].object.visible = false;
         }
       }
-      this.DragLady.axuobj.watchMyCOppsite();
+      this.DragLady.axuobj.object.lookAt(this.camera.position
+      );
 
       //this.akonList[0].watchMyCrossVector(new THREE.Vector3(17.9, 2.35, -4.03));
       this.akonList[0].watchMe();
@@ -657,8 +666,8 @@ export default {
         case 2:
           this.akonList[0].FilpOption(1);
           break;
-        case "3": //rotate to car
-          console.log("#######");
+        case 3: //rotate to car
+
 
           break;
       }

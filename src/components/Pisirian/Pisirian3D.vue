@@ -175,8 +175,9 @@ export default {
       for (let i = 1; i <= 4; i++) {
         let objTemp = this.islandModel.getObjectByName(`par_passerby0${i}`);
         if (i == 3)
-          this.passerbyList.push(new PasserBy(this.camera, objTemp, 3));
-        else this.passerbyList.push(new PasserBy(this.camera, objTemp, 2));
+          this.passerbyList.push(new PasserBy(this.camera, objTemp, 4
+          ));
+        else this.passerbyList.push(new PasserBy(this.camera, objTemp, 4));
       }
       this.AkonObject = new PasserBy(
         this.camera,

@@ -21,7 +21,7 @@
         : false
     "
   >
-    <q-img class="charactor-image" src="images/a_kon_hi.png"></q-img>
+    <img class="charactor-image" src="images/a_kon_hi.png" preload>
     <div></div>
   </div>
   <div
@@ -38,9 +38,9 @@
     </div>
   </div>
   <div v-show="dialogContent_Index >= 9" >
-    <img class="cupon" :src="imagesrc(dialogContent_Index - 9)" />
+    <img class="cupon" :src="imagesrc(dialogContent_Index - 9)" preload>
   </div>
-  <div
+  <!-- <div v-if="0"
     class="dialog"
     v-show="
       dialogContent_Array[dialogContent_Index] != '' &&
@@ -73,7 +73,48 @@
         >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
       >
     </div>
-  </div>
+  </div> -->
+
+
+
+
+
+    <div
+
+    v-show="
+      dialogContent_Array[dialogContent_Index] != '' &&
+      dialogContent_Array[dialogContent_Index] != 'lottie' &&
+      dialogContent_Array[dialogContent_Index] != 'hearvest'
+        ? true
+        : false
+    "
+
+
+      class="PasserbydialogArea"
+
+    >
+      <div
+        class="PasserbydialogArea-dialog"
+        v-html="dialogContent_Array[dialogContent_Index]"
+      ></div>
+      <div class="PasserbydialogArea-group">
+        <div  @click.stop="dialogContent_Index++" class="button color-cyan">
+          {{ dialogButton_Content[dialogContent_Index] }}
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
   <div class="hearvest" v-show="dialogContent_Index == 8 ? true : false">
     <div class="hearvest-content">
       <img
@@ -94,12 +135,12 @@
       </div>
     </div>
 
-    <q-btn
-      color="orange"
-      class="hearvest-content-button"
+        <div
+      class="button color-cyan hearvest-content-button"
       @click.stop="dialogContent_Index++"
-      >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
+      >{{ dialogButton_Content[dialogContent_Index] }}</div
     >
+
   </div>
 
   <div id="hintOfHit">恭喜!你鏢中了!</div>
@@ -359,8 +400,8 @@ $content-text-size-pc: 1.4vw;
     &-button {
       position: relative;
       margin: auto;
-      bottom: 0;
-      left: 45%;
+      top: -30px;
+      left: 0;
     }
   }
 }
@@ -452,4 +493,100 @@ $content-text-size-pc: 1.4vw;
   font-weight: bolder;
   font-size: $content-text-size-pc;
 }
+
+
+.PasserbydialogArea {
+  opacity: 1;
+  position: absolute;
+  width: 60vw;
+  height: 20vh;
+  left: 20vw;
+  bottom: 10vh;
+  & * {
+    pointer-events: all;
+  }
+  &-photo {
+    position: relative;
+    width: 45vw;
+    left: 7.5vw;
+    top: -3%;
+  }
+  &-dialog {
+    position: relative;
+    width: 45vw;
+    height: 20vh;
+    left: 7.5vw;
+    background-color: aliceblue;
+
+    border-radius: 30px;
+    padding: 2.5vw;
+    font-size: 1.5vw;
+    color: #276a70;
+    @media screen and (min-width: 1024px) {
+      font-size: $content-text-size-pc;
+      line-height: $content-text-size-pc * 1.8;
+      letter-spacing: $content-text-size-pc * 0.2;
+    }
+    ::v-deep b {
+      color: #fea30b;
+      font-weight: bolder;
+    }
+  }
+  &-group {
+    position: relative;
+    width: 45vw;
+    height: 10vh;
+    // background-color: aquamarine;
+    left: 7.5vw;
+    top: -20%;
+    display: flex;
+    justify-content: space-around;
+  }
+}
+b {
+  color: #fea30b;
+  font-weight: bolder;
+}
+.button {
+  z-index: 11;
+  width: 10vw;
+  height: 7vh;
+  // background-color: cornflowerblue;
+  border-radius: 20px;
+  padding: 2%;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+  color: white;
+  font-weight: bolder;
+}
+
+.color {
+  &-orange {
+    background-color: #fea30b;
+    &:hover {
+      background-color: #ff7a00;
+    }
+  }
+
+  &-cyan {
+    background-color: #1ab5c1;
+    &:hover {
+      background-color: #0098a4;
+    }
+  }
+}
+* {
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+
+
 </style>

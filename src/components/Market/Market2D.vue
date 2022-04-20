@@ -230,6 +230,8 @@ export default {
     // },
 
     marketPersonDisplay: function () {
+      if(this.marketPersonDisplayEnable == false)
+      return;
       if (this.marketPersonDisplay.includes("_")) {
         //select cupon
 
@@ -258,6 +260,9 @@ export default {
     },
     marketPersonDisplay() {
       return this.$store.state.Market.marketDisplay[0]["id"];
+    },
+       marketPersonDisplayEnable() {
+      return this.$store.state.Market.marketDisplay[0]["display"];
     },
     fishmongerPhoto() {
       return this.fishMonger_image_path.fishMonger;
@@ -342,7 +347,7 @@ export default {
           //   id: "None",
           //   display: 0,
           // });
-          // this.$store.commit("resetmarketChangeState");
+           this.$store.commit("Market/resetmarketChangeState");
           break;
         default:
           console.log("No condition fit");
