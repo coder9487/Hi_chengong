@@ -188,23 +188,25 @@ export default defineComponent({
   }
 }
 .loadingPage {
+  top:20vh;
   width: 100vw;
   height: 100vh;
   // background-color: cadetblue;
   &-mask {
     // opacity: 0.3;
+    top:-5vh;
     position: fixed;
     width: 100%;
     z-index: 10;
     height: auto;
-    top: -5vh;
+
   }
   &-percentage {
     z-index: 20;
     position: fixed;
     font-size: 50px;
     color: darkorange;
-    bottom: 10%;
+    bottom: -10%;
     left: 40%;
     @media screen and (max-device-width: 768px) {
       bottom: 10%;
@@ -242,7 +244,7 @@ export default defineComponent({
   text-align: center;
   font-size: 10px;
   transform: translateX(-50%);
-  top: 50vh;
+  top: 40vh;
   left: 50vw;
   position: absolute;
   color: #35909c;
