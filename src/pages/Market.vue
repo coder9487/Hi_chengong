@@ -26,7 +26,7 @@
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
       v-if="!IS_MOBILE"
-      v-show="showingFlag"
+      v-show="showingFlag && !IS_MOBILE"
     ></Market3D>
     <Market3DMobileVue
       id="market3D"
@@ -59,7 +59,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      IS_MOBILE: ref(false),
+      IS_MOBILE: ref(true),
     };
   },
   mounted() {
@@ -130,8 +130,9 @@ export default defineComponent({
   },
   methods: {
     detectPaltform() {
+
       if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        /Android|webOS|iPhone|iPad|iPod/i.test(
           navigator.userAgent
         )
       )
