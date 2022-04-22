@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="detectPaltform"
+    v-if="0"
     @touchstart.prevent.stop="touchFn('start')"
     @touchend.prevent="touchFn('end')"
     id="goBtn"

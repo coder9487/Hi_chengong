@@ -26,7 +26,7 @@
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
       v-if="!IS_MOBILE"
-      v-show="showingFlag && !IS_MOBILE"
+      v-show="showingFlag"
     ></Market3D>
     <Market3DMobileVue
       id="market3D"
@@ -58,8 +58,13 @@ export default defineComponent({
     Market3DMobileVue,
   },
   setup() {
+    let IS_MOBILE = ref(
+        /Android|webOS|iPhone|iPad|iPod/i.test(
+          navigator.userAgent
+        )
+      );
     return {
-      IS_MOBILE: ref(true),
+      IS_MOBILE,
     };
   },
   mounted() {
@@ -102,7 +107,7 @@ export default defineComponent({
       // console.log("loading progress ", this.loading);
       let loadingWave = document.getElementById("loading-video");
       loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 97 * this.DEBUG) {
+      if (this.loading >= 80 * this.DEBUG) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);
