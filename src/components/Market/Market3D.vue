@@ -20,8 +20,6 @@ import {
   Akon,
 } from "../../Library/AnimationLibrary";
 
-import Hammer from "hammerjs";
-
 export default {
   setup() {
     const Document = document;

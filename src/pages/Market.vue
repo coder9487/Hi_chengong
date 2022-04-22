@@ -47,7 +47,7 @@
 import { defineComponent, ref, reactive } from "vue";
 import Market3D from "src/components/Market/Market3D.vue";
 import Market2D from "src/components/Market/Market2D.vue";
-import Market3DMobileVue from "src/components/market/Market3DMobile.vue";
+import Market3DMobileVue from "src/components/Market/Market3DMobile.vue";
 import gsap from "gsap";
 
 export default defineComponent({
