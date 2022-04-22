@@ -1,9 +1,9 @@
 <template>
-  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_win">
-    <source src="../../../public/hitVideo.mp4" type="video/mp4" />
+  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_win" preload>
+    <source src="../../../public/hitVideo.mp4" type="video/mp4"  />
   </video>
-  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_fail">
-    <source src="../../../public/failHitVideo.mp4" type="video/mp4" />
+  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_fail" preload>
+    <source src="../../../public/failHitVideo.mp4" type="video/mp4"  />
     Your browser does not support the video tag.
   </video>
 
@@ -98,7 +98,7 @@
         v-html="dialogContent_Array[dialogContent_Index]"
       ></div>
       <div class="PasserbydialogArea-group">
-        <div  @click.stop="dialogContent_Index++" class="button color-cyan">
+        <div  @click.stop="dialogContent_Index++" class="button color-orange">
           {{ dialogButton_Content[dialogContent_Index] }}
         </div>
       </div>

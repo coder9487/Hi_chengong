@@ -11,7 +11,7 @@
       >走！去成功</q-btn
     >
   </div>
-  <video id="startUpVedio" @ended="videoFinish" @dblclick="videoDblcilck">
+  <video id="startUpVedio" @ended="videoFinish" @dblclick="videoDblcilck" preload>
     <source src="../../public/startupVideo.mp4" type="video/mp4" />
   </video>
   <div></div>
@@ -23,6 +23,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "PageIndex",
   setup() {
+
     return {};
   },
   data() {

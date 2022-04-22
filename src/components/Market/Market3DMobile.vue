@@ -1,12 +1,12 @@
 <template>
-  <div >
-    <canvas  id="three"></canvas>
+  <div id="FullScreen">
+    <canvas v-touch-pan.prevent="direciton" id="three"></canvas>
   </div>
 </template>
 <script>
 import * as THREE from "three";
 import { Sea } from "../../Library/Sea";
-import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
+import { GlobalScene } from "../../Library/BasicLibrary";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { marketSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
@@ -19,8 +19,6 @@ import {
   HoverCharacter,
   Akon,
 } from "../../Library/AnimationLibrary";
-
-import Hammer from "hammerjs";
 
 export default {
   setup() {
@@ -35,7 +33,6 @@ export default {
     };
   },
   mounted() {
-
     this.Init_Three();
     this.AddEnentListener();
     this.Animation_Three();
@@ -54,7 +51,7 @@ export default {
   },
   watch: {
     direc: {
-      handler() {
+      handler:function() {
         this.$store.commit("setLookDir", {
           x: this.direc.hori,
           y: this.direc.vert,
@@ -84,26 +81,23 @@ export default {
     },
   },
   methods: {
-    detectPaltform() {
-
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      )
-        return true;
-      else return false;
-    },
     direciton({ evt, ...newInfo }) {
+
       this.direc.hori = newInfo.delta.x.toFixed(0);
       this.direc.vert = newInfo.delta.y.toFixed(0);
+       this.$store.commit("setLookDir", {
+          x: this.direc.hori,
+          y: this.direc.vert,
+        });
 
-      if (newInfo.isFirst) {
-      } else if (newInfo.isFinal) {
-        this.direc.hori = 0;
-        this.direc.vert = 0;
-      }
     },
+     setAllCulled(obj, culled) {
+  obj.frustumCulled = culled;
+  obj.children.forEach(child => setAllCulled(child, culled));
+},
+
+
+
 
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 213110000).toFixed(2));
@@ -126,11 +120,12 @@ export default {
         powerPreference: "high-performance",
       });
       this.renderer.setClearColor(new THREE.Color("#ffffff"), 0);
+      window.renderer = this.renderer
       this.camera = new THREE.PerspectiveCamera(
         50,
         window.innerWidth / window.innerHeight,
         0.1,
-        400
+        100
       );
       this.camera.position.set(20, 1.5, 0);
 
@@ -193,20 +188,13 @@ export default {
     },
     AddEnentListener() {
       this.Window = window;
-      if (!this.detectPaltform()) {
-        this.Window.addEventListener("pointermove", this.onPointerMove);
-        this.Window.addEventListener("resize", this.onWindowResize);
-        this.Window.addEventListener("dblclick", this.onDblclick);
-        this.Window.addEventListener("mousemove", this.onMouseMove);
-      } else {
-        // this.Window.addEventListener("touchstart", this.touch.handleTouchStart);
-        // this.Window.addEventListener("touchmove", this.touch.handleTouchMove);
-        // this.Window.addEventListener("touchend", this.touch.handleTouchEnd);
-
-      }
+      this.Window.addEventListener("resize", this.onWindowResize);
+      this.Window.addEventListener("click", this.onDblclick);
+      this.Window.addEventListener("touchmove", this.onMouseMove);
     },
 
     async loadMarket() {
+
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
@@ -303,6 +291,8 @@ export default {
       //   " VuexDataPool",
       //   this.VuexDataPool
       // );
+      console.log(this.dbClickEvent
+      )
 
       switch (this.dbClickEvent.eventName) {
         case "Moving":
@@ -361,7 +351,7 @@ export default {
       this.raycaster.setFromCamera(this.pointer, this.camera);
       let lastestRay = this.raycaster.intersectObjects(raycasterList);
       if (lastestRay.length > 0) {
-        if (lastestRay[0].object.name.includes("ground") ) {
+        if (lastestRay[0].object.name == "ground") {
           this.pin.visible = true;
           this.dbClickEvent.eventObject = { distance: lastestRay[0].distance };
           this.dbClickEvent.eventName = "Moving";
@@ -487,7 +477,7 @@ export default {
         new PasserBy(
           this.camera,
           this.marketModel.getObjectByName("par_a_kon_start"),
-          6
+          3
         )
       );
 
@@ -570,7 +560,7 @@ export default {
 
       for (let j = 0; j < 2; j++) this.cloudArray[j].rotation.y += 0.0001;
 
-      //  this.akonArrowList[0].object.lookAt(this.camera.position)
+      // this.akonArrowList[0].object.lookAt(this.camera.position)
       /** passerby will filp if camera approach them */
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
@@ -592,6 +582,16 @@ export default {
 
       //this.akonList[0].watchMyCrossVector(new THREE.Vector3(17.9, 2.35, -4.03));
       this.akonList[0].watchMe();
+      if(this.akonList[0].DoOnce == false)
+      {
+        if(this.akonList[0].isApproach())
+        {
+          // alert()
+          this.akonList[0].DoOnce = true;
+          this.PlayerState = 1;
+        }
+      }
+
       if (
         this.camera.position.distanceTo(new THREE.Vector3(-44.4, 1.65, -4.12)) <
         this.akonList[1].toggleDistance
@@ -702,8 +702,8 @@ export default {
       switch (this.PlayerState) {
         case 1:
           this.akonArrowList[0].object.visible = false;
-          let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
-          yellow_arrow.visible = false;
+          // let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
+          // yellow_arrow.visible = false;
           if (this.$store.state.Market.tutorialIndex == 1)
             this.$store.commit("Market/IncreaseTutorialDialog");
           break;
@@ -753,5 +753,8 @@ export default {
   left: 0;
   top: 0;
 }
-
+#FullScreen {
+  width: 100vw;
+  height: 100vh;
+}
 </style>

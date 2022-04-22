@@ -74,6 +74,7 @@ export class PasserBy {
     this.object = object;
     this.distance = distance;
     this.toggle = false;
+    this.DoOnce = false;
   }
   isApproach() {
     return (

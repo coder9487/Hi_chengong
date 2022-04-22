@@ -12,7 +12,7 @@ const routes = [
       {path: '/Pisirian', component: () => import('src/pages/Pisirian.vue')},
        {path: '/Market', component: () => import('src/pages/Market.vue')},
       {path: '/Swordfish', component: () => import('src/pages/Swordfish.vue')},
-      {path: '/lottie', component: () => import('src/pages/Lab/lottie.vue')},
+      {path: '/Final', component: () => import('src/pages/Final.vue')},
 
 
 

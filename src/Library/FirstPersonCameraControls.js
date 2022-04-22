@@ -188,10 +188,20 @@ export class FirstPersonCameraControl {
     }
     mobileMove() {
         let moveForward = store.state.Forward;
-        let turnRight = store.state.Right;
-        let turnLeft = store.state.Left;
-        let lookup = store.state.Lookup;
-        let lookdown = store.state.Lookdown;
+        let CameraDirect = store.state.CameraDirect;
+        this.rotateX(CameraDirect.x)
+        this.rotateY(CameraDirect.y)
+
+        switch (moveForward) {
+          case false: // w
+              this._camerLocalDirection.z = 0;
+              break;
+          case true: // w
+              this._camerLocalDirection.z = 0.3;
+              break;
+
+      }
+return;
         switch (moveForward) {
             case false: // w
                 this._camerLocalDirection.z = 0;

@@ -22,7 +22,6 @@ const Market = {
     marketChangeState(state, person) {
       state.marketDisplay.splice(0, 1, person);
     },
-
   },
   actions: {},
   getters: {},
@@ -45,9 +44,9 @@ const Swordfish = {
     ToggleGame(state) {
       state.gameEnable = !state.gameEnable;
     },
-    clearResult(state){
-      state.swordfish = 0
-    }
+    clearResult(state) {
+      state.swordfish = 0;
+    },
   },
   actions: {},
   getters: {
@@ -113,11 +112,20 @@ const Pisirian = {
 export default createStore({
   state: {
     Fozzy3D: false,
+    Forward:false,
+    CameraDirect: { x: 0, y: 0 },
   },
   mutations: {
     setFozzyFram(state, available) {
       state.Fozzy3D = available;
     },
+    setLookDir(state, objects) {
+      state.CameraDirect.x = objects.x;
+      state.CameraDirect.y = objects.y;
+    },
+    setForward(state,statment){
+      state.Forward = statment
+    }
   },
   modules: {
     Market: Market,

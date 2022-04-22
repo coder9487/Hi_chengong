@@ -17,9 +17,16 @@
       id="market3D"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="1"
+      v-if="!IS_MOBILE"
       v-show="showingFlag"
     ></Market3D>
+    <Market3DMobileVue
+      id="market3D"
+      @loadingProgress="loadingProgressPercentage"
+      @scene="sceneRecieve"
+      v-if="IS_MOBILE"
+      v-show="showingFlag"
+    ></Market3DMobileVue>
     <Market2D
       id="Market2D"
       v-if="showingFlag && 1"
@@ -30,8 +37,9 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import Market3D from "../components/Market/Market3D.vue";
-import Market2D from "../components/Market/Market2D.vue";
+import Market3D from "src/components/Market/Market3D.vue";
+import Market2D from "src/components/Market/Market2D.vue";
+import Market3DMobileVue from "src/components/market/Market3DMobile.vue";
 import gsap from "gsap";
 
 export default defineComponent({
@@ -39,13 +47,20 @@ export default defineComponent({
   components: {
     Market3D,
     Market2D,
+    Market3DMobileVue
   },
-  setup() {},
+  setup() {
+    return{
+      IS_MOBILE:false
+    }
+  },
   mounted() {
+    this.IS_MOBILE = this.detectPaltform()
     let vid = document.getElementById("loading-video");
     vid.canplay = function () {
       vid.style.display = "show";
     };
+    // this.fullScreen("market3D");
   },
 
   watch: {
@@ -79,7 +94,7 @@ export default defineComponent({
       // console.log("loading progress ", this.loading);
       let loadingWave = document.getElementById("loading-video");
       loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 98 * this.DEBUG) {
+      if (this.loading >= 97 * this.DEBUG) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);
@@ -88,7 +103,7 @@ export default defineComponent({
     sceneObject: function () {},
   },
   computed: {
-        lightBoxEffectMode() {
+    lightBoxEffectMode() {
       return this.$store.state.Fozzy3D;
     },
   },
@@ -102,10 +117,32 @@ export default defineComponent({
       progressPercent: ref(0),
       showEnable: ref(true),
       DEBUG: 1,
-      golbalEvent: { dblclick: false }
+      golbalEvent: { dblclick: false },
     };
   },
   methods: {
+        detectPaltform() {
+
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      )
+        return true;
+      else return false;
+    },
+    fullScreen(id_tag) {
+      let elem = document.getElementById(id_tag);
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    },
     loadingProgressPercentage(val) {
       this.loading = (val * 99).toFixed(2);
     },

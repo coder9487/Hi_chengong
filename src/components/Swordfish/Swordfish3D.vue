@@ -351,8 +351,8 @@ export default {
 
             this.$store.commit("Swordfish/ShootSwordfish");
             console.log("this.$store.state.Swordfish.swordfish",this.$store.state.Swordfish.swordfish)
-            for (let i = 0; i <= 2; i++)
-              this.mixer.clipAction(this.swordfish.animations[i]).reset();
+            // for (let i = 0; i <= 2; i++)
+            //   this.mixer.clipAction(this.swordfish.animations[i]).reset();
 
             this.spear_direct_vector.times = 101;
           }

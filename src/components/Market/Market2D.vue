@@ -1,4 +1,11 @@
 <template>
+  <div
+    v-if="detectPaltform"
+    @touchstart.prevent.stop="touchFn('start')"
+    @touchend.prevent="touchFn('end')"
+    id="goBtn"
+  ></div>
+
   <div class="navigate">
     <div id="navigate-lottie">
       <div
@@ -15,28 +22,12 @@
       ></div>
     </div>
 
-    <div class="navigate-dialog" v-if="0">
-      <div
-        class="navigate-dialog-content"
-        v-show="navigate_dialog_content_show_availbale"
-      >
-        <div v-html="A_kon_dialogContent[navigate_dialog_content_index]"></div>
-
-        <q-btn
-          class="navigate-dialog-button"
-          color="cyan-6"
-          @click="A_kon_chatbox_handle"
-          :size="$q.platform.is.desktop ? 'lg' : 'lg'"
-        >
-          我知道了
-        </q-btn>
-      </div>
-    </div>
-
     <div
       class="PasserbydialogArea"
-      v-show="navigate_dialog_content_show_availbale && navigate_dialog_content_index <= 10"
-
+      v-show="
+        navigate_dialog_content_show_availbale &&
+        navigate_dialog_content_index < 10
+      "
     >
       <div
         class="PasserbydialogArea-dialog"
@@ -57,7 +48,11 @@
       navigate_dialog_content_index <= 10
     "
   >
-    <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" preload />
+    <img
+      class="fishmonger-monger"
+      :src="fishMonger_image_path.fishMonger"
+      preload
+    />
     <div
       class="fishmonger-dialog"
       v-show="fishmonger_dialog_content_show_available"
@@ -87,83 +82,67 @@
 <script>
 import { ref, reactive } from "vue";
 import lottie from "lottie-web";
+
 export default {
   mounted() {
     this.changeLottie();
     let state = 0;
-    window.addEventListener("mousedown", (e) => {
-      state = 1;
-    });
+    if (!this.detectPaltform()) {
+      window.addEventListener("mousedown", (e) => {
+        state = 1;
+      });
 
-    window.addEventListener("mousemove", (e) => {
-      if (state === 1) {
-        state = 2;
-      }
-    });
+      window.addEventListener("mousemove", (e) => {
+        if (state === 1) {
+          state = 2;
+        }
+      });
 
-    window.addEventListener("mouseup", (e) => {
-      if (state === 2) {
-        if (this.$store.state.Market.tutorialIndex == 0)
-          this.$store.commit("Market/IncreaseTutorialDialog");
-      }
-    });
+      window.addEventListener("mouseup", (e) => {
+        if (state === 2) {
+          if (this.$store.state.Market.tutorialIndex == 0)
+            this.$store.commit("Market/IncreaseTutorialDialog");
+        }
+      });
+    } else {
+      window.addEventListener("touchstart", (e) => {
+        state = 1;
+      });
+
+      window.addEventListener("touchmove", (e) => {
+        if (state === 1) {
+          state = 2;
+        }
+      });
+
+      window.addEventListener("touchend", (e) => {
+        if (state === 2) {
+          if (this.$store.state.Market.tutorialIndex == 0)
+            this.$store.commit("Market/IncreaseTutorialDialog");
+        }
+      });
+    }
   },
+
   setup() {
     let NextTutorial = ref(false);
-    let WindowObject = window;
     let lottieAnimation;
-
+    let direc = reactive({ hori: 0, vert: 0 });
+    const info = ref(null);
     return {
+      info,
+
+      handleHold({ evt, ...newInfo }) {
+        info.value = newInfo;
+
+        // native Javascript event
+        console.log(evt);
+      },
       NextTutorial,
       lottieAnimation,
+      direc,
     };
   },
-  // setup() {
-  //   let moving = reactive({ x: 0, y: 0 });
-  //   let direc = reactive({ hori: 0, vert: 0 });
-  //   return {
-  //     moving,
-  //     direc,
-  //     movement({ evt, ...newInfo }) {
-  //       // movementInfo.value = newInfo;
-
-  //       // native Javascript event
-  //       moving.x = (newInfo.offset.x / 10).toFixed(0);
-  //       moving.y = (newInfo.offset.y / 10).toFixed(0);
-  //       if (moving.x > 13) {
-  //         moving.x = 13;
-  //       } else if (moving.x < -13) {
-  //         moving.x = -13;
-  //       }
-  //       if (moving.y > 13) {
-  //         moving.y = 13;
-  //       } else if (moving.y < -13) {
-  //         moving.y = -13;
-  //       }
-  //       if (newInfo.isFirst) {
-  //         // movementInfo.value = true;
-  //       } else if (newInfo.isFinal) {
-  //         // movementPanning.value = false;
-  //         moving.x = 0;
-  //         moving.y = 0;
-  //       }
-  //     },
-  //     direciton({ evt, ...newInfo }) {
-  //       // direcitonInfo.value = newInfo;
-
-  //       direc.hori = newInfo.delta.x.toFixed(0);
-  //       direc.vert = newInfo.delta.y.toFixed(0);
-
-  //       if (newInfo.isFirst) {
-  //         // direcitonInfo.value = true;
-  //       } else if (newInfo.isFinal) {
-  //         // direcitonPanning.value = false;
-  //         direc.hori = 0;
-  //         direc.vert = 0;
-  //       }
-  //     },
-  //   };
-  // },
   data() {
     return {
       lottie_conetnt: ["", "mouse_drag", "click_move", "double_click"],
@@ -212,27 +191,20 @@ export default {
       }
     },
 
-    // moving: {
-    //   handler(newVal) {
-    //     this.$store.commit("MobileMovement", [this.moving.x, this.moving.y]);
-    //     // console.log(this.$store.state.MobileMovement);
-    //   },
-    //   deep: true,
-    // },
-    // direc: {
-    //   handler(newVal) {
-    //     this.$store.commit("MobileDirection", [
-    //       this.direc.hori,
-    //       this.direc.vert,
-    //     ]);
-    //     console.log(this.$store.state.MobileDirection);
-    //   },
-    //   deep: true,
-    // },
+
+    direc: {
+      handler(newVal) {
+        this.$store.commit("setLookDir", {
+          x: this.direc.hori,
+          y: this.direc.vert,
+        });
+        console.log(this.$store.state.CameraDirect);
+      },
+      deep: true,
+    },
 
     marketPersonDisplay: function () {
-      if(this.marketPersonDisplayEnable == false)
-      return;
+      if (this.marketPersonDisplayEnable == false) return;
       if (this.marketPersonDisplay.includes("_")) {
         //select cupon
 
@@ -255,30 +227,49 @@ export default {
     },
     fuzzyavailable() {
       return (
-        this.navigate_dialog_content_show_availbale ||
         this.fishmonger_dialog_content_show_available
       );
     },
     marketPersonDisplay() {
       return this.$store.state.Market.marketDisplay[0]["id"];
     },
-       marketPersonDisplayEnable() {
+    marketPersonDisplayEnable() {
       return this.$store.state.Market.marketDisplay[0]["display"];
     },
     fishmongerPhoto() {
       return this.fishMonger_image_path.fishMonger;
     },
+  },
+  methods: {
+    touchFn(state) {
+      switch (state) {
+        case "start":
+          this.$store.commit("setForward", true);
+          break;
+        case "end":
+          this.$store.commit("setForward", false);
+          break;
+      }
+    },
+    direciton({ evt, ...newInfo }) {
+      this.direc.hori = newInfo.delta.x.toFixed(0);
+      this.direc.vert = newInfo.delta.y.toFixed(0);
+
+      if (newInfo.isFirst) {
+      } else if (newInfo.isFinal) {
+        this.direc.hori = 0;
+        this.direc.vert = 0;
+      }
+    },
     detectPaltform() {
       if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry /i.test(
           navigator.userAgent
         )
       )
         return true;
       else return false;
     },
-  },
-  methods: {
     lottieShowEnableFunc(passIn) {
       if (passIn == this.lottie_counter && this.lottieShowEnable == true)
         return true;
@@ -348,7 +339,7 @@ export default {
           //   id: "None",
           //   display: 0,
           // });
-           this.$store.commit("Market/resetmarketChangeState");
+          this.$store.commit("Market/resetmarketChangeState");
           break;
         default:
           console.log("No condition fit");
@@ -610,5 +601,25 @@ b {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+
+
+#goBtn {
+  z-index: 100;
+  left: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  border-radius: 20px;
+  background-color: #ff7a00;
+  opacity: 0.5;
+  transition: border-radius 0.3s;
+
+  &:active {
+    border-radius: 50px;
+    transition: border-radius 0.3s;
+  }
 }
 </style>

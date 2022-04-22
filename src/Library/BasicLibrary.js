@@ -43,31 +43,7 @@ export class GlobalScene {
     let LightArray = new Array();
      LightArray.push(new THREE.AmbientLight(0xffffff,3));
 
-    // LightArray.push(new THREE.HemisphereLight(0x00aeff, 0x080820, 3.1));
-    // LightArray.push(new THREE.RectAreaLight(0xff6969, 4.1, 100, 100));
 
-    // LightArray[1].position.set(0, 50, 0);
-
-    // LightArray[1].lookAt(LightArray[1].position.x, 0, LightArray[1].position.z);
-
-    // LightArray.push(new THREE.PointLight(0x060075, 4.1, 100));
-    // LightArray[2].position.set(0, 30, 0);
-    // LightArray.push(new THREE.PointLight(0xb55202, 0.5, 25));
-    // LightArray[3].position.set(30, 5, 0);
-    // LightArray.push(new THREE.RectAreaLight(0x541500, 10, 100, 20));
-    // LightArray[4].position.set(0, 0, -10);
-    // LightArray[4].lookAt(
-    //   LightArray[4].position.x,
-    //   LightArray[4].position.y,
-    //   1000
-    // );
-    // LightArray.push(new THREE.RectAreaLight(0x00e0e0, 7.1, 100, 20));
-    // LightArray[5].position.set(0, 0, -10);
-    // LightArray[5].lookAt(
-    //   LightArray[5].position.x,
-    //   LightArray[5].position.y,
-    //   -1000
-    // );
 
     for (let i = 0; i <= LightArray.length; i++) {
       this.scene.add(LightArray[i]);

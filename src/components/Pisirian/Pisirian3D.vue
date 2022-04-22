@@ -19,7 +19,7 @@ import {
   HoverCharacter,
   Akon,
 } from "../../Library/AnimationLibrary";
-
+import { reactive } from "vue";
 export default {
   name: "Pisirian3D",
   setup() {
@@ -46,16 +46,37 @@ export default {
       dbClickEvent: { eventName: "", eventObject: {} },
       controllerMode: "0",
       togglePasserby: 0,
+      direc: reactive({ hori: 0, vert: 0 }),
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
-  watch: { detectSowrdfish: function () {} },
+  watch: {
+     direc: {
+      handler(newVal) {
+        this.$store.commit("setLookDir", {
+          x: this.direc.hori,
+          y: this.direc.vert,
+        });
+        console.log(this.$store.state.CameraDirect);
+      },
+      deep: true,
+    },},
   computed: {
     detectSowrdfish() {
       return this.$store.state.Pisirian.toggledPasserby;
     },
   },
   methods: {
+    direciton({ evt, ...newInfo }) {
+      this.direc.hori = newInfo.delta.x.toFixed(0);
+      this.direc.vert = newInfo.delta.y.toFixed(0);
+      console.log(this.direc);
+      if (newInfo.isFirst) {
+      } else if (newInfo.isFinal) {
+        this.direc.hori = 0;
+        this.direc.vert = 0;
+      }
+    },
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 65211482).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 65211482).toFixed(2));
@@ -66,7 +87,7 @@ export default {
       this.pointer = new THREE.Vector2();
 
       this.scene = new THREE.Scene();
-         this.scene.background =   new THREE.Color( 0x3CC4D0 );
+      this.scene.background = new THREE.Color(0x3cc4d0);
       let canvas = document.querySelector("#three");
       this.renderer = new THREE.WebGLRenderer({
         canvas,
@@ -84,7 +105,6 @@ export default {
       );
       this.camera.position.set(54.87, 31.5, -1.5);
       //this.camera.position.set(54.78, 30, 2.02);
-
 
       this.camera.lookAt(-54.87, 31.5, 0.3);
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
@@ -175,8 +195,7 @@ export default {
       for (let i = 1; i <= 4; i++) {
         let objTemp = this.islandModel.getObjectByName(`par_passerby0${i}`);
         if (i == 3)
-          this.passerbyList.push(new PasserBy(this.camera, objTemp, 4
-          ));
+          this.passerbyList.push(new PasserBy(this.camera, objTemp, 4));
         else this.passerbyList.push(new PasserBy(this.camera, objTemp, 4));
       }
       this.AkonObject = new PasserBy(
@@ -352,5 +371,17 @@ export default {
   },
 };
 </script>
-
-{x: 26.960382, y: 28.490637273707723, z: -1.871433, _gsap: GSCache}
+<style lang="scss" scoped>
+#three #touch{
+  /* background-color: #65e9fa; */
+  width: 100vw;
+  height: 100h;
+  position: fixed;
+  z-index: 6;
+  left: 0;
+  top: 0;
+}
+#touch{
+  z-index:10
+}
+</style>
