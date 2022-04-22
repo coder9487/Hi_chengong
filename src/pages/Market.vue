@@ -17,7 +17,7 @@
       手機版尚未完成系統測試，請使用電腦版以獲得最佳體驗
     </div>
     <div >
-      Mobile and VR version are not supported now, please try Hi！ Chenggong on desktop.
+      Mobile and VR version are not supported now, please try Hi Chenggong on desktop.
     </div>
   </div>
   <div id="colorSlide">
