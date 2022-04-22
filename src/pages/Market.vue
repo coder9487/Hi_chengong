@@ -12,6 +12,14 @@
       ></video>
     </div>
   </div>
+  <div v-if="IS_MOBILE" class="mobile-text">
+    <div>
+      手機版尚未完成系統測試，請使用電腦版以獲得最佳體驗
+    </div>
+    <div >
+      Mobile and VR version are not supported now, please try Hi！ Chenggong on desktop.
+    </div>
+  </div>
   <div id="colorSlide">
     <Market3D
       id="market3D"
@@ -24,7 +32,7 @@
       id="market3D"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="IS_MOBILE"
+      v-if="0"
       v-show="showingFlag"
     ></Market3DMobileVue>
     <Market2D
@@ -47,15 +55,15 @@ export default defineComponent({
   components: {
     Market3D,
     Market2D,
-    Market3DMobileVue
+    Market3DMobileVue,
   },
   setup() {
-    return{
-      IS_MOBILE:false
-    }
+    return {
+      IS_MOBILE: ref(false),
+    };
   },
   mounted() {
-    this.IS_MOBILE = this.detectPaltform()
+    this.IS_MOBILE = this.detectPaltform();
     let vid = document.getElementById("loading-video");
     vid.canplay = function () {
       vid.style.display = "show";
@@ -121,8 +129,7 @@ export default defineComponent({
     };
   },
   methods: {
-        detectPaltform() {
-
+    detectPaltform() {
       if (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
@@ -229,5 +236,16 @@ export default defineComponent({
 }
 #colorSlide {
   background-color: black;
+}
+.mobile-text {
+  text-align: center;
+  font-size: 10px;
+  transform: translateX(-50%);
+  top: 50vh;
+  left: 50vw;
+  position: absolute;
+  color: #35909c;
+  z-index: 200;
+  margin-top: 10%;
 }
 </style>
