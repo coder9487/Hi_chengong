@@ -4,8 +4,6 @@
     <q-btn
       v-show="hideFlag"
       class="start_btn text-h5 text-weight-bolder"
-      text-color="cyan-7"
-      color="grey-1"
       @click="playVideo()"
       :size="$q.platform.is.desktop ? 'lg' : 'md'"
       >走！去成功</q-btn
@@ -53,7 +51,7 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #startUpVedio {
   width: 100vw;
   height: auto;
@@ -69,7 +67,14 @@ export default defineComponent({
   bottom: 16%;
   right: 40vw;
   border: 20px ;
+  background-color:#FFFFFF;
+  color: #1AA4B1;
   z-index: 5;
+
+  &:hover{
+  background-color:#1AA4B1;
+  color: white;
+  }
 }
 
 #StartBackgroung {

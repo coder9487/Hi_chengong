@@ -1,6 +1,6 @@
 <template>
-  <div >
-    <canvas  id="three"></canvas>
+  <div>
+    <canvas id="three"></canvas>
   </div>
 </template>
 <script>
@@ -33,7 +33,6 @@ export default {
     };
   },
   mounted() {
-
     this.Init_Three();
     this.AddEnentListener();
     this.Animation_Three();
@@ -83,7 +82,6 @@ export default {
   },
   methods: {
     detectPaltform() {
-
       if (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
@@ -102,12 +100,25 @@ export default {
         this.direc.vert = 0;
       }
     },
+    readTextFile(file, callback) {
+      let rawFile = new XMLHttpRequest();
+      rawFile.overrideMimeType("application/json");
+      rawFile.open("GET", file, true);
+      rawFile.onreadystatechange = function () {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+          callback(rawFile.responseText);
+        } else {
+          alert(rawFile.readyState);
+        }
+      };
+    },
 
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 213110000).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 213110000).toFixed(2));
     },
     Init_Three() {
+      this.gsapTimeline = gsap.timeline();
       this.raycaster = new THREE.Raycaster();
       this.raycaster.far = 10;
       this.pointer = new THREE.Vector2();
@@ -200,7 +211,6 @@ export default {
         // this.Window.addEventListener("touchstart", this.touch.handleTouchStart);
         // this.Window.addEventListener("touchmove", this.touch.handleTouchMove);
         // this.Window.addEventListener("touchend", this.touch.handleTouchEnd);
-
       }
     },
 
@@ -224,7 +234,11 @@ export default {
       this.setupAinmation();
       this.controls.colliders = this.marketModel;
       this.LoadMarketFinish = true;
-      console.log(this.marketModel);
+      this.readTextFile("./3dconfig.json", (text) => {
+        this.ConfigFile = JSON.parse(text);
+        console.clear();
+        console.log("this.ConfigFile", this.ConfigFile);
+      });
     },
 
     createSea() {
@@ -301,12 +315,13 @@ export default {
       //   " VuexDataPool",
       //   this.VuexDataPool
       // );
+      console.log(this.camera.quaternion);
 
       switch (this.dbClickEvent.eventName) {
         case "Moving":
           if (this.EnableControl == false) break;
           console.log("Point to ", this.pin.position);
-          gsap.to(this.camera.position, {
+          this.gsapTimeline.to(this.camera.position, {
             duration: 1.5,
             repeat: 0,
             x: this.pin.position.x,
@@ -317,27 +332,28 @@ export default {
         case "tutorial":
           // console.log("Enter tutorial");
           this.EnableControl = false;
-          gsap.to(this.camera.position, {
-            duration: 1,
-            x: 18.631,
-            y: 1.5,
-            z: -1.21,
-            onComplete: () => {
-              this.walkingGsap = gsap.to(this.camera.quaternion, {
-                duration: 2,
-                x: 0.09786719758176317,
-                y: -0.19650288234430477,
-                z: -0.0197160522638617,
-                w: -0.9754075589982892,
-                //_x: 0.09786719758176317, _y: -0.19650288234430477, _z: -0.0197160522638617, _w: -0.9754075589982892
-                onComplete: () => {
-                  this.EnableControl = true;
-                  this.PlayerState = 1;
-                  console.log(this.walkingGsap);
-                },
-              });
-            },
-          });
+          this.gsapTimeline
+            .to(this.camera.position, {
+              duration: 1,
+              x: 18.631,
+              y: 1.5,
+              z: -1.21,
+              onComplete: () => {
+                this.gsapTimeline;
+              },
+            })
+            .to(this.camera.quaternion, {
+              duration: 2,
+              x: 0.09786719758176317,
+              y: -0.19650288234430477,
+              z: -0.0197160522638617,
+              w: -0.9754075589982892,
+              //_x: 0.09786719758176317, _y: -0.19650288234430477, _z: -0.0197160522638617, _w: -0.9754075589982892
+              onComplete: () => {
+                this.EnableControl = true;
+                this.PlayerState = 1;
+              },
+            });
           break;
         case "fishmonger":
           this.$store.commit("Market/marketChangeState", {
@@ -359,7 +375,7 @@ export default {
       this.raycaster.setFromCamera(this.pointer, this.camera);
       let lastestRay = this.raycaster.intersectObjects(raycasterList);
       if (lastestRay.length > 0) {
-        if (lastestRay[0].object.name.includes("ground") ) {
+        if (lastestRay[0].object.name.includes("ground")) {
           this.pin.visible = true;
           this.dbClickEvent.eventObject = { distance: lastestRay[0].distance };
           this.dbClickEvent.eventName = "Moving";
@@ -563,12 +579,8 @@ export default {
 
     updateAnimation() {
       if (this.LoadMarketFinish != true) return;
-
-      this.controls.mobileMove();
-
+      if (this.detectPaltform()) this.controls.mobileMove();
       for (let j = 0; j < 2; j++) this.cloudArray[j].rotation.y += 0.0001;
-
-      //  this.akonArrowList[0].object.lookAt(this.camera.position)
       /** passerby will filp if camera approach them */
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
@@ -577,95 +589,101 @@ export default {
       /** fishmonger hover effect and arrow action */
       for (let i = 0; i < this.fishmongerList.length; i++) {
         this.fishmongerList[i].watchMe();
-
         if (this.fishmongerList[i].isApproach()) {
           this.fishmongerArrowList[i].object.visible = true;
-
-          // console.log("arrow  ", this.fishmongerArrowList[i]);
         } else {
           this.fishmongerArrowList[i].object.visible = false;
         }
       }
       this.DragLady.axuobj.object.lookAt(this.camera.position);
-
-      //this.akonList[0].watchMyCrossVector(new THREE.Vector3(17.9, 2.35, -4.03));
       this.akonList[0].watchMe();
+
       if (
         this.camera.position.distanceTo(new THREE.Vector3(-44.4, 1.65, -4.12)) <
         this.akonList[1].toggleDistance
       ) {
+        this.dbClickEvent.eventName = "";
         // this.walkingGsap.pause();
         // console.log(this.camera.quaternion);
         this.akonList[1].toggleDistance = 1000;
-        gsap.to(this.camera.position, {
-          duration: 2,
-          x: -41.87,
-          z: -3.85,
-          onComplete: () => {
-            gsap.to(this.camera.quaternion, {
-              duration: 0.5,
-              x: 0.039719355081779,
-              y: -0.7478140956181748,
-              z: -0.04492276599848267,
-              w: -0.6611946735430532,
-              onComplete: () => {
-                this.PlayerState = 3;
-                if (this.$store.state.Market.tutorialIndex == 4)
-                  this.$store.commit("Market/IncreaseTutorialDialog");
-              },
-            });
-
-            // const scrollTop = Math.round(tween.target.y)
-          },
-        });
+        this.gsapTimeline
+          .to(this.camera.position, {
+            duration: 2,
+            x: -41.87,
+            z: -3.85,
+          })
+          .to(this.camera.quaternion, {
+            duration: 0.5,
+            x: -0.025688131840607836,
+            y: 0.7657777937572651,
+            z: 0.03064745880541916,
+            w: 0.641860751050853,
+            onComplete: () => {
+              this.PlayerState = 3;
+              if (this.$store.state.Market.tutorialIndex == 4)
+                this.$store.commit("Market/IncreaseTutorialDialog");
+            },
+          });
       }
 
       /** */
       if (this.KickMan.isApproach()) {
         if (this.KickMan.DoOnce == true) {
+          this.dbClickEvent.eventName = "";
           this.KickMan.DoOnce = false;
           let currentQuaternion = this.camera.position.clone();
-          // this.walkingGsap.pause();
-          gsap.to(this.camera.position, {
-            duration: 1,
-            repeat: 0,
-            x: 6.241002770590721,
-            y: 1.5,
-            z: -2.8831586237151945,
-          });
-          console.log(currentQuaternion);
+          // this.walkingthis.gsapTimeline.pause();
+          this.gsapTimeline
+            .to(this.camera.position, {
+              duration: 1,
+              repeat: 0,
+              x: 6.241002770590721,
+              y: 1.5,
+              z: -2.8831586237151945,
+            })
+            .to(this.camera.rotation, {
+              duration: 1,
+              repeat: 0,
+              y: Math.PI / 2,
+              onComplete: () => {
+                this.KickMan.PlayAnimation();
+              },
+            });
 
-          gsap.to(this.camera.rotation, {
-            duration: 1,
-            repeat: 0,
-            y: Math.PI / 2,
-          });
-
-          setTimeout(this.KickMan.PlayAnimation(), 2500);
+          // setTimeout(, 2500);
         }
       }
 
       if (this.SwordFish.isApproach()) {
         if (this.SwordFish.DoOnce) {
+          this.dbClickEvent.eventName = "";
           this.SwordFish.DoOnce = false;
-          gsap.to(this.camera.position, {
-            duration: 0.5,
-            repeat: 0,
-            x: -25.481761805844634,
-            y: 1.5,
-            z: -4.4241223574449045,
-          });
+          this.gsapTimeline
+            .to(this.camera.position, {
+              duration: 0.5,
+              repeat: 0,
+              x: -25.481761805844634,
+              y: 1.5,
+              z: -4.4241223574449045,
+            })
+            .to(this.camera.quaternion, {
+              duration: 1,
+              repeat: 0,
+              w: 0.9241902014275073,
+              x: 0.07037400092097702,
+              y: 0.37430947590170366,
+              z: -0.028502417966723204,
+              onComplete: () => {
+                this.SwordFish.PlayAnimation();
+              },
+            });
 
-          gsap.to(this.camera.quaternion, {
-            duration: 1,
-            repeat: 0,
-            w: 0.9241902014275073,
-            x: 0.07037400092097702,
-            y: 0.37430947590170366,
-            z: -0.028502417966723204,
-          });
+          // this.controls._euler = new THREE.Euler().setFromQuaternion(
+          //   this.camera.quaternion,
+          //   "XYZ"
+          // );
           // console.log(camera.position);
-          setTimeout(this.SwordFish.PlayAnimation(), 1900);
+          // setTimeout(, 1900);
         }
       }
 
@@ -751,5 +769,4 @@ export default {
   left: 0;
   top: 0;
 }
-
 </style>
