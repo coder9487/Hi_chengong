@@ -1,27 +1,26 @@
 <template>
   <div>
-    <canvas id="three"></canvas>
+    <canvas v-touch-pan.prevent="" id="three"></canvas>
   </div>
 </template>
 <script>
 import * as THREE from "three/build/three.module.js";
 import { Sea } from "../../Library/Sea";
-import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
+import { GlobalScene } from "../../Library/BasicLibrary";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { sceneSetting, collectObject } from "../../Library/LoadObject";
+import { sceneSetting } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import gsap from "gsap";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 export default {
-  name: "Pisirian3D",
   setup() {
+    let direc = reactive({ x: 0, y: 0 });
     const Document = document;
-    const Window = window;
     let EnableControl = true;
     return {
       Document,
       EnableControl,
+      direc,
     };
   },
   mounted() {
@@ -44,11 +43,15 @@ export default {
   },
   watch: {
     GameEnable: function () {
-      if(this.GameEnable)
-      this.UpdateTime = 0.02
-      else
-      this.UpdateTime = 0;
-      console.log("GameEnable ", this.GameEnable);
+      if (this.GameEnable) this.UpdateTime = 0.02;
+      else this.UpdateTime = 0;
+
+    },
+    direc: {
+      handler: function () {
+
+      },
+      deep: true,
     },
   },
   computed: {
@@ -57,9 +60,13 @@ export default {
     },
   },
   methods: {
+    direciton(evt) {
+      if (evt.touches[0] != undefined) this.onMouseMove(evt.touches[0]);
+
+    },
 
     loading_callbacks(val) {
-      console.log("Pass into callbacks ", (val.loaded / 3246875).toFixed(2));
+      // console.log("Pass into callbacks ", (val.loaded / 3246875).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 3246875).toFixed(2));
     },
     Init_Three() {
@@ -122,7 +129,7 @@ export default {
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();
-         this.scene.background =   new THREE.Color( 0x3CC4D0 );
+      this.scene.background = new THREE.Color(0x3cc4d0);
       // this.scene.background = new THREE.CubeTextureLoader()
       //   .setPath("../")
       //   .load([
@@ -143,8 +150,7 @@ export default {
       // this.pin = this.createPointer();w
     },
     Animation_Three() {
-      if(this.controllerMode <= "1")
-      this.controls.update();
+      if (this.controllerMode <= "1") this.controls.update();
       this.sea.moveWaves();
       this.lowersea.moveWaves();
       this.composer.render();
@@ -158,6 +164,7 @@ export default {
       this.Window.addEventListener("resize", this.onWindowResize);
       this.Window.addEventListener("click", this.onDblclick);
       this.Window.addEventListener("mousemove", this.onMouseMove);
+       this.Window.addEventListener("touchmove", this.direciton);
     },
 
     async loadTable() {
@@ -181,10 +188,8 @@ export default {
         // this.swordfish.animations = this.swordfish.scene.animations;
       }
 
-      console.log("this.swordfish.scene", this.swordfish.scene);
+      // console.log("this.swordfish.scene", this.swordfish.scene);
       if (!GLTF_LOADER) {
-        // this.swordfish.animations = this.swordfish.scene.children[4].animations;
-        console.log("Animation:", this.swordfish.animations);
       }
       let model = this.swordfish.scene;
       this.scene.add(this.swordfish.scene);
@@ -205,13 +210,13 @@ export default {
 
       this.swordfishbody.position.y = 5;
       this.spear = model.getObjectByName("spear");
-      console.log("Monger skeleton system ", this.mongerSkeleton);
-      console.log("Scene ", this.scene.children[2]);
+      // console.log("Monger skeleton system ", this.mongerSkeleton);
+      // console.log("Scene ", this.scene.children[2]);
       this.raycasterList = [];
       this.backOriginSpear = new THREE.Vector3();
 
       this.raycasterList.push(this.scene.children[2]);
-      console.log(this.scene);
+      // console.log(this.scene);
 
       this.mixer = new THREE.AnimationMixer(model);
       for (let i = 0; i <= 2; i++) {
@@ -219,7 +224,7 @@ export default {
           this.mixer.clipAction(this.swordfish.scene.animations[i]).play();
         else this.mixer.clipAction(this.swordfish.animations[i]).play();
 
-        console.log(this.swordfish.animations[i])
+        // console.log(this.swordfish.animations[i]);
       }
 
       sceneSetting(this.swordfish.scene);
@@ -260,9 +265,9 @@ export default {
       const material = new THREE.MeshStandardMaterial({
         color: 0x00066e,
         side: THREE.DoubleSide,
-        opacity:0.5,
-      //         depthWrite: false,
-      // depthTest: false,
+        opacity: 0.5,
+        //         depthWrite: false,
+        // depthTest: false,
         transparent: true,
       });
       geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
@@ -297,11 +302,10 @@ export default {
       }
     },
     onDblclick() {
-      if( this.spear_direct_vector.state == "trans")
-      return;
-      // console.log("arrowHelper ", this.arrowHelper);
+      if (this.spear_direct_vector.state == "trans") return;
+      // // console.log("arrowHelper ", this.arrowHelper);
       if (this.castToSea) {
-        // console.log("Spera eular ", this.spear.rotation);
+        // // console.log("Spera eular ", this.spear.rotation);
         this.spear_direct_vector.vector = new THREE.Vector3();
 
         this.spear_direct_vector.vector = this.spear.getWorldDirection(
@@ -317,7 +321,7 @@ export default {
         this.spear_direct_vector.times = 0;
       }
 
-      // console.log(direct_vector);
+      // // console.log(direct_vector);
     },
     InitarrowHelper(dir) {
       //normalize the direction vector (convert to vector of length 1)
@@ -337,7 +341,7 @@ export default {
           this.spear_direct_vector.state = "trans";
           break;
         case "trans":
-          // console.log("during trans mode ", this.spear_direct_vector.times);
+          // // console.log("during trans mode ", this.spear_direct_vector.times);
           /**Do not modifity code below */
           this.spear.translateZ(-0.05);
           this.spear.translateY(-0.00098);
@@ -348,9 +352,11 @@ export default {
           let swordfishPos = new THREE.Vector3();
           this.swordfishbody.getWorldPosition(swordfishPos);
           if (swordfishPos.distanceTo(spearWorldPos) < 2) {
-
             this.$store.commit("Swordfish/ShootSwordfish");
-            console.log("this.$store.state.Swordfish.swordfish",this.$store.state.Swordfish.swordfish)
+            console.log(
+              "this.$store.state.Swordfish.swordfish",
+              this.$store.state.Swordfish.swordfish
+            );
             // for (let i = 0; i <= 2; i++)
             //   this.mixer.clipAction(this.swordfish.animations[i]).reset();
 

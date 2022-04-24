@@ -12,7 +12,7 @@
       ></video>
     </div>
   </div>
-  <div v-if="IS_MOBILE" class="mobile-text">
+  <div v-if="IS_MOBILE && !DEBUG" class="mobile-text">
     <div>
       手機版尚未完成系統測試，請使用電腦版以獲得最佳體驗
     </div>
@@ -25,14 +25,14 @@
       id="market3D"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="!IS_MOBILE"
+      v-if="!IS_MOBILE && !DEBUG"
       v-show="showingFlag"
     ></Market3D>
     <Market3DMobileVue
       id="market3D"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="0"
+      v-if="1"
       v-show="showingFlag"
     ></Market3DMobileVue>
     <Market2D
@@ -58,11 +58,14 @@ export default defineComponent({
     Market3DMobileVue,
   },
   setup() {
+    let DEBUG  = true;
     let IS_MOBILE = ref(
         /Android|webOS|iPhone|iPad|iPod/i.test(
           navigator.userAgent
         )
       );
+      if(DEBUG)
+      IS_MOBILE = false;
     return {
       IS_MOBILE,
     };

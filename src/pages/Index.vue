@@ -9,7 +9,7 @@
       >走！去成功</q-btn
     >
   </div>
-  <video id="startUpVedio" @ended="videoFinish" @dblclick="videoDblcilck" preload>
+  <video id="startUpVedio" @ended="videoFinish" @dblclick="videoDblcilck" playsinline preload>
     <source src="../../public/startupVideo.mp4" type="video/mp4" />
   </video>
   <div></div>

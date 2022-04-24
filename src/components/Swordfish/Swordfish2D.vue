@@ -1,9 +1,9 @@
 <template>
-  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_win" preload>
-    <source src="../../../public/hitVideo.mp4" type="video/mp4"  />
+  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_win"  muted playsinline preload>
+    <source src="../../../public/hitVideo.mp4" type="video/mp4" />
   </video>
-  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_fail" preload>
-    <source src="../../../public/failHitVideo.mp4" type="video/mp4"  />
+  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_fail"  muted playsinline preload>
+    <source src="../../../public/failHitVideo.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
@@ -16,12 +16,13 @@
     class="charactor"
     v-show="
       dialogContent_Array[dialogContent_Index] != '' &&
-      dialogContent_Array[dialogContent_Index] != 'lottie'
+      dialogContent_Array[dialogContent_Index] != 'lottie'&&
+      dialogContent_Array[dialogContent_Index] != 'video'
         ? true
         : false
     "
   >
-    <img class="charactor-image" src="images/a_kon_hi.png" preload>
+    <img class="charactor-image" src="images/a_kon_hi.png" preload />
     <div></div>
   </div>
   <div
@@ -37,83 +38,31 @@
       <!-- <div id="lottie-container-a_kon_normal" v-show="!showAkonHover"></div> -->
     </div>
   </div>
-  <div v-show="dialogContent_Index >= 9" >
-    <img class="cupon" :src="imagesrc(dialogContent_Index - 9)" preload>
+  <div v-show="dialogContent_Index >= 9">
+    <img class="cupon" :src="imagesrc(dialogContent_Index - 9)" preload />
   </div>
-  <!-- <div v-if="0"
-    class="dialog"
+
+  <div
     v-show="
       dialogContent_Array[dialogContent_Index] != '' &&
       dialogContent_Array[dialogContent_Index] != 'lottie' &&
-      dialogContent_Array[dialogContent_Index] != 'hearvest'
+      dialogContent_Array[dialogContent_Index] != 'hearvest' &&
+      dialogContent_Array[dialogContent_Index] != 'video'
         ? true
         : false
     "
+    class="PasserbydialogArea"
   >
-    <div>
-      <div
-        class="dialog-content"
-        v-show="
-          dialogContent_Array[dialogContent_Index] != '' &&
-          dialogContent_Array[dialogContent_Index] != 'lottie'
-            ? true
-            : false
-        "
-      >
-        <div
-          class="dialog-content-text"
-          v-html="dialogContent_Array[dialogContent_Index]"
-        ></div>
-      </div>
-
-      <q-btn
-        color="orange"
-        class="dialog-button"
-        @click.stop="dialogContent_Index++"
-        >{{ dialogButton_Content[dialogContent_Index] }}</q-btn
-      >
-    </div>
-  </div> -->
-
-
-
-
-
     <div
-
-    v-show="
-      dialogContent_Array[dialogContent_Index] != '' &&
-      dialogContent_Array[dialogContent_Index] != 'lottie' &&
-      dialogContent_Array[dialogContent_Index] != 'hearvest'
-        ? true
-        : false
-    "
-
-
-      class="PasserbydialogArea"
-
-    >
-      <div
-        class="PasserbydialogArea-dialog"
-        v-html="dialogContent_Array[dialogContent_Index]"
-      ></div>
-      <div class="PasserbydialogArea-group">
-        <div  @click.stop="dialogContent_Index++" class="button color-orange">
-          {{ dialogButton_Content[dialogContent_Index] }}
-        </div>
+      class="PasserbydialogArea-dialog"
+      v-html="dialogContent_Array[dialogContent_Index]"
+    ></div>
+    <div class="PasserbydialogArea-group">
+      <div @click.stop="dialogContent_Index++" class="button color-orange">
+        {{ dialogButton_Content[dialogContent_Index] }}
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
+  </div>
 
   <div class="hearvest" v-show="dialogContent_Index == 8 ? true : false">
     <div class="hearvest-content">
@@ -135,12 +84,12 @@
       </div>
     </div>
 
-        <div
+    <div
       class="button color-cyan hearvest-content-button"
       @click.stop="dialogContent_Index++"
-      >{{ dialogButton_Content[dialogContent_Index] }}</div
     >
-
+      {{ dialogButton_Content[dialogContent_Index] }}
+    </div>
   </div>
 
   <div id="hintOfHit">恭喜!你鏢中了!</div>
@@ -152,8 +101,14 @@ import gsap from "gsap";
 
 export default {
   setup() {
+        let IS_MOBILE = ref(
+        /Android|webOS|iPhone|iPad|iPod/i.test(
+          navigator.userAgent
+        )
+      );
     return {
-      debug: false,
+      IS_MOBILE,
+      debug: true,
       url: "",
     };
   },
@@ -161,20 +116,23 @@ export default {
     getMountofSwordfish() {
       return this.$store.state.Swordfish.swordfish;
     },
-    getMoney(){
-      return (this.hearvest * Math.floor(Math.random() * (120000 - 80000) + 80000)).toFixed(0)
-    }
+    getMoney() {
+      return (
+        this.hearvest * Math.floor(Math.random() * (120000 - 80000) + 80000)
+      ).toFixed(0);
+    },
   },
   mounted() {},
   watch: {
     getMountofSwordfish: function () {
       console.log("getMountofSwordfish", this.getMountofSwordfish);
       if (this.dialogContent_Index == 4)
-      this.$store.commit("Swordfish/clearResult")
+        this.$store.commit("Swordfish/clearResult");
       this.showHitHint();
     },
     dialogContent_Index: function () {
       if (this.dialogContent_Index == 4) {
+        if(!this.IS_MOBILE);
         this.changeLottie("swordfish_tutorial");
         this.changeLottie("a_kon_hover");
         this.changeLottie("a_kon_normal");
@@ -225,7 +183,6 @@ export default {
               brightness: 0,
               onComplete: () => {
                 videoObj.style.zIndex = "-5";
-
               },
             });
           else {
@@ -234,17 +191,14 @@ export default {
               brightness: 0,
               onComplete: () => {
                 videoObj.style.zIndex = "-5";
-
               },
             });
           }
         };
       }
-      if(this.dialogContent_Index == 9)
-      {
-        if(this.getMountofSwordfish == 0)
-        {
-          this.dialogContent_Index = 10
+      if (this.dialogContent_Index == 9) {
+        if (this.getMountofSwordfish == 0) {
+          this.dialogContent_Index = 10;
         }
       }
       if (this.dialogContent_Index == 11) {
@@ -315,6 +269,12 @@ export default {
         loop: true, //循环播放，默认：false
         autoplay: true, //自动播放 ，默认true
         path: `../../lottie/${str}.json`, // json 路径
+        rendererSettings: {
+          filterSize: {
+            width: "60%",
+            height: "100%",
+          },
+        },
       });
     },
     returnVideoUrl() {},
@@ -327,40 +287,11 @@ $content-text-size-pc: 1.4vw;
 .charactor {
   &-image {
     bottom: 0;
-    right: 5vw;
-    width: 30vw;
+    right: 10vw;
+    width: 20vw;
     height: auto;
     position: fixed;
-  }
-}
-.dialog {
-  width: 40vw;
-  height: 15vh;
-  position: fixed;
-  bottom: 15vh;
-  background-color: aliceblue;
-  left: 30vw;
-  border-radius: 30px;
-  flex-direction: column;
-  display: flex;
-  color:#276a70;
-
-  &-content {
-    margin: 5% 5%;
-
-    &-text {
-      font-size: 2.5vh;
-    }
-  }
-
-  &-button {
-    left: 35%;
-    top: -20px;
-    justify-content: space-around;
-    width: 180px;
-    height: 40px;
-    position: relative;
-    border-radius: 20px;
+    z-index: 1;
   }
 }
 
@@ -370,14 +301,17 @@ $content-text-size-pc: 1.4vw;
   display: flex;
   bottom: 20vh;
   display: block;
+  top: 15vh;
 
   &-content {
     position: relative;
     width: 50vw;
     height: auto;
+
     // border-radius: 30px;
 
     &-image {
+      top: 15vh;
       width: 50vw;
     }
     &-money {
@@ -408,22 +342,39 @@ $content-text-size-pc: 1.4vw;
 
 #lottie-container {
   &-swordfish_tutorial {
-    width: 40vw;
+    width: 30vw;
     height: 30vh;
     position: fixed;
-    bottom: 5vh;
-    left: 30vw;
+    bottom: -5vh;
+    left: 50vw;
+    transform: translateX(-50%);
+    @media screen and (min-width: 1024px) {
+      width: 40vw;
+      height: 30vh;
+      bottom: 5vh;
+    }
   }
 
   &-a_kon {
     position: fixed;
-    right:0px;
-    bottom: 0vh;
+    right: 0px;
+    bottom: -2vh;
+    width: 50vw;
+    right: -10vw;
+    @media screen and (min-width: 1024px) {
+    }
     // background-color: beige;
 
-    &_normal &_hover  {
+    &_normal &_hover {
       height: auto;
       width: 500px;
+      @media screen and (min-width: 1024px) {
+        width: 200px;
+      }
+      :deep & > canvas {
+        width: 60%;
+        left: -30%;
+      }
     }
     // &_normal {
 
@@ -433,28 +384,47 @@ $content-text-size-pc: 1.4vw;
 
 #progressbar {
   $progressbar_height: 30px;
-  $progressbar_border_radius: 20px;
+  $progressbar_border_radius: 10px;
+  $progressbar_border_radius_mobile: 10px;
+  $progressbar_height_mobile: 20px;
 
   position: absolute;
-  top: 5vh;
+  top: 2vh;
+  @media screen and (min-width: 1024px) {
+    top: 5vh;
+  }
+
   width: 80vw;
   left: 10vw;
   display: flex;
   background-color: white;
-  border-radius: $progressbar_border_radius;
+  border-radius: $progressbar_border_radius_mobile;
+
+  @media screen and (min-width: 1024px) {
+    border-radius: $progressbar_border_radius;
+  }
   padding: 5px;
   &-background {
     background-color: #ffd29d;
     width: 100%;
-    height: $progressbar_height;
-    border-radius: $progressbar_border_radius;
+    height: $progressbar_height_mobile;
+    border-radius: $progressbar_border_radius_mobile;
+
+    @media screen and (min-width: 1024px) {
+      height: $progressbar_height;
+      border-radius: $progressbar_border_radius;
+    }
   }
   &-line {
     background-color: #ffa400;
     width: 0%;
     /* Adjust with JavaScript */
-    height: $progressbar_height;
-    border-radius: $progressbar_border_radius;
+    height: $progressbar_height_mobile;
+    border-radius: $progressbar_border_radius_mobile;
+    @media screen and (min-width: 1024px) {
+      height: $progressbar_height;
+      border-radius: $progressbar_border_radius;
+    }
   }
 }
 
@@ -478,13 +448,14 @@ $content-text-size-pc: 1.4vw;
   opacity: 0;
   width: 15vw;
   height: 6vh;
-  top: 13vh;
+  top: 15vh;
   left: 50vw;
   border-radius: 20px;
   transform: translateX(-50%);
   background-color: white;
   position: fixed;
-  padding: 10px;
+
+  padding: 3px;
   align-content: center;
   align-items: center;
   justify-content: center;
@@ -492,8 +463,11 @@ $content-text-size-pc: 1.4vw;
   color: #276a70;
   font-weight: bolder;
   font-size: $content-text-size-pc;
-}
 
+  @media screen and (min-width: 1524px) {
+    padding: 10px;
+  }
+}
 
 .PasserbydialogArea {
   opacity: 1;
@@ -518,11 +492,12 @@ $content-text-size-pc: 1.4vw;
     left: 7.5vw;
     background-color: aliceblue;
 
-    border-radius: 30px;
+    border-radius: 15px;
     padding: 2.5vw;
     font-size: 1.5vw;
     color: #276a70;
     @media screen and (min-width: 1024px) {
+      border-radius: 30px;
       font-size: $content-text-size-pc;
       line-height: $content-text-size-pc * 1.8;
       letter-spacing: $content-text-size-pc * 0.2;
@@ -541,6 +516,10 @@ $content-text-size-pc: 1.4vw;
     top: -20%;
     display: flex;
     justify-content: space-around;
+    font-size: 12px;
+    @media screen and (min-width: 1024px) {
+      font-size: 20px;
+    }
   }
 }
 b {
@@ -549,10 +528,10 @@ b {
 }
 .button {
   z-index: 11;
-  width: 10vw;
-  height: 7vh;
+  width: 13vw;
+  height: 10vh;
   // background-color: cornflowerblue;
-  border-radius: 20px;
+  border-radius: 15px;
   padding: 2%;
   display: flex;
   align-content: center;
@@ -561,6 +540,13 @@ b {
   font-size: larger;
   color: white;
   font-weight: bolder;
+  @media screen and (min-width: 1024px) {
+    width: 10vw;
+    height: 7vh;
+    // background-color: cornflowerblue;
+    border-radius: 20px;
+    padding: 2%;
+  }
 }
 
 .color {
@@ -586,7 +572,4 @@ b {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-
-
-
 </style>

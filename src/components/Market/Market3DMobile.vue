@@ -1,6 +1,12 @@
 <template>
-  <div id="FullScreen">
-    <canvas v-touch-pan.prevent="direciton" id="three"></canvas>
+  <div
+    v-if="1"
+    @touchstart.prevent.stop="touchFn('start')"
+    @touchend.prevent="touchFn('end')"
+    id="goBtn"
+  ></div>
+  <div v-touch-pan.prevent="direciton" id="FullScreen">
+    <canvas id="three"></canvas>
   </div>
 </template>
 <script>
@@ -51,7 +57,7 @@ export default {
   },
   watch: {
     direc: {
-      handler:function() {
+      handler: function () {
         this.$store.commit("setLookDir", {
           x: this.direc.hori,
           y: this.direc.vert,
@@ -81,23 +87,29 @@ export default {
     },
   },
   methods: {
+    touchFn(state) {
+      switch (state) {
+        case "start":
+          this.$store.commit("setForward", true);
+          break;
+        case "end":
+          this.$store.commit("setForward", false);
+          break;
+      }
+    },
     direciton({ evt, ...newInfo }) {
-
       this.direc.hori = newInfo.delta.x.toFixed(0);
       this.direc.vert = newInfo.delta.y.toFixed(0);
-       this.$store.commit("setLookDir", {
-          x: this.direc.hori,
-          y: this.direc.vert,
-        });
-
+      console.log(this.direc);
+      this.$store.commit("setLookDir", {
+        x: this.direc.hori,
+        y: this.direc.vert,
+      });
     },
-     setAllCulled(obj, culled) {
-  obj.frustumCulled = culled;
-  obj.children.forEach(child => setAllCulled(child, culled));
-},
-
-
-
+    setAllCulled(obj, culled) {
+      obj.frustumCulled = culled;
+      obj.children.forEach((child) => setAllCulled(child, culled));
+    },
 
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 213110000).toFixed(2));
@@ -120,7 +132,7 @@ export default {
         powerPreference: "high-performance",
       });
       this.renderer.setClearColor(new THREE.Color("#ffffff"), 0);
-      window.renderer = this.renderer
+      window.renderer = this.renderer;
       this.camera = new THREE.PerspectiveCamera(
         50,
         window.innerWidth / window.innerHeight,
@@ -190,11 +202,10 @@ export default {
       this.Window = window;
       this.Window.addEventListener("resize", this.onWindowResize);
       this.Window.addEventListener("click", this.onDblclick);
-      this.Window.addEventListener("touchmove", this.onMouseMove);
+      // this.Window.addEventListener("touchmove", this.onMouseMove);
     },
 
     async loadMarket() {
-
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
@@ -291,8 +302,7 @@ export default {
       //   " VuexDataPool",
       //   this.VuexDataPool
       // );
-      console.log(this.dbClickEvent
-      )
+      console.log(this.dbClickEvent);
 
       switch (this.dbClickEvent.eventName) {
         case "Moving":
@@ -582,10 +592,8 @@ export default {
 
       //this.akonList[0].watchMyCrossVector(new THREE.Vector3(17.9, 2.35, -4.03));
       this.akonList[0].watchMe();
-      if(this.akonList[0].DoOnce == false)
-      {
-        if(this.akonList[0].isApproach())
-        {
+      if (this.akonList[0].DoOnce == false) {
+        if (this.akonList[0].isApproach()) {
           // alert()
           this.akonList[0].DoOnce = true;
           this.PlayerState = 1;
@@ -756,5 +764,22 @@ export default {
 #FullScreen {
   width: 100vw;
   height: 100vh;
+}
+#goBtn {
+  z-index: 100;
+  left: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  border-radius: 20px;
+  background-color: #ff7a00;
+  opacity: 0.5;
+  transition: border-radius 0.3s;
+
+  &:active {
+    border-radius: 50px;
+    transition: border-radius 0.3s;
+  }
 }
 </style>

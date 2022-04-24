@@ -633,6 +633,7 @@ export default {
           this.KickMan.DoOnce = false;
           let currentQuaternion = this.camera.position.clone();
           // this.walkingthis.gsapTimeline.pause();
+
           this.gsapTimeline
             .to(this.camera.position, {
               duration: 1,

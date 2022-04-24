@@ -1,15 +1,8 @@
 <template>
-  <div
-    v-if="0"
-    @touchstart.prevent.stop="touchFn('start')"
-    @touchend.prevent="touchFn('end')"
-    id="goBtn"
-  ></div>
-
   <div class="navigate">
     <div id="navigate-lottie" v-for="n in 3" :key="n">
       <div
-        :id= "`loading-video-container_${n}`"
+        :id="`loading-video-container_${n}`"
         v-show="lottieShowEnableFunc(n)"
       ></div>
     </div>
@@ -40,34 +33,24 @@
       navigate_dialog_content_index <= 10
     "
   >
-  <div>
-    <img
-      class="fishmonger-monger"
-      :src="fishMonger_image_path.fishMonger"
-    />
-  </div>
-
-    <div
-      class="fishmonger-dialog"
-      v-show="fishmonger_dialog_content_show_available"
-    >
-      <q-img :src="fishMonger_image_path.dialogBox" preload> </q-img>
+    <div>
+      <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" />
+    </div>
+    <!-- v-show="fishmonger_dialog_content_show_available" -->
+    <div class="fishmonger-dialog" v-show="1">
+      <img :src="fishMonger_image_path.dialogBox" >
       <div class="fishmonger-dialog-button-group">
-        <q-btn
-          class="fishmonger-dialog-button"
+        <div
+          class="fishmonger-dialog-button button color-orange"
           id="escapeIntroduceBox"
-          color="orange"
-          :size="$q.platform.is.desktop ? 'lg' : 'md'"
           @click="FishMonger_handler('next')"
-          >繼續說</q-btn
+          >繼續說</div
         >
-        <q-btn
-          class="fishmonger-dialog-button"
+        <div
+          class="fishmonger-dialog-button button color-cyan"
           id="nextIntroduceBox"
-          color="cyan-8"
-          :size="$q.platform.is.desktop ? 'lg' : 'md'"
           @click="FishMonger_handler('end')"
-          >了解，謝謝</q-btn
+          >了解，謝謝</div
         >
       </div>
     </div>
@@ -78,7 +61,6 @@ import { ref, reactive } from "vue";
 import lottie from "lottie-web";
 
 export default {
-  name:'Market2D',
   mounted() {
     this.changeLottie();
     let state = 0;
@@ -120,28 +102,22 @@ export default {
   },
 
   setup() {
-
-// {
-//     let count = 0;
-//     let imgs = [
-//     //用require的方式添加圖片地址，直接添加圖片地址的話，在build打包之後會查找不到圖片，因為打包之後的圖片名稱會有一個加密的字元串
-//         require('../../images/monger1/monger1.png'),
-//         require('../../images/monger1/1-1.png'),
-//         require('../../images/monger1/1-2.png')
-//     ]
-//     for (let img of imgs) {
-//         let image = new Image();
-//         image.src = img;
-//         image.onload = () => {
-//             count++;
-//         };
-//     }
-// }
-
-
-
-
-
+    // {
+    //     let count = 0;
+    //     let imgs = [
+    //     //用require的方式添加圖片地址，直接添加圖片地址的話，在build打包之後會查找不到圖片，因為打包之後的圖片名稱會有一個加密的字元串
+    //         require('../../images/monger1/monger1.png'),
+    //         require('../../images/monger1/1-1.png'),
+    //         require('../../images/monger1/1-2.png')
+    //     ]
+    //     for (let img of imgs) {
+    //         let image = new Image();
+    //         image.src = img;
+    //         image.onload = () => {
+    //             count++;
+    //         };
+    //     }
+    // }
 
     let NextTutorial = ref(false);
     let lottieAnimation;
@@ -209,7 +185,6 @@ export default {
       }
     },
 
-
     direc: {
       handler(newVal) {
         this.$store.commit("setLookDir", {
@@ -244,9 +219,7 @@ export default {
       return `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
     },
     fuzzyavailable() {
-      return (
-        this.fishmonger_dialog_content_show_available
-      );
+      return this.fishmonger_dialog_content_show_available;
     },
     marketPersonDisplay() {
       return this.$store.state.Market.marketDisplay[0]["id"];
@@ -281,9 +254,7 @@ export default {
     },
     detectPaltform() {
       if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry /i.test(
-          navigator.userAgent
-        )
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry /i.test(navigator.userAgent)
       )
         return true;
       else return false;
@@ -382,29 +353,7 @@ export default {
 </script>
 <style lang="scss">
 $content-text-size-pc: 1.4vw;
-.controlPannel {
-  // // background-color: antiquewhite;
 
-  &-movement {
-    // background-color: orange;
-    opacity: 0.3;
-    width: 20vw;
-    height: 33vh;
-    position: fixed;
-    left: 0px;
-    z-index: 200;
-    bottom: 33vh;
-  }
-  &-direction {
-    z-index: 101;
-    // background-color: orange;
-    opacity: 0.3;
-    width: 20vw;
-    height: 100vh;
-    position: fixed;
-    right: 0px;
-  }
-}
 #navigate {
   &-lottie {
     position: absolute;
@@ -417,63 +366,7 @@ $content-text-size-pc: 1.4vw;
     right: 50vw;
   }
 }
-.navigate {
-  * {
-    display: inline;
-    float: left;
-  }
 
-  &-dialog {
-    position: absolute;
-    max-width: 50vw;
-    height: 20vh;
-    left: 25%;
-    bottom: 8vh;
-    border-radius: 20px;
-    background-color: aliceblue;
-
-    &-lottie {
-      width: 40vw;
-      height: 20vh;
-    }
-    &-content {
-      font-size: 5vh;
-      @media screen and (min-width: 1024px) {
-        font-size: 2.5vh;
-        line-height: 50px;
-      }
-      $content-border-gap: 20px;
-
-      // margin-left: 7%;
-      // margin-right: 7%;
-      // margin-top: 6%;
-      // margin-bottom: 7%;
-      margin: 5%;
-
-      color: rgb(18, 89, 74);
-      &-b {
-        color: orange;
-      }
-    }
-    &-button {
-      bottom: 2vh;
-      position: relative;
-      border-radius: 20px;
-      margin-left: 60%;
-      top: 10px;
-      width: 40%;
-      @media screen and (min-width: 1024px) {
-        margin-left: 38%;
-        width: 110px;
-      }
-    }
-    &-button * {
-      // margin: 10%;
-      padding: 5%;
-      font-size: 2vh;
-    }
-  }
-}
 
 .fishmonger {
   * {
@@ -498,15 +391,18 @@ $content-text-size-pc: 1.4vw;
       max-width: 60vw;
     }
     &-button-group {
-      // background-color: cornflowerblue;
+       background-color: cornflowerblue;
       display: flex;
       top: -20px;
-      justify-content: space-between;
-      left: -12vw;
+      justify-content: space-around;
+      // left: -10vw;
       width: 50vw;
       position: relative;
+      transform: translateX(-25%);
+
+
       @media screen and (min-width: 1024px) {
-        left: -3vw; //trial and error
+        left: 0vw; //trial and error
       }
     }
     &-button {
