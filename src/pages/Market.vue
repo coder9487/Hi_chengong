@@ -25,14 +25,14 @@
       id="market3D"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="!IS_MOBILE && !DEBUG"
+      v-if="!IS_MOBILE "
       v-show="showingFlag"
     ></Market3D>
     <Market3DMobileVue
       id="market3D"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="1"
+      v-if="IS_MOBILE"
       v-show="showingFlag"
     ></Market3DMobileVue>
     <Market2D
@@ -110,7 +110,7 @@ export default defineComponent({
       // console.log("loading progress ", this.loading);
       let loadingWave = document.getElementById("loading-video");
       loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 80 * this.DEBUG) {
+      if (this.loading >= 50 * this.DEBUG) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);

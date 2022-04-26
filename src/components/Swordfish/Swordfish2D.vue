@@ -1,13 +1,35 @@
 <template>
-  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_win"  muted playsinline preload>
+  <video
+    v-show="showVideo"
+    class="FinishVideo"
+    id="FinishVideo_win"
+    muted
+    playsinline
+    preload
+  >
     <source src="../../../public/hitVideo.mp4" type="video/mp4" />
   </video>
-  <video v-show="showVideo" class="FinishVideo" id="FinishVideo_fail"  muted playsinline preload>
+  <video
+    v-show="showVideo"
+    class="FinishVideo"
+    id="FinishVideo_fail"
+    muted
+    playsinline
+    preload
+  >
     <source src="../../../public/failHitVideo.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
-  <div id="progressbar">
+  <div
+    id="progressbar"
+    v-show="
+      dialogContent_Array[dialogContent_Index] == '' &&
+      dialogContent_Array[dialogContent_Index] != 'video'
+        ? true
+        : false
+    "
+  >
     <div id="progressbar-background">
       <div id="progressbar-line"></div>
     </div>
@@ -16,7 +38,7 @@
     class="charactor"
     v-show="
       dialogContent_Array[dialogContent_Index] != '' &&
-      dialogContent_Array[dialogContent_Index] != 'lottie'&&
+      dialogContent_Array[dialogContent_Index] != 'lottie' &&
       dialogContent_Array[dialogContent_Index] != 'video'
         ? true
         : false
@@ -28,7 +50,13 @@
   <div
     v-show="dialogContent_Array[dialogContent_Index] == 'lottie' ? true : false"
   >
-    <div id="lottie-container-swordfish_tutorial"></div>
+    <div
+      :id="
+        IS_MOBILE
+          ? 'lottie-container-swordfish_tutorial'
+          : 'lottie-container-swordfish_tutorial-desktop'
+      "
+    ></div>
     <div id="lottie-container-a_kon">
       <div
         id="lottie-container-a_kon_hover"
@@ -39,6 +67,7 @@
     </div>
   </div>
   <div v-show="dialogContent_Index >= 9">
+    <!-- <img class="cupon" src="../../../public/images/cupon.png" preload /> -->
     <img class="cupon" :src="imagesrc(dialogContent_Index - 9)" preload />
   </div>
 
@@ -91,6 +120,16 @@
       {{ dialogButton_Content[dialogContent_Index] }}
     </div>
   </div>
+  <div
+    v-show="
+      dialogContent_Array[dialogContent_Index] == '' ||
+      dialogContent_Array[dialogContent_Index] == 'lottie'
+        ? true
+        : false
+    "
+  >
+    <img id="hitButton" src="../../../public/images/shoot.png" v-if="IS_MOBILE" />
+  </div>
 
   <div id="hintOfHit">恭喜!你鏢中了!</div>
 </template>
@@ -101,14 +140,13 @@ import gsap from "gsap";
 
 export default {
   setup() {
-        let IS_MOBILE = ref(
-        /Android|webOS|iPhone|iPad|iPod/i.test(
-          navigator.userAgent
-        )
-      );
+    let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
     return {
+      HIT_STATE: 0,
       IS_MOBILE,
-      debug: true,
+      debug: false,
       url: "",
     };
   },
@@ -122,7 +160,24 @@ export default {
       ).toFixed(0);
     },
   },
-  mounted() {},
+  mounted() {
+    this.$store.commit("Swordfish/Reset")
+    if (this.IS_MOBILE) {
+      const btn = document.getElementById("hitButton");
+      btn.addEventListener("touchstart", (e) => {
+        this.HIT_STATE = 1;
+        this.Hit();
+        e.stopPropagation();
+        e.preventDefault();
+      });
+      btn.addEventListener("touchend", (e) => {
+        if (this.HIT_STATE) this.HIT_STATE = 0;
+        this.Hit();
+        e.stopPropagation();
+        e.preventDefault();
+      });
+    }
+  },
   watch: {
     getMountofSwordfish: function () {
       console.log("getMountofSwordfish", this.getMountofSwordfish);
@@ -132,8 +187,9 @@ export default {
     },
     dialogContent_Index: function () {
       if (this.dialogContent_Index == 4) {
-        if(!this.IS_MOBILE);
-        this.changeLottie("swordfish_tutorial");
+        if (this.IS_MOBILE) this.changeLottie("swordfish_tutorial");
+        else this.changeLottie("swordfish_tutorial-desktop");
+
         this.changeLottie("a_kon_hover");
         this.changeLottie("a_kon_normal");
       }
@@ -202,7 +258,7 @@ export default {
         }
       }
       if (this.dialogContent_Index == 11) {
-        this.$router.push("DiningTable");
+        this.$router.push("/diningTable");
       }
     },
   },
@@ -242,6 +298,9 @@ export default {
     };
   },
   methods: {
+    Hit() {
+      this.$store.commit("Swordfish/Hit");
+    },
     showHitHint() {
       gsap.to("#hintOfHit", {
         duration: 0.5,
@@ -299,9 +358,11 @@ $content-text-size-pc: 1.4vw;
   position: absolute;
   left: 25vw;
   display: flex;
-  bottom: 20vh;
+  bottom: 5vh;
   display: block;
-  top: 15vh;
+  @media screen and (min-width: 1024px) {
+    bottom: 15vh;
+  }
 
   &-content {
     position: relative;
@@ -340,19 +401,27 @@ $content-text-size-pc: 1.4vw;
   }
 }
 
+@mixin lottie-style {
+  width: 30vw;
+  height: 30vh;
+  position: fixed;
+  bottom: -5vh;
+  left: 50vw;
+  transform: translateX(-50%);
+  @media screen and (min-width: 1024px) {
+    width: 40vw;
+    height: 30vh;
+    bottom: 2vh;
+  }
+}
+
 #lottie-container {
   &-swordfish_tutorial {
-    width: 30vw;
-    height: 30vh;
-    position: fixed;
-    bottom: -5vh;
-    left: 50vw;
-    transform: translateX(-50%);
-    @media screen and (min-width: 1024px) {
-      width: 40vw;
-      height: 30vh;
-      bottom: 5vh;
-    }
+    @include lottie-style;
+  }
+
+  &-swordfish_tutorial-desktop {
+    @include lottie-style;
   }
 
   &-a_kon {
@@ -388,7 +457,7 @@ $content-text-size-pc: 1.4vw;
   $progressbar_border_radius_mobile: 10px;
   $progressbar_height_mobile: 20px;
 
-  position: absolute;
+  position: fixed;
   top: 2vh;
   @media screen and (min-width: 1024px) {
     top: 5vh;
@@ -464,14 +533,14 @@ $content-text-size-pc: 1.4vw;
   font-weight: bolder;
   font-size: $content-text-size-pc;
 
-  @media screen and (min-width: 1524px) {
+  @media screen and (min-width: 1024px) {
     padding: 10px;
   }
 }
 
 .PasserbydialogArea {
   opacity: 1;
-  position: absolute;
+  position: fixed;
   width: 60vw;
   height: 20vh;
   left: 20vw;
@@ -502,7 +571,7 @@ $content-text-size-pc: 1.4vw;
       line-height: $content-text-size-pc * 1.8;
       letter-spacing: $content-text-size-pc * 0.2;
     }
-    ::v-deep b {
+    :deep b {
       color: #fea30b;
       font-weight: bolder;
     }
@@ -544,6 +613,7 @@ b {
     width: 10vw;
     height: 7vh;
     // background-color: cornflowerblue;
+    font-size: 16px;
     border-radius: 20px;
     padding: 2%;
   }
@@ -565,11 +635,21 @@ b {
   }
 }
 * {
-  user-drag: none;
   -webkit-user-drag: none;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+#hitButton {
+  position: fixed;
+  bottom: 5vh;
+  left: 5vh;
+  width: 100px;
+  height: 100px;
+  // border-radius: 10px;
+  // background-color: #fea30b;
+  z-index: 100;
 }
 </style>

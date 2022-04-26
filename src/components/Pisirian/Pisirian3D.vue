@@ -157,7 +157,7 @@ export default {
     },
     Animation_Three() {
       this.controls.update();
-      this.sea.moveWaves();
+      // this.sea.moveWaves();
       this.composer.render();
       this.updateAnimation();
 

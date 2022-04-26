@@ -1,5 +1,4 @@
 import { createStore } from "vuex";
-import state from "./module-example/state";
 
 const Market = {
   namespaced: true,
@@ -33,8 +32,18 @@ const Swordfish = {
     swordfish: 0,
     gameEnable: false,
     Fozzy3D: false,
+    hit:false,
   }),
   mutations: {
+    Reset(state){
+      state.swordfish = 0;
+      state.gameEnable = false;
+      state.Fozzy3D = false;
+      state.hit = false;
+    },
+    Hit(state){
+        state.hit = !state.hit;
+    },
     setFozzyFram(state, available) {
       state.Fozzy3D = available;
     },

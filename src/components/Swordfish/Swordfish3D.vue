@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas v-touch-pan.prevent="" id="three"></canvas>
+    <canvas id="three"></canvas>
   </div>
 </template>
 <script>
@@ -14,10 +14,14 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { ref, reactive } from "vue";
 export default {
   setup() {
+    let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
     let direc = reactive({ x: 0, y: 0 });
     const Document = document;
     let EnableControl = true;
     return {
+      IS_MOBILE,
       Document,
       EnableControl,
       direc,
@@ -38,19 +42,23 @@ export default {
       dbClickEvent: { eventName: "", eventObject: {} },
       controllerMode: "2",
       PlayerState: 0,
+      PoleGoEnable: ref(false),
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
   watch: {
+    Hit: function () {
+      this.onDblclick();
+    },
     GameEnable: function () {
-      if (this.GameEnable) this.UpdateTime = 0.02;
-      else this.UpdateTime = 0;
-
+      if (this.GameEnable) {
+        if (this.IS_MOBILE) this.UpdateTime = 0.02;
+        else this.UpdateTime = 0.011;
+        this.PoleGoEnable = true;
+      } else this.UpdateTime = 0;
     },
     direc: {
-      handler: function () {
-
-      },
+      handler: function () {},
       deep: true,
     },
   },
@@ -58,11 +66,13 @@ export default {
     GameEnable() {
       return this.$store.state.Swordfish.gameEnable;
     },
+    Hit() {
+      return this.$store.state.Swordfish.hit;
+    },
   },
   methods: {
     direciton(evt) {
       if (evt.touches[0] != undefined) this.onMouseMove(evt.touches[0]);
-
     },
 
     loading_callbacks(val) {
@@ -162,9 +172,14 @@ export default {
       this.Window = window;
       // this.Window.addEventListener("pointermove", this.onPointerMove);
       this.Window.addEventListener("resize", this.onWindowResize);
-      this.Window.addEventListener("click", this.onDblclick);
-      this.Window.addEventListener("mousemove", this.onMouseMove);
-       this.Window.addEventListener("touchmove", this.direciton);
+      let threewindow = document.getElementById("three");
+
+      if (!this.IS_MOBILE) {
+        this.Window.addEventListener("mousemove", this.onMouseMove);
+        this.Window.addEventListener("click", this.onDblclick);
+      } else {
+        threewindow.addEventListener("touchmove", this.direciton);
+      }
     },
 
     async loadTable() {
@@ -381,9 +396,9 @@ export default {
       }
       this.mixer.update(this.UpdateTime);
       if (this.UpdateTime <= 0.01) return;
-
-      this.sea.mesh.position.x += 0.1;
-      this.lowersea.mesh.position.x += 0.1;
+      if (this.IS_MOBILE) this.sea.mesh.position.x += 1;
+      else this.sea.mesh.position.x += 0.3;
+      this.lowersea.mesh.position.x += 0.5;
       this.mongerSkeleton.position.y = this.boat.position.y =
         Math.sin(Date.now() / 500) * 0.05;
       this.boat.position.y += 0.22;
@@ -391,3 +406,4 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped></style>

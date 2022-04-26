@@ -172,17 +172,17 @@ export default {
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();
-      // this.scene.background = new THREE.CubeTextureLoader()
-      //   .setPath("../")
-      //   .load([
-      //     "images/sky_pos_x.jpg",
-      //     "images/sky_neg_x.jpg",
-      //     "images/sky_pos_y.jpg",
-      //     "images/sky_neg_y.jpg",
-      //     "images/sky_neg_z.jpg",
-      //     "images/sky_pos_z.jpg",
-      //   ]);
-      this.scene.background = new THREE.Color(0x3cc4d0);
+      this.scene.background = new THREE.CubeTextureLoader()
+        .setPath("../")
+        .load([
+          "images/sky_pos_x.jpg",
+          "images/sky_neg_x.jpg",
+          "images/sky_pos_y.jpg",
+          "images/sky_neg_y.jpg",
+          "images/sky_neg_z.jpg",
+          "images/sky_pos_z.jpg",
+        ]);
+      // this.scene.background = new THREE.Color(0x3cc4d0);
 
       // load a resource
       this.loadMarket();
@@ -194,7 +194,7 @@ export default {
       this.handlePlayerState();
 
       this.controls.update();
-      this.sea.moveWaves();
+      // this.sea.moveWaves();
       this.composer.render();
       this.updateAnimation();
 
@@ -218,7 +218,7 @@ export default {
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market2-1.json",
+        "../models/combine.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
@@ -239,6 +239,9 @@ export default {
         console.clear();
         console.log("this.ConfigFile", this.ConfigFile);
       });
+       window.scene = this.scene;
+
+      //  console.log(this.scene.background.texture.minFilter = THREE.LinearFilter)
     },
 
     createSea() {
@@ -338,7 +341,7 @@ export default {
               x: 18.631,
               y: 1.5,
               z: -1.21,
-              onComplete: () => {
+            onComplete: () => {
                 this.gsapTimeline;
               },
             })

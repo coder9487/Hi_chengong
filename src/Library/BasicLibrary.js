@@ -22,6 +22,7 @@ export class GlobalScene {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // THREE.PCFSoftShadowMap
     this.renderer.toneMapping = THREE.ReinhardToneMapping;
     this.renderer.gammaFactor = 3; //2.2
+    this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.renderer.gammaOutput = true;
     if (post_processing) {
       const composer = new EffectComposer(this.renderer);

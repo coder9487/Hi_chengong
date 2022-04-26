@@ -3,6 +3,7 @@
     <img class="loadingPage-mask" src="../../public/loading/loading.png" />
     <div class="loadingPage-loading-video" id="loading-video">
       <video
+        @onloadstart="fullScreen('swordfish3D')"
         src="../../public/loading/wave.mp4"
         autoplay
         muted
@@ -21,8 +22,8 @@
       v-show="showingFlag"
     ></swordfish3D>
     <swordfish2D
-      id="Navigate"
-      v-if="showingFlag && 1"
+      id="swordfish2D"
+      v-if="showingFlag"
       @lightBoxEffect="lightBoxEffect"
     ></swordfish2D>
   </div>
@@ -30,8 +31,8 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import swordfish3D from "../components/Swordfish/Swordfish3D.vue";
-import swordfish2D from "../components/Swordfish/Swordfish2D.vue";
+import swordfish3D from "../components/swordfish/Swordfish3D.vue";
+import swordfish2D from "../components/swordfish/Swordfish2D.vue";
 import gsap from "gsap";
 
 export default defineComponent({
@@ -103,6 +104,18 @@ export default defineComponent({
     };
   },
   methods: {
+    fullScreen(id_tag) {
+      let elem = document.getElementById(id_tag);
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    },
     loadingProgressPercentage(val) {
       this.loading = (val * 99).toFixed(2);
     },
@@ -189,5 +202,15 @@ export default defineComponent({
 }
 #colorSlide {
   background-color: black;
+}
+@media only screen and (orientation:portrait){
+  #swordfish3D {
+    height: 100vw;
+    transform: rotate(90deg);
+  }
+    #swordfish2D {
+    height: 100vw;
+    transform: rotate(90deg);
+  }
 }
 </style>

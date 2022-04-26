@@ -1,15 +1,21 @@
 <template>
   <div id="IndexPageGroup">
     <img id="StartBackgroung" src="images/start.jpg" v-show="hideFlag" />
-    <q-btn
+    <div
       v-show="hideFlag"
       class="start_btn text-h5 text-weight-bolder"
       @click="playVideo()"
-      :size="$q.platform.is.desktop ? 'lg' : 'md'"
-      >走！去成功</q-btn
     >
+      走！去成功
+    </div>
   </div>
-  <video id="startUpVedio" @ended="videoFinish" @dblclick="videoDblcilck" playsinline preload>
+  <video
+    id="startUpVedio"
+    @ended="videoFinish"
+    @dblclick="videoDblcilck"
+    playsinline
+    preload
+  >
     <source src="../../public/startupVideo.mp4" type="video/mp4" />
   </video>
   <div></div>
@@ -21,7 +27,6 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "PageIndex",
   setup() {
-
     return {};
   },
   data() {
@@ -33,16 +38,9 @@ export default defineComponent({
   methods: {
     videoFinish() {
       this.clickEnable = true;
-      this.$router.push('Market')
+      this.$router.push("Market");
     },
-    videoDblcilck()
-    {
-        if(this.clickEnable)
-        {
-          this.$router.push('Market')
-        }
-    }
-,
+    videoDblcilck() {},
     playVideo() {
       this.hideFlag = false;
       var myVideo = document.getElementById("startUpVedio");
@@ -61,19 +59,34 @@ export default defineComponent({
 
 .start_btn {
   width: 20%;
-  height: 10%;
+  height: 15%;
   border-radius: 50px;
   position: absolute;
   bottom: 16%;
   right: 40vw;
-  border: 20px ;
-  background-color:#FFFFFF;
-  color: #1AA4B1;
+  border: 20px;
+  display: flex;
+  background-color: #ffffff;
+  color: #1aa4b1;
   z-index: 5;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  transition: 1s;
+  font-size: large;
 
-  &:hover{
-  background-color:#1AA4B1;
-  color: white;
+  @media screen and (min-width: 1024px) {
+    padding: 1%;
+    height: 10%;
+    font-size:x-large;
+  }
+
+  &:hover {
+    border-radius: 50px;
+    transition: 1s;
+    background-color: #1aa4b1;
+    color: white;
   }
 }
 

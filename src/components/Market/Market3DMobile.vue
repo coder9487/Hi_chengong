@@ -101,6 +101,7 @@ export default {
       this.direc.hori = newInfo.delta.x.toFixed(0);
       this.direc.vert = newInfo.delta.y.toFixed(0);
       console.log(this.direc);
+      this.onMouseMove()
       this.$store.commit("setLookDir", {
         x: this.direc.hori,
         y: this.direc.vert,
@@ -129,7 +130,7 @@ export default {
         antialias: true,
         // alpha: true,
         precision: "lowp",
-        powerPreference: "high-performance",
+        powerPreference: "low-power",
       });
       this.renderer.setClearColor(new THREE.Color("#ffffff"), 0);
       window.renderer = this.renderer;
@@ -192,7 +193,7 @@ export default {
       this.handlePlayerState();
 
       this.controls.update();
-      this.sea.moveWaves();
+      // this.sea.moveWaves();
       this.composer.render();
       this.updateAnimation();
 
@@ -302,7 +303,8 @@ export default {
       //   " VuexDataPool",
       //   this.VuexDataPool
       // );
-      console.log(this.dbClickEvent);
+      // alert(this.dbClickEvent.eventName
+      // );
 
       switch (this.dbClickEvent.eventName) {
         case "Moving":

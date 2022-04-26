@@ -13,6 +13,8 @@ const routes = [
        {path: '/Market', component: () => import('src/pages/Market.vue')},
       {path: '/Swordfish', component: () => import('src/pages/Swordfish.vue')},
       {path: '/Final', component: () => import('src/pages/Final.vue')},
+      {path: '/swordfishChallenge', component: () => import('src/pages/swordfishChallenge.vue')},
+      {path: '/Challenge', component: () => import('src/pages/swordfish_Index.vue')},
 
 
 
