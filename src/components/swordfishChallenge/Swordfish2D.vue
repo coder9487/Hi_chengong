@@ -63,6 +63,10 @@
         @click.stop="dialogContent_Index++"
         v-show="!showAkonHover"
       ></div>
+
+
+
+
       <!-- <div id="lottie-container-a_kon_normal" v-show="!showAkonHover"></div> -->
     </div>
   </div>

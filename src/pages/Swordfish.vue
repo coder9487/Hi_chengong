@@ -15,14 +15,14 @@
   </div>
   <div id="colorSlide">
     <swordfish3D
-      id="swordfish3D"
+      id="swordfish3D-tag"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
       v-if="1"
       v-show="showingFlag"
     ></swordfish3D>
     <swordfish2D
-      id="swordfish2D"
+      id="swordfish2D-tag"
       v-if="showingFlag"
       @lightBoxEffect="lightBoxEffect"
     ></swordfish2D>
@@ -31,7 +31,7 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import swordfish3D from "../components/swordfish/Swordfish3D.vue";
+import swordfish3D from '../components/swordfish/Swordfish3D.vue';
 import swordfish2D from "../components/swordfish/Swordfish2D.vue";
 import gsap from "gsap";
 
@@ -54,7 +54,7 @@ export default defineComponent({
       switch (this.lightBoxEffectMode) {
         case "on":
           gsap.fromTo(
-            "#swordfish3D",
+            "#swordfish3D-tag",
             { webkitFilter: "brightness(1)", filter: "brightness(1)" },
             {
               webkitFilter: "brightness(0)",
@@ -65,7 +65,7 @@ export default defineComponent({
           break;
         case "off":
           gsap.fromTo(
-            "#swordfish3D",
+            "#swordfish3D-tag",
             { webkitFilter: "brightness(0)", filter: "brightness(0)" },
             {
               webkitFilter: "brightness(1)",
@@ -187,7 +187,7 @@ export default defineComponent({
     z-index: 8;
   }
 }
-#swordfish3D {
+#swordfish3D-tag {
   position: fixed;
   background-color: #35909c;
 }
@@ -204,11 +204,11 @@ export default defineComponent({
   background-color: black;
 }
 @media only screen and (orientation:portrait){
-  #swordfish3D {
+  #swordfish3D-tag {
     height: 100vw;
     transform: rotate(90deg);
   }
-    #swordfish2D {
+    #swordfish2D-tag {
     height: 100vw;
     transform: rotate(90deg);
   }
