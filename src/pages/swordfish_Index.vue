@@ -9,15 +9,6 @@
       開始體驗
     </div>
   </div>
-  <video
-    id="startUpVedio"
-    @ended="videoFinish"
-    @dblclick="videoDblcilck"
-    playsinline
-    preload
-  >
-    <source src="../../public/startupVideo.mp4" type="video/mp4" />
-  </video>
   <div></div>
 </template>
 

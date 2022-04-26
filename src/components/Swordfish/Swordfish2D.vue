@@ -139,7 +139,6 @@ import { ref } from "vue";
 import gsap from "gsap";
 
 export default {
-  name:"swordfish2D",
   setup() {
     let IS_MOBILE = ref(
       /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
