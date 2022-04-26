@@ -13,6 +13,7 @@ import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControl
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { ref, reactive } from "vue";
 export default {
+  name:"swordfish3D",
   setup() {
     let IS_MOBILE = ref(
       /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
