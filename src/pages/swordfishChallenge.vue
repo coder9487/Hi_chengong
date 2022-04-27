@@ -256,7 +256,6 @@ export default defineComponent({
   background-color: black;
 }
 @media screen and (orientation: portrait) {
-
   .loadingPage {
     &-loading-video {
       top: 20vh;
