@@ -256,16 +256,7 @@ export default defineComponent({
   background-color: black;
 }
 @media screen and (orientation: portrait) {
-  #Swordfish3D-tag,
-  #Swordfish2D-tag {
-    transform: rotate(-90deg);
-    transform-origin: left top;
-    width: 100vh;
-    overflow-x: hidden;
-    position: absolute;
-    top: 100%;
-    left: 0;
-  }
+
   .loadingPage {
     &-loading-video {
       top: 20vh;
