@@ -1,6 +1,6 @@
 <template>
   <q-layout id="root_layout" view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white" height-hint="98" v-if="1">
+    <q-header elevated class="bg-primary text-white" height-hint="98" v-if="0">
     </q-header>
 
     <q-page-container>
@@ -65,9 +65,6 @@ export default {
     scene() {
       return this.$store.state.scene;
     },
-    screenOrientation() {
-      return window.screen.orientation.type;
-    },
   },
   watch: {
     screenOrientation: function () {},
@@ -82,6 +79,7 @@ export default {
   methods: {
     ScreenOrientation() {
       {
+        // alert(window.screen)
         const orientation = window.screen.orientation.type;
         if (orientation === "portrait-primary") {
           this.persistent = true;
@@ -111,13 +109,5 @@ export default {
 .systemIcon_group * {
   z-index: 20;
   padding: 50px;
-}
-
-.interpreterCard {
-  top: 300px;
-  left: 500px;
-  width: 300px;
-  height: 400px;
-  position: absolute;
 }
 </style>

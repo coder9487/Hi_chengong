@@ -10,6 +10,18 @@
     gtag('js', new Date());
 
     gtag('config', 'G-5L9ZZ9M8CF');
+
+
+
+
+    links = document.getElementsByClassName("video-content")[0].getElementsByTagName("A");
+
+    let i;
+    for (i = 0; i < links.length; i++) {
+      links[i].onclick = function () { window.open(this.href, '_system'); this.href = "javascript:void(0)"; this.preventDefault(); };
+    }
+
+
   </script>
   <title>嗨！成功</title>
 
