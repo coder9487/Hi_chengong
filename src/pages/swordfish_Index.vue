@@ -26,6 +26,9 @@ export default defineComponent({
       clickEnable: false,
     };
   },
+  mounted(){
+
+},
   methods: {
     videoFinish() {
       this.clickEnable = true;
@@ -41,6 +44,19 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
+
+@media screen and (orientation: portrait) {
+  #IndexPageGroup {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    // width: 100vh;
+    // overflow-x: hidden;
+    // position: absolute;
+    // top: 100%;
+    // left: 0;
+  }
+}
+
 #startUpVedio {
   width: 100vw;
   height: auto;

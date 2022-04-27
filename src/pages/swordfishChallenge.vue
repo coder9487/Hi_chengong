@@ -2,7 +2,7 @@
   <div class="loadingPage" v-if="!showingFlag">
     <img class="loadingPage-mask" id="loadingPage-mask" />
     <div class="loadingPage-text">
-      <div v-if="ENABLE_FOR_MOBILE && IS_MOBILE  || !IS_MOBILE">
+      <div v-if="(ENABLE_FOR_MOBILE && IS_MOBILE) || !IS_MOBILE">
         {{ loading_text[loading_text_index] }}
       </div>
       <div v-else class="loadingPage-text-dev">
@@ -52,13 +52,16 @@ export default defineComponent({
     let IS_MOBILE = ref(
       /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
     );
-    let ENABLE_FOR_MOBILE = 0;
+    let ENABLE_FOR_MOBILE = 1;
     return {
       IS_MOBILE,
-      ENABLE_FOR_MOBILE
+      ENABLE_FOR_MOBILE,
     };
   },
   mounted() {
+
+
+
     let vid = document.getElementById("loading-video");
     // let photo = document.getElementById("loadingPage-mask");
     let image = document.getElementById("loadingPage-mask");
@@ -104,7 +107,10 @@ export default defineComponent({
       if (this.IS_MOBILE)
         loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
       else loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 95 && (this.ENABLE_FOR_MOBILE && this.IS_MOBILE || !this.IS_MOBILE)) {
+      if (
+        this.loading >= 95 &&
+        ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE)
+      ) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);
@@ -250,6 +256,16 @@ export default defineComponent({
   background-color: black;
 }
 @media screen and (orientation: portrait) {
+  #Swordfish3D-tag,
+  #Swordfish2D-tag {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
   .loadingPage {
     &-loading-video {
       top: 20vh;
@@ -262,4 +278,16 @@ export default defineComponent({
     }
   }
 }
+// @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape)
+// {
+//   html {
+//     transform: rotate(-90deg);
+//     transform-origin: left top;
+//     width: 100vh;
+//     overflow-x: hidden;
+//     position: absolute;
+//     top: 100%;
+//     left: 0;
+//   }
+// }
 </style>
