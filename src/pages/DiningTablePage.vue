@@ -38,8 +38,8 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import DiningTable3D from "../components/diningTable/DiningTable3D";
-import DiningTable2D from "../components/diningTable/DiningTable2D";
+import DiningTable3D from "../components/DiningTable/DiningTable3D";
+import DiningTable2D from "../components/DiningTable/DiningTable2D";
 import gsap from "gsap";
 
 export default defineComponent({
