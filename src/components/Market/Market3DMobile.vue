@@ -113,8 +113,8 @@ export default {
     },
 
     loading_callbacks(val) {
-      console.log("Pass into callbacks ", (val.loaded / 213110000).toFixed(2));
-      this.$emit("loadingProgress", (val.loaded / 213110000).toFixed(2));
+      console.log("Pass into callbacks ", (val.loaded / 166225800).toFixed(2));
+      this.$emit("loadingProgress", (val.loaded / 166225800).toFixed(2));
     },
     Init_Three() {
       this.raycaster = new THREE.Raycaster();

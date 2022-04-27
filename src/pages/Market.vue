@@ -1,6 +1,18 @@
 <template>
   <div class="loadingPage" v-if="!showingFlag">
-    <img class="loadingPage-mask" src="../../public/loading/loading.png" />
+    <img class="loadingPage-mask" id="loadingPage-mask" />
+    <div class="loadingPage-text">
+      <div v-if="(ENABLE_FOR_MOBILE && IS_MOBILE) || !IS_MOBILE">
+        {{ loading_text[loading_text_index] }}
+      </div>
+      <div v-else class="loadingPage-text-dev">
+        手機版尚未完成系統測試，請使用電腦版以獲得最佳體驗
+        <div>
+          Mobile and VR version are not supported now, please try Hi！ Chenggong
+          on desktop.
+        </div>
+      </div>
+    </div>
     <div class="loadingPage-loading-video" id="loading-video">
       <video
         src="../../public/loading/wave.mp4"
@@ -12,71 +24,51 @@
       ></video>
     </div>
   </div>
-  <div v-if="IS_MOBILE && !DEBUG" class="mobile-text">
-    <div>
-      手機版尚未完成系統測試，請使用電腦版以獲得最佳體驗
-    </div>
-    <div >
-      Mobile and VR version are not supported now, please try Hi Chenggong on desktop.
-    </div>
-  </div>
   <div id="colorSlide">
     <Market3D
-      id="market3D"
+      id="Market3D-tag"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="!IS_MOBILE "
+      v-if="1"
       v-show="showingFlag"
     ></Market3D>
-    <Market3DMobileVue
-      id="market3D"
-      @loadingProgress="loadingProgressPercentage"
-      @scene="sceneRecieve"
-      v-if="IS_MOBILE"
-      v-show="showingFlag"
-    ></Market3DMobileVue>
-    <Market2D
-      id="Market2D"
-      v-if="showingFlag && 1"
-      @lightBoxEffect="lightBoxEffect"
-    ></Market2D>
+    <Market2D id="Market2D-tag" v-if="showingFlag"></Market2D>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import Market3D from "src/components/Market/Market3D.vue";
-import Market2D from "src/components/Market/Market2D.vue";
-import Market3DMobileVue from "src/components/Market/Market3DMobile.vue";
+import Market3D from "../components/Market/Market3D";
+import Market2D from "../components/Market/Market2D";
 import gsap from "gsap";
 
 export default defineComponent({
-  name: "SwordfishPage",
+  name: "DiningTable",
   components: {
     Market3D,
     Market2D,
-    Market3DMobileVue,
   },
   setup() {
-    let DEBUG  = true;
     let IS_MOBILE = ref(
-        /Android|webOS|iPhone|iPad|iPod/i.test(
-          navigator.userAgent
-        )
-      );
-      if(DEBUG)
-      IS_MOBILE = false;
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
+    let ENABLE_FOR_MOBILE = 0;
     return {
       IS_MOBILE,
+      ENABLE_FOR_MOBILE,
     };
   },
   mounted() {
-    this.IS_MOBILE = this.detectPaltform();
     let vid = document.getElementById("loading-video");
-    vid.canplay = function () {
-      vid.style.display = "show";
+    // let photo = document.getElementById("loadingPage-mask");
+    let image = document.getElementById("loadingPage-mask");
+    image.onload = () => {
+      vid.style.opacity = 1;
     };
-    // this.fullScreen("market3D");
+    image.src = "../loading/loading2.png";
+    this.timer = setInterval(() => {
+      this.increaseLoadingText();
+    }, 3000);
   },
 
   watch: {
@@ -84,7 +76,7 @@ export default defineComponent({
       switch (this.lightBoxEffectMode) {
         case true:
           gsap.fromTo(
-            "#market3D",
+            "#Market3D-tag",
             { webkitFilter: "brightness(1)", filter: "brightness(1)" },
             {
               webkitFilter: "brightness(0.6)",
@@ -95,7 +87,7 @@ export default defineComponent({
           break;
         case false:
           gsap.fromTo(
-            "#market3D",
+            "#Market3D-tag",
             { webkitFilter: "brightness(0.6)", filter: "brightness(0.6)" },
             {
               webkitFilter: "brightness(1)",
@@ -109,8 +101,13 @@ export default defineComponent({
     loading: function () {
       // console.log("loading progress ", this.loading);
       let loadingWave = document.getElementById("loading-video");
-      loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 50 * this.DEBUG) {
+      if (this.IS_MOBILE)
+        loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
+      else loadingWave.style.bottom = this.loading * 0.2 + "%";
+      if (
+        this.loading >= 95 &&
+        ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE)
+      ) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);
@@ -118,7 +115,13 @@ export default defineComponent({
     },
     sceneObject: function () {},
   },
+  beforeUnmount() {
+    window.clearInterval(this.timer);
+  },
   computed: {
+    returnloadingProgress() {
+      return this.loadingProgress;
+    },
     lightBoxEffectMode() {
       return this.$store.state.Fozzy3D;
     },
@@ -134,18 +137,21 @@ export default defineComponent({
       showEnable: ref(true),
       DEBUG: 1,
       golbalEvent: { dblclick: false },
+      loading_text: [
+        "魚市場有現場代殺魚的服務喔，有時候一堆魚只要100塊就幫你處理得乾乾淨淨!",
+        " 有競標證的商家才可競標魚市場的大魚，已賣出的魚身上會貼有店家商標呢",
+        " 真實的旗魚嘴巴都會事先鋸掉，因為擔心剛捕上船掙扎的過程會刺傷漁夫",
+        " 黃鰭鮪也是魚市場的常客，吃法多元又新鮮，在地居民買一條能吃好幾天呢",
+        " 鬼頭刀能做魚排、魚鬆、魚丸、魚塊，煎煮炒炸樣樣都好吃，外銷業績非常驚人!",
+      ],
+      loading_text_index: 0,
     };
   },
   methods: {
-    detectPaltform() {
-
-      if (
-        /Android|webOS|iPhone|iPad|iPod/i.test(
-          navigator.userAgent
-        )
-      )
-        return true;
-      else return false;
+    increaseLoadingText() {
+      this.loading_text_index++;
+      if (this.loading_text_index >= this.loading_text.length - 1)
+        this.loading_text_index = 0;
     },
     fullScreen(id_tag) {
       let elem = document.getElementById(id_tag);
@@ -165,79 +171,78 @@ export default defineComponent({
     sceneRecieve(val) {
       this.sceneObject = val;
     },
-    lightBoxEffect(val) {
-      this.lightBoxEffectMode = val;
-    },
+
     //111356897
   },
 });
 </script>
 <style lang="scss">
-@media screen and (max-device-width: 768px) {
-  .controlPan {
-    z-index: 100;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    &-directionPan {
-      height: 100vh;
-      width: 20vw;
-      position: absolute;
-      left: 0;
-      background-color: goldenrod;
-    }
-    &-speedPan {
-      height: 100vh;
-      width: 20vw;
-      position: absolute;
-      background-color: goldenrod;
-      right: 0;
-    }
-  }
+@media screen and (min-device-width: 1024px) {
 }
 .loadingPage {
-  top:20vh;
   width: 100vw;
   height: 100vh;
-  // background-color: cadetblue;
+  //  background-color: cadetblue;
   &-mask {
-    // opacity: 0.3;
-    top:-5vh;
+    //  opacity: 0.3;
     position: fixed;
     width: 100%;
     z-index: 10;
     height: auto;
-
+    top: -5vh;
+  }
+  &-text {
+    display: flex;
+    align-items: center;
+    z-index: 20;
+    position: fixed;
+    text-align: center;
+    bottom: 25%;
+    font-size: 10px;
+    color: #174275;
+    display: table;
+    margin: 0 auto;
+    transform: translateX(55%);
+    @media screen and (min-device-width: 1024px) {
+      bottom: 30%;
+      font-size: 20px;
+      left: 0%;
+      // transform: translateX(50%);
+    }
+    &-dev {
+      transform: translateX(-10%);
+    }
   }
   &-percentage {
     z-index: 20;
     position: fixed;
     font-size: 50px;
     color: darkorange;
-    bottom: -10%;
+    bottom: 10%;
     left: 40%;
-    @media screen and (max-device-width: 768px) {
+    @media screen and (min-device-width: 1024px) {
       bottom: 10%;
       left: 40%;
     }
   }
   &-loading-video {
-    display: hide;
+    opacity: 0;
     position: absolute;
-    left: 15%;
-    bottom: 0%;
-    @media screen and (max-device-width: 768px) {
-      bottom: -1500%;
+    // left: 15%;
+    bottom: -70%;
+    @media screen and (min-device-width: 1024px) {
+      left: 15%;
+      bottom: -50vh;
     }
     z-index: 8;
   }
 }
-#market3D {
+#Market3D-tag {
   position: fixed;
-  background-color: #35909c;
+  // background-color: #35909c;
 }
 
-#Market2D {
+#Navigate {
   position: absolute;
   // background-color: chartreuse;
   // opacity: 0.3;
@@ -248,15 +253,17 @@ export default defineComponent({
 #colorSlide {
   background-color: black;
 }
-.mobile-text {
-  text-align: center;
-  font-size: 10px;
-  transform: translateX(-50%);
-  top: 40vh;
-  left: 50vw;
-  position: absolute;
-  color: #35909c;
-  z-index: 200;
-  margin-top: 10%;
+@media screen and (orientation: portrait) {
+  .loadingPage {
+    &-loading-video {
+      top: 20vh;
+    }
+    &-mask {
+      top: 20vh;
+      height: 100vh;
+      width: auto;
+      transform: translateX(-25%);
+    }
+  }
 }
 </style>

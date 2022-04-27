@@ -185,7 +185,7 @@ export default {
     async loadTable() {
       let GLTF_LOADER = 1;
 
-      console.clear();
+      // console.clear();
       if (GLTF_LOADER) {
         const loader = new GLTFLoader().setPath("models/");
         this.swordfish = await loader.loadAsync("swordfish_old.gltf", (xhr) => {

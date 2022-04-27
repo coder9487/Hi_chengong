@@ -1,9 +1,20 @@
 <template>
   <div class="loadingPage" v-if="!showingFlag">
-    <img class="loadingPage-mask" src="../../public/loading/loading.png" />
+    <img class="loadingPage-mask" id="loadingPage-mask" />
+    <div class="loadingPage-text">
+      <div v-if="ENABLE_FOR_MOBILE && IS_MOBILE  || !IS_MOBILE">
+        {{ loading_text[loading_text_index] }}
+      </div>
+      <div v-else class="loadingPage-text-dev">
+        手機版尚未完成系統測試，請使用電腦版以獲得最佳體驗
+        <div>
+          Mobile and VR version are not supported now, please try Hi！ Chenggong
+          on desktop.
+        </div>
+      </div>
+    </div>
     <div class="loadingPage-loading-video" id="loading-video">
       <video
-        @onloadstart="fullScreen('swordfish3D')"
         src="../../public/loading/wave.mp4"
         autoplay
         muted
@@ -14,59 +25,70 @@
     </div>
   </div>
   <div id="colorSlide">
-    <swordfish3D
-      id="swordfish3D"
+    <Swordfish3D
+      id="Swordfish3D-tag"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
       v-if="1"
       v-show="showingFlag"
-    ></swordfish3D>
-    <swordfish2D
-      id="swordfish2D"
-      v-if="showingFlag"
-      @lightBoxEffect="lightBoxEffect"
-    ></swordfish2D>
+    ></Swordfish3D>
+    <Swordfish2D id="Swordfish2D-tag" v-if="showingFlag"></Swordfish2D>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import swordfish3D from "../components/swordfishChallenge/Swordfish3D.vue";
-import swordfish2D from "../components/swordfishChallenge/Swordfish2D.vue";
+import Swordfish3D from "../components/swordfishChallenge/Swordfish3D";
+import Swordfish2D from "../components/swordfishChallenge/Swordfish2D";
 import gsap from "gsap";
 
 export default defineComponent({
-  name: "SwordfishPageChallenge",
+  name: "DiningTable",
   components: {
-    swordfish3D,
-    swordfish2D,
+    Swordfish3D,
+    Swordfish2D,
   },
-  setup() {},
+  setup() {
+    let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
+    let ENABLE_FOR_MOBILE = 0;
+    return {
+      IS_MOBILE,
+      ENABLE_FOR_MOBILE
+    };
+  },
   mounted() {
     let vid = document.getElementById("loading-video");
-    vid.canplay = function () {
-      vid.style.display = "show";
+    // let photo = document.getElementById("loadingPage-mask");
+    let image = document.getElementById("loadingPage-mask");
+    image.onload = () => {
+      vid.style.opacity = 1;
     };
+    image.src = "../loading/loading2.png";
+    this.timer = setInterval(() => {
+      this.increaseLoadingText();
+    }, 3000);
   },
 
   watch: {
     lightBoxEffectMode: function () {
       switch (this.lightBoxEffectMode) {
-        case "on":
+        case true:
           gsap.fromTo(
-            "#swordfish3D",
+            "#Swordfish3D-tag",
             { webkitFilter: "brightness(1)", filter: "brightness(1)" },
             {
-              webkitFilter: "brightness(0)",
-              filter: "brightness(0)",
+              webkitFilter: "brightness(0.6)",
+              filter: "brightness(0.6)",
               duration: 1,
             }
           );
           break;
-        case "off":
+        case false:
           gsap.fromTo(
-            "#swordfish3D",
-            { webkitFilter: "brightness(0)", filter: "brightness(0)" },
+            "#Swordfish3D-tag",
+            { webkitFilter: "brightness(0.6)", filter: "brightness(0.6)" },
             {
               webkitFilter: "brightness(1)",
               filter: "brightness(1)",
@@ -79,8 +101,10 @@ export default defineComponent({
     loading: function () {
       // console.log("loading progress ", this.loading);
       let loadingWave = document.getElementById("loading-video");
-      loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 98 * this.DEBUG) {
+      if (this.IS_MOBILE)
+        loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
+      else loadingWave.style.bottom = this.loading * 0.2 + "%";
+      if (this.loading >= 95 && (this.ENABLE_FOR_MOBILE && this.IS_MOBILE || !this.IS_MOBILE)) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);
@@ -88,7 +112,17 @@ export default defineComponent({
     },
     sceneObject: function () {},
   },
-  computed: {},
+  beforeUnmount() {
+    window.clearInterval(this.timer);
+  },
+  computed: {
+    returnloadingProgress() {
+      return this.loadingProgress;
+    },
+    lightBoxEffectMode() {
+      return this.$store.state.Fozzy3D;
+    },
+  },
   data() {
     return {
       audio: null,
@@ -100,10 +134,22 @@ export default defineComponent({
       showEnable: ref(true),
       DEBUG: 1,
       golbalEvent: { dblclick: false },
-      lightBoxEffectMode: 0,
+      loading_text: [
+        "魚市場有現場代殺魚的服務喔，有時候一堆魚只要100塊就幫你處理得乾乾淨淨!",
+        " 有競標證的商家才可競標魚市場的大魚，已賣出的魚身上會貼有店家商標呢",
+        " 真實的旗魚嘴巴都會事先鋸掉，因為擔心剛捕上船掙扎的過程會刺傷漁夫",
+        " 黃鰭鮪也是魚市場的常客，吃法多元又新鮮，在地居民買一條能吃好幾天呢",
+        " 鬼頭刀能做魚排、魚鬆、魚丸、魚塊，煎煮炒炸樣樣都好吃，外銷業績非常驚人!",
+      ],
+      loading_text_index: 0,
     };
   },
   methods: {
+    increaseLoadingText() {
+      this.loading_text_index++;
+      if (this.loading_text_index >= this.loading_text.length - 1)
+        this.loading_text_index = 0;
+    },
     fullScreen(id_tag) {
       let elem = document.getElementById(id_tag);
       if (elem.requestFullscreen) {
@@ -122,47 +168,46 @@ export default defineComponent({
     sceneRecieve(val) {
       this.sceneObject = val;
     },
-    lightBoxEffect(val) {
-      this.lightBoxEffectMode = val;
-    },
+
     //111356897
   },
 });
 </script>
 <style lang="scss">
-@media screen and (max-device-width: 768px) {
-  .controlPan {
-    z-index: 100;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    &-directionPan {
-      height: 100vh;
-      width: 20vw;
-      position: absolute;
-      left: 0;
-      background-color: goldenrod;
-    }
-    &-speedPan {
-      height: 100vh;
-      width: 20vw;
-      position: absolute;
-      background-color: goldenrod;
-      right: 0;
-    }
-  }
+@media screen and (min-device-width: 1024px) {
 }
 .loadingPage {
   width: 100vw;
   height: 100vh;
-  // background-color: cadetblue;
+  //  background-color: cadetblue;
   &-mask {
-    // opacity: 0.3;
+    //  opacity: 0.3;
     position: fixed;
     width: 100%;
     z-index: 10;
     height: auto;
     top: -5vh;
+  }
+  &-text {
+    display: flex;
+    align-items: center;
+    z-index: 20;
+    position: fixed;
+    text-align: center;
+    bottom: 25%;
+    font-size: 10px;
+    color: #174275;
+    display: flex;
+    transform: translateX(55%);
+    @media screen and (min-device-width: 1024px) {
+      bottom: 30%;
+      font-size: 20px;
+      left: 0%;
+      // transform: translateX(50%);
+    }
+    &-dev {
+      transform: translateX(-10%);
+    }
   }
   &-percentage {
     z-index: 20;
@@ -171,25 +216,26 @@ export default defineComponent({
     color: darkorange;
     bottom: 10%;
     left: 40%;
-    @media screen and (max-device-width: 768px) {
+    @media screen and (min-device-width: 1024px) {
       bottom: 10%;
       left: 40%;
     }
   }
   &-loading-video {
-    display: hide;
+    opacity: 0;
     position: absolute;
-    left: 15%;
-    bottom: 0%;
-    @media screen and (max-device-width: 768px) {
-      bottom: -1500%;
+    // left: 15%;
+    bottom: -70%;
+    @media screen and (min-device-width: 1024px) {
+      left: 15%;
+      bottom: -50vh;
     }
     z-index: 8;
   }
 }
-#swordfish3D {
+#Swordfish3D-tag {
   position: fixed;
-  background-color: #35909c;
+  // background-color: #35909c;
 }
 
 #Navigate {
@@ -203,14 +249,17 @@ export default defineComponent({
 #colorSlide {
   background-color: black;
 }
-@media only screen and (orientation:portrait){
-  #swordfish3D {
-    height: 100vw;
-    transform: rotate(90deg);
-  }
-    #swordfish2D {
-    height: 100vw;
-    transform: rotate(90deg);
+@media screen and (orientation: portrait) {
+  .loadingPage {
+    &-loading-video {
+      top: 20vh;
+    }
+    &-mask {
+      top: 20vh;
+      height: 100vh;
+      width: auto;
+      transform: translateX(-25%);
+    }
   }
 }
 </style>

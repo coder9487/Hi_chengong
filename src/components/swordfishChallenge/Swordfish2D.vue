@@ -70,7 +70,7 @@
       <!-- <div id="lottie-container-a_kon_normal" v-show="!showAkonHover"></div> -->
     </div>
   </div>
-  <div v-show="dialogContent_Index >= 9">
+  <div v-show="dialogContent_Index >= 9 && dialogContent_Index != 11">
     <img class="cupon" src="../../../public/images/cupon-challenge.png" preload />
     <!-- <img class="cupon" :src="imagesrc(dialogContent_Index - 9)" preload /> -->
   </div>
@@ -80,7 +80,8 @@
       dialogContent_Array[dialogContent_Index] != '' &&
       dialogContent_Array[dialogContent_Index] != 'lottie' &&
       dialogContent_Array[dialogContent_Index] != 'hearvest' &&
-      dialogContent_Array[dialogContent_Index] != 'video'
+      dialogContent_Array[dialogContent_Index] != 'video' &&
+      dialogContent_Index != 11
         ? true
         : false
     "
@@ -187,6 +188,7 @@ export default {
       console.log("getMountofSwordfish", this.getMountofSwordfish);
       if (this.dialogContent_Index == 4)
         this.$store.commit("Swordfish/clearResult");
+      if(this.getMountofSwordfish > 0)
       this.showHitHint();
     },
     dialogContent_Index: function () {
@@ -199,6 +201,7 @@ export default {
       }
       if (this.dialogContent_Index == 6) {
         this.$store.commit("Swordfish/ToggleGame");
+        this.$store.commit("Swordfish/clearResult");
         let progressNum = 0;
         let progressElement = document.querySelector("#progressbar-line ");
         let timeInter = 33;
@@ -217,7 +220,7 @@ export default {
         this.calcResult();
         this.$store.commit("Swordfish/ToggleGame");
         this.showVideo = true;
-        this.$emit("lightBoxEffect", "on");
+       this.$store.commit("setFozzyFram", true);
 
         let videoObj = document.getElementById("FinishVideo_fail");
         if (this.hearvest >= 1)
@@ -235,7 +238,7 @@ export default {
         videoObj.style.zIndex = "200";
         videoObj.play();
         videoObj.onended = () => {
-          this.$emit("lightBoxEffect", "off");
+          this.$store.commit("setFozzyFram", false);
           this.dialogContent_Index++;
           if (this.hearvest >= 1)
             gsap.to("#FinishVideo_win", {
@@ -257,12 +260,13 @@ export default {
         };
       }
       if (this.dialogContent_Index == 9) {
+         this.dialogContent_Index = 10;
         if (this.getMountofSwordfish == 0) {
           this.dialogContent_Index = 10;
         }
       }
       if (this.dialogContent_Index == 11) {
-        this.$router.push("/Challenge");
+         window.location.replace("https://www.instagram.com/hi_chenggong/?hl=zh-tw");
       }
     },
   },
@@ -283,8 +287,8 @@ export default {
         "",
         "video",
         "hearvest",
-        '哇!不愧是我的孫子，阿公送你一張<b style="color: #FEA30B;">成功折價卷</b>，等體驗結束後記得到櫃檯領取喔!',
-        '辛苦後的結晶總是特別香甜，阿公帶你去吃一頓「<b style="color: #FEA30B;">成功大餐</b>」，都是成功道地料理喔!',
+         '在活動結束前可以無限次遊玩喔!挑戰你的最高紀錄，截圖投稿IG，<b style="color: #FEA30B;">旗魚王</b>就是你！',
+          '在活動結束前可以無限次遊玩喔!挑戰你的最高紀錄，截圖投稿IG，<b style="color: #FEA30B;">旗魚王</b>就是你！',
       ],
       dialogButton_Content: [
         "這~麼厲害",
@@ -297,7 +301,7 @@ export default {
         "",
         "哇!好棒",
         "這~麼厲害",
-        "想吃!走吧!",
+        "揪團鏢旗魚!",
       ],
     };
   },

@@ -30,6 +30,7 @@
     "quasar": "^2.0.0",
     "sound": "^2.7.0",
     "three": "^0.127.0",
+    "timers": "^0.1.1",
     "troisjs": "^0.3.4",
     "video.js": "^7.17.0",
     "vue-touch": "^2.0.0-beta.4",

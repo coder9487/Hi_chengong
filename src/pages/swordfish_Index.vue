@@ -1,6 +1,6 @@
 <template>
   <div id="IndexPageGroup">
-    <img id="StartBackgroung" src="images/challenge.png" v-show="hideFlag" />
+    <img id="StartBackgroung" src="images/challengeIndex.jpeg" v-show="hideFlag" />
     <div
       v-show="hideFlag"
       class="start_btn text-h5 text-weight-bolder"
@@ -54,7 +54,7 @@ export default defineComponent({
   border-radius: 50px;
   position: absolute;
   bottom: 7vh;
-  left: 15vw;
+  left: 8vw;
   border: 20px;
   display: flex;
   background-color: #F49D1A;
@@ -83,8 +83,8 @@ export default defineComponent({
 
 #StartBackgroung {
   z-index: 4;
-  width: 100vw;
-  height: 100vh;
+  min-width: 100vw;
+  height: 120vh;
   overflow-y: hidden;
   display: flex;
   position: absolute;
