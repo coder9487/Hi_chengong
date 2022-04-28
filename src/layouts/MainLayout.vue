@@ -14,11 +14,11 @@
     >
       <q-card class="bg-cyan-14 text-white" style="width: 300px">
         <q-card-section>
-          <div class="text-h6">良心建議</div>
+          <div class="text-h6">嗨！成功提醒您</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          將手機橫放以達到最佳體驗
+          為達到最佳體驗效果，建議使用瀏覽器進行體驗，並將手機轉為橫向操作，祝您成功！
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-teal">
