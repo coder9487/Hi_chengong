@@ -221,7 +221,7 @@ export default {
 
       this.spearAim = model.getObjectByName("spear_aiming");
       this.swordfishbody = model.getObjectByName("sailfish_Armature");
-      this.boat = model.getObjectByName("boat");
+      this.boat = model.getObjectByName("par_boat");
 
       this.swordfishbody.position.y = 5;
       this.spear = model.getObjectByName("spear");
@@ -401,7 +401,7 @@ export default {
       this.lowersea.mesh.position.x += 0.5;
       this.mongerSkeleton.position.y = this.boat.position.y =
         Math.sin(Date.now() / 500) * 0.05;
-      this.boat.position.y += 0.22;
+       this.boat.position.y += 0.1;
     },
   },
 };

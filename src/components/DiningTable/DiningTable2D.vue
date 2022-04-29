@@ -13,7 +13,7 @@
     </div>
     <div class="PasserbydialogArea">
       <div class="PasserbydialogArea-dialog">
-        來成功玩一定要品嘗一下成功的海鮮，點擊餐點看看成功好料的秘密吧!
+        來成功玩一定要品嘗一下成功的海鮮，<b>點擊餐點</b>看看成功好料的秘密吧!
       </div>
       <div class="PasserbydialogArea-group">
         <div @click.stop="closeInitDialog()" class="button color-cyan">
