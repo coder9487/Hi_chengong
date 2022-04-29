@@ -2,7 +2,10 @@
   <div class="loadingPage" v-if="!showingFlag">
     <img class="loadingPage-mask" id="loadingPage-mask" />
     <div class="loadingPage-text">
-      <div v-if="(ENABLE_FOR_MOBILE && IS_MOBILE) || !IS_MOBILE">
+      <div
+        class="loadingPage-text-content"
+        v-if="(ENABLE_FOR_MOBILE && IS_MOBILE) || !IS_MOBILE"
+      >
         {{ loading_text[loading_text_index] }}
       </div>
       <div v-else class="loadingPage-text-dev">
@@ -56,6 +59,7 @@ export default defineComponent({
     return {
       IS_MOBILE,
       ENABLE_FOR_MOBILE,
+      DEV_FOR_LOADING:0,
     };
   },
   mounted() {
@@ -103,10 +107,10 @@ export default defineComponent({
       let loadingWave = document.getElementById("loading-video");
       if (this.IS_MOBILE)
         loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
-      else loadingWave.style.bottom = this.loading * 0.2 + "%";
+      else loadingWave.style.bottom = this.loading * 0.3 + "%";
       if (
-        this.loading >= 95 &&
-        ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE)
+        this.loading >= 90 &&
+        ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE) && !this.DEV_FOR_LOADING
       ) {
         setTimeout(() => {
           this.showingFlag = true;
@@ -192,7 +196,10 @@ export default defineComponent({
     top: -5vh;
   }
   &-text {
+    left: 50vw;
+    transform: translateX(-50%);
     display: flex;
+    justify-content: space-around;
     align-items: center;
     z-index: 20;
     position: fixed;
@@ -200,14 +207,16 @@ export default defineComponent({
     bottom: 25%;
     font-size: 10px;
     color: #174275;
-    display: table;
     margin: 0 auto;
-    transform: translateX(55%);
     @media screen and (min-device-width: 1024px) {
       bottom: 30%;
       font-size: 20px;
-      left: 0%;
-      // transform: translateX(50%);
+    }
+    &-content {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
     }
     &-dev {
       transform: translateX(-10%);

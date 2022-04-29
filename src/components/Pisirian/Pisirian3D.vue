@@ -157,7 +157,8 @@ export default {
     },
     Animation_Three() {
       this.controls.update();
-      // this.sea.moveWaves();
+
+      this.sea.moveWaves();
       this.composer.render();
       this.updateAnimation();
 
@@ -234,7 +235,7 @@ export default {
       this.LoadMarketFinish = true;
     },
     createSea() {
-      let seaVertices = 1000;
+      let seaVertices = 50;
       let seaAmp = 0.8;
 
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
@@ -292,6 +293,7 @@ export default {
       const geometry = new THREE.PlaneGeometry(0.7, 0.7);
       const plane = new THREE.Mesh(geometry, material);
       plane.position.y += 0.35;
+      plane.position.set(54.87, 31.5, -1.5)
       this.scene.add(plane);
       plane.name = "pin_pointer";
       return plane;

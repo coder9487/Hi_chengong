@@ -2,7 +2,10 @@
   <div class="loadingPage" v-if="!showingFlag">
     <img class="loadingPage-mask" id="loadingPage-mask" />
     <div class="loadingPage-text">
-      <div v-if="ENABLE_FOR_MOBILE && IS_MOBILE  || !IS_MOBILE">
+      <div
+        class="loadingPage-text-content"
+        v-if="(ENABLE_FOR_MOBILE && IS_MOBILE) || !IS_MOBILE"
+      >
         {{ loading_text[loading_text_index] }}
       </div>
       <div v-else class="loadingPage-text-dev">
@@ -55,7 +58,7 @@ export default defineComponent({
     let ENABLE_FOR_MOBILE = 0;
     return {
       IS_MOBILE,
-      ENABLE_FOR_MOBILE
+      ENABLE_FOR_MOBILE,
     };
   },
   mounted() {
@@ -104,7 +107,10 @@ export default defineComponent({
       if (this.IS_MOBILE)
         loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
       else loadingWave.style.bottom = this.loading * 0.2 + "%";
-      if (this.loading >= 95 && (this.ENABLE_FOR_MOBILE && this.IS_MOBILE || !this.IS_MOBILE)) {
+      if (
+        this.loading >= 95 &&
+        ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE)
+      ) {
         setTimeout(() => {
           this.showingFlag = true;
         }, 5000);
@@ -135,11 +141,10 @@ export default defineComponent({
       DEBUG: 1,
       golbalEvent: { dblclick: false },
       loading_text: [
-        "魚市場有現場代殺魚的服務喔，有時候一堆魚只要100塊就幫你處理得乾乾淨淨!",
-        " 有競標證的商家才可競標魚市場的大魚，已賣出的魚身上會貼有店家商標呢",
-        " 真實的旗魚嘴巴都會事先鋸掉，因為擔心剛捕上船掙扎的過程會刺傷漁夫",
-        " 黃鰭鮪也是魚市場的常客，吃法多元又新鮮，在地居民買一條能吃好幾天呢",
-        " 鬼頭刀能做魚排、魚鬆、魚丸、魚塊，煎煮炒炸樣樣都好吃，外銷業績非常驚人!",
+        "大家或多或少知道三仙台這個地方，但常有人不知道，三仙台在成功鎮!",
+        "三仙台的鵝卵石很漂亮，但是不能亂撿喔，不僅破壞生態還要罰錢的!",
+        "三仙台島上有很多長得像鳳梨的果實，它們是「林投」，下次別認錯囉!",
+        "登上三仙台燈塔可以鳥瞰海岸線，但路途顛簸，天候不佳時不建議前往",
       ],
       loading_text_index: 0,
     };
@@ -189,7 +194,10 @@ export default defineComponent({
     top: -5vh;
   }
   &-text {
+    left: 50vw;
+    transform: translateX(-50%);
     display: flex;
+    justify-content: space-around;
     align-items: center;
     z-index: 20;
     position: fixed;
@@ -197,13 +205,16 @@ export default defineComponent({
     bottom: 25%;
     font-size: 10px;
     color: #174275;
-    display: flex;
-    transform: translateX(55%);
+    margin: 0 auto;
     @media screen and (min-device-width: 1024px) {
       bottom: 30%;
       font-size: 20px;
-      left: 0%;
-      // transform: translateX(50%);
+    }
+    &-content {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
     }
     &-dev {
       transform: translateX(-10%);

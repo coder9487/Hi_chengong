@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-show="!showAkon" class="mission">
+      <div class="text">吃飽後點擊阿公</div>
+    </div>
     <div class="introduceBox" v-show="!showAkon">
       <img class="introduceBox-photo" :src="imagepath" />
       <img
@@ -8,10 +11,21 @@
         @click.stop="resetShowenable"
       />
     </div>
+    <div class="PasserbydialogArea">
+      <div class="PasserbydialogArea-dialog">
+        來成功玩一定要品嘗一下成功的海鮮，點擊餐點看看成功好料的秘密吧!
+      </div>
+      <div class="PasserbydialogArea-group">
+        <div @click.stop="closeInitDialog()" class="button color-cyan">
+          開動!
+        </div>
+      </div>
+    </div>
     <div class="Akon">
       <div>
         <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
       </div>
+
       <div class="dialogArea">
         <img
           class="dialogArea-photo"
@@ -37,11 +51,15 @@ import gsap from "gsap";
 import { ref } from "vue";
 export default {
   setup() {},
+  mounted() {
+    this.$store.commit("setFozzyFram", true);
+  },
   data() {
     return {
       showEnable: false,
       imagepath: ref(""),
       showAkon: false,
+      initShowFlag: true,
     };
   },
   computed: {
@@ -112,6 +130,33 @@ export default {
     },
   },
   methods: {
+    closeInitDialog() {
+      this.$store.commit("setFozzyFram", false);
+      gsap.fromTo(
+        ".PasserbydialogArea",
+        { opacity: 1 },
+        {
+          opacity: 0,
+          duration: 0.5,
+        }
+      );
+          //       gsap.fromTo(
+          //   ".Akon",
+          //   { opacity: 1 },
+          //   {
+          //     opacity: 0,
+          //     duration: 0.5,
+          //   }
+          // );
+      // gsap.fromTo(
+      //   ".Akon-charactor",
+      //   { opacity: 1 },
+      //   {
+      //     opacity: 0,
+      //     duration: 0.5,
+      //   }
+      // );
+    },
     getimagepath() {
       let imagesUrl = `../../images/diningtable/${this.getDish}.png`;
       console.log("calling path ", imagesUrl);
@@ -216,7 +261,54 @@ $content-text-size-pc: 1.5vw;
     justify-content: space-around;
   }
 }
+.PasserbydialogArea {
+  opacity: 1;
+  position: absolute;
+  width: 60vw;
+  height: 20vh;
+  left: 20vw;
+  bottom: 10vh;
+  & * {
+    pointer-events: all;
+  }
+  &-photo {
+    position: relative;
+    width: 45vw;
+    left: 7.5vw;
+    top: -3%;
+  }
+  &-dialog {
+    position: relative;
+    width: 45vw;
+    height: 20vh;
+    left: 7.5vw;
+    background-color: aliceblue;
 
+    border-radius: 30px;
+    padding: 2.5vw;
+    font-size: 1.5vw;
+    color: #276a70;
+    @media screen and (min-width: 1024px) {
+      font-size: $content-text-size-pc;
+      line-height: $content-text-size-pc * 1.8;
+      letter-spacing: $content-text-size-pc * 0.2;
+    }
+    ::v-deep b {
+      color: #fea30b;
+      font-weight: bolder;
+    }
+  }
+  &-group {
+    position: relative;
+    width: 45vw;
+    height: 10vh;
+    // background-color: aquamarine;
+    left: 7.5vw;
+    top: -20%;
+    display: flex;
+    justify-content: space-around;
+  }
+}
 .button {
   z-index: 11;
   width: 10vw;
@@ -247,5 +339,26 @@ $content-text-size-pc: 1.5vw;
       background-color: #0098a4;
     }
   }
+}
+
+.mission {
+  position: fixed;
+  top: 5vh;
+  width: 15vw;
+  height: 5vh;
+  border-radius: 30px;
+  left: 50vw;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bolder;
+  font-size: large;
+  animation-duration: 1s;
+  background-color: #fea30b;
 }
 </style>

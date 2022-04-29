@@ -41,6 +41,7 @@ export default {
       dbClickEvent: { eventName: "", eventObject: {} },
       controllerMode: "0",
       PlayerState: 0,
+
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
@@ -108,6 +109,7 @@ export default {
           );
           break;
       }
+      this.controls.enabled = false;
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();

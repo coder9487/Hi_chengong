@@ -83,15 +83,15 @@ export class FirstPersonCameraControl {
             false
         );
         this.domElement.addEventListener("mouseup", this.bindmouseup, false);
-        document.body.addEventListener("keydown", this.bindonKeyDown, false);
-        document.body.addEventListener("keyup", this.bindonKeyUp, false);
+        // document.body.addEventListener("keydown", this.bindonKeyDown, false);
+        // document.body.addEventListener("keyup", this.bindonKeyUp, false);
     }
 
     removeEvents() {
         this.domElement.removeEventListener("mousedown", this.bindmousedown);
         this.domElement.removeEventListener("mouseup", this.bindmouseup);
-        document.body.removeEventListener("keydown", this.bindonKeyDown);
-        document.body.removeEventListener("keyup", this.bindonKeyUp);
+        // document.body.removeEventListener("keydown", this.bindonKeyDown);
+        // document.body.removeEventListener("keyup", this.bindonKeyUp);
     }
 
     onMouseDown(event) {
@@ -122,6 +122,7 @@ export class FirstPersonCameraControl {
     }
 
     onKeyDown(event) {
+
         switch (event.keyCode) {
             case 38: // up
                 this.rotateY(-1);

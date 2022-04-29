@@ -139,7 +139,7 @@ export default {
         50,
         window.innerWidth / window.innerHeight,
         0.1,
-        400
+        600
       );
       this.camera.position.set(20, 1.5, 0);
 
@@ -172,17 +172,17 @@ export default {
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
       globalScene.AddLight();
-      this.scene.background = new THREE.CubeTextureLoader()
-        .setPath("../")
-        .load([
-          "images/sky_pos_x.jpg",
-          "images/sky_neg_x.jpg",
-          "images/sky_pos_y.jpg",
-          "images/sky_neg_y.jpg",
-          "images/sky_neg_z.jpg",
-          "images/sky_pos_z.jpg",
-        ]);
-      // this.scene.background = new THREE.Color(0x3cc4d0);
+      // this.scene.background = new THREE.CubeTextureLoader()
+      //   .setPath("../")
+      //   .load([
+      //     "images/sky_pos_x.jpg",
+      //     "images/sky_neg_x.jpg",
+      //     "images/sky_pos_y.jpg",
+      //     "images/sky_neg_y.jpg",
+      //     "images/sky_neg_z.jpg",
+      //     "images/sky_pos_z.jpg",
+      //   ]);
+      this.scene.background = new THREE.Color(0x3cc4d0);
 
       // load a resource
       this.loadMarket();
@@ -194,7 +194,7 @@ export default {
       this.handlePlayerState();
 
       this.controls.update();
-      // this.sea.moveWaves();
+      this.sea.moveWaves();
       this.composer.render();
       this.updateAnimation();
 
@@ -239,7 +239,7 @@ export default {
         console.clear();
         console.log("this.ConfigFile", this.ConfigFile);
       });
-       window.scene = this.scene;
+      window.scene = this.scene;
 
       //  console.log(this.scene.background.texture.minFilter = THREE.LinearFilter)
     },
@@ -341,7 +341,7 @@ export default {
               x: 18.631,
               y: 1.5,
               z: -1.21,
-            onComplete: () => {
+              onComplete: () => {
                 this.gsapTimeline;
               },
             })
@@ -424,6 +424,11 @@ export default {
     setupAinmation() {
       this.createCloud();
       this.mixer = new THREE.AnimationMixer(this.marketModel);
+      this.boat = new Array();
+      for (let i = 1; i <= 3; i++) {
+        let objTemp = this.marketModel.getObjectByName(`par_3d_boat0${i}`);
+        this.boat.push(objTemp);
+      }
       this.passerbyList = new Array();
       for (let i = 1; i <= 4; i++) {
         let objTemp = this.marketModel.getObjectByName(`par_passerby0${i}`);
@@ -458,7 +463,7 @@ export default {
         "arrow_monger3",
         "arrow_monger4",
       ];
-      let akonArrowNameList = ["yellow_arrow", "arrow_a_kon_swordfish"];
+      let akonArrowNameList = ["yellow_arrowAction"];
 
       fishmongerArrowNameList.forEach((elem) => {
         let arrowObjTemp = this.marketModel.getObjectByName(elem);
@@ -477,8 +482,10 @@ export default {
         let arrowTemp = new AnimateObject(arrowObjTemp, 6, this.camera);
         const clip = THREE.AnimationClip.findByName(
           this.marketModel.animations,
-          "act_" + elem
+          elem
         );
+        console.log(this.marketModel.animations);
+
         arrowTemp.AppendInfiniteAnimation(this.mixer.clipAction(clip));
         arrowTemp.PlayAnimation();
 
@@ -520,14 +527,14 @@ export default {
           )
         )
       );
-      this.akonList[1].AppendInfiniteAnimation(
-        this.mixer.clipAction(
-          THREE.AnimationClip.findByName(
-            this.marketModel.animations,
-            "act_arrow_a_kon_swordfish"
-          )
-        )
-      );
+      // this.akonList[1].AppendInfiniteAnimation(
+      //   this.mixer.clipAction(
+      //     THREE.AnimationClip.findByName(
+      //       this.marketModel.animations,
+      //       "act_arrow_a_kon_swordfish"
+      //     )
+      //   )
+      // );
 
       this.akonList[1].PlayAnimation();
 
@@ -598,7 +605,7 @@ export default {
           this.fishmongerArrowList[i].object.visible = false;
         }
       }
-      this.DragLady.axuobj.object.lookAt(this.camera.position);
+      // this.DragLady.axuobj.object.lookAt(this.camera.position);
       this.akonList[0].watchMe();
 
       if (
@@ -609,6 +616,7 @@ export default {
         // this.walkingGsap.pause();
         // console.log(this.camera.quaternion);
         this.akonList[1].toggleDistance = 1000;
+        this.controls.enabled = false;
         this.gsapTimeline
           .to(this.camera.position, {
             duration: 2,
@@ -636,6 +644,7 @@ export default {
           this.KickMan.DoOnce = false;
           let currentQuaternion = this.camera.position.clone();
           // this.walkingthis.gsapTimeline.pause();
+          this.controls.enabled = false;
 
           this.gsapTimeline
             .to(this.camera.position, {
@@ -651,6 +660,7 @@ export default {
               y: Math.PI / 2,
               onComplete: () => {
                 this.KickMan.PlayAnimation();
+                this.controls.enabled = true;
               },
             });
 
@@ -660,6 +670,7 @@ export default {
 
       if (this.SwordFish.isApproach()) {
         if (this.SwordFish.DoOnce) {
+          this.controls.enabled = false;
           this.dbClickEvent.eventName = "";
           this.SwordFish.DoOnce = false;
           this.gsapTimeline
@@ -679,6 +690,7 @@ export default {
               z: -0.028502417966723204,
               onComplete: () => {
                 this.SwordFish.PlayAnimation();
+                this.controls.enabled = true;
               },
             });
 
@@ -715,15 +727,19 @@ export default {
           }
         }
       }
+      for (let i = 0; i < 3; i++) {
+        this.boat[i].position.y =
+          Math.sin((performance.now()+i*1000) * 0.001 ) * 0.1 - 0.2;
+      }
 
       this.mixer.update(0.03);
     },
     handlePlayerState() {
       switch (this.PlayerState) {
         case 1:
-          this.akonArrowList[0].object.visible = false;
-          let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
-          yellow_arrow.visible = false;
+          // this.akonArrowList[0].object.visible = false;
+          // let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
+          // yellow_arrow.visible = false;
           if (this.$store.state.Market.tutorialIndex == 1)
             this.$store.commit("Market/IncreaseTutorialDialog");
           break;

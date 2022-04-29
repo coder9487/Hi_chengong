@@ -1,4 +1,7 @@
 <template>
+  <div v-show="missionContentIndex < missionContent.length" class="mission">
+    <div class="text">{{ missionContent[missionContentIndex] }}</div>
+  </div>
   <div
     v-if="0"
     @touchstart.prevent.stop="touchFn('start')"
@@ -7,11 +10,13 @@
   ></div>
 
   <div class="navigate">
-    <div id="navigate-lottie" v-for="n in 3" :key="n">
-      <div
-        :id= "`loading-video-container_${n}`"
-        v-show="lottieShowEnableFunc(n)"
-      ></div>
+    <div id="navigate">
+      <div id="navigate-lottie" v-for="n in 3" :key="n">
+        <div
+          :id="`loading-video-container_${n}`"
+          v-show="lottieShowEnableFunc(n)"
+        ></div>
+      </div>
     </div>
 
     <div
@@ -40,12 +45,9 @@
       navigate_dialog_content_index <= 10
     "
   >
-  <div>
-    <img
-      class="fishmonger-monger"
-      :src="fishMonger_image_path.fishMonger"
-    />
-  </div>
+    <div>
+      <img class="fishmonger-monger" :src="fishMonger_image_path.fishMonger" />
+    </div>
 
     <div
       class="fishmonger-dialog"
@@ -78,7 +80,7 @@ import { ref, reactive } from "vue";
 import lottie from "lottie-web";
 
 export default {
-  name:'Market2D',
+  name: "Market2D",
   mounted() {
     this.changeLottie();
     let state = 0;
@@ -120,28 +122,22 @@ export default {
   },
 
   setup() {
-
-// {
-//     let count = 0;
-//     let imgs = [
-//     //用require的方式添加圖片地址，直接添加圖片地址的話，在build打包之後會查找不到圖片，因為打包之後的圖片名稱會有一個加密的字元串
-//         require('../../images/monger1/monger1.png'),
-//         require('../../images/monger1/1-1.png'),
-//         require('../../images/monger1/1-2.png')
-//     ]
-//     for (let img of imgs) {
-//         let image = new Image();
-//         image.src = img;
-//         image.onload = () => {
-//             count++;
-//         };
-//     }
-// }
-
-
-
-
-
+    // {
+    //     let count = 0;
+    //     let imgs = [
+    //     //用require的方式添加圖片地址，直接添加圖片地址的話，在build打包之後會查找不到圖片，因為打包之後的圖片名稱會有一個加密的字元串
+    //         require('../../images/monger1/monger1.png'),
+    //         require('../../images/monger1/1-1.png'),
+    //         require('../../images/monger1/1-2.png')
+    //     ]
+    //     for (let img of imgs) {
+    //         let image = new Image();
+    //         image.src = img;
+    //         image.onload = () => {
+    //             count++;
+    //         };
+    //     }
+    // }
 
     let NextTutorial = ref(false);
     let lottieAnimation;
@@ -164,6 +160,8 @@ export default {
   data() {
     return {
       lottie_conetnt: ["", "mouse_drag", "click_move", "double_click"],
+      missionContent: ["找找阿公在哪裡?", "選擇一張體驗卷"],
+      missionContentIndex: 0,
       A_kon_dialogContent: [
         "lottie",
         "lottie",
@@ -192,12 +190,23 @@ export default {
   },
   watch: {
     tutorialIndex: function () {
+      console.log(this.tutorialIndex);
+
       switch (this.tutorialIndex) {
+        case 3:
+          this.missionContentIndex++;
+          break;
+        case 4:
+          this.missionContentIndex++;
         case 1:
         case 2:
-        case 4:
         case 5:
           this.A_kon_chatbox_handle();
+          break;
+
+        //
+        // this.A_kon_chatbox_handle();
+        // break;
       }
     },
     fuzzyavailable: function () {
@@ -208,7 +217,6 @@ export default {
         this.$store.commit("setFozzyFram", false);
       }
     },
-
 
     direc: {
       handler(newVal) {
@@ -244,9 +252,7 @@ export default {
       return `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
     },
     fuzzyavailable() {
-      return (
-        this.fishmonger_dialog_content_show_available
-      );
+      return this.fishmonger_dialog_content_show_available;
     },
     marketPersonDisplay() {
       return this.$store.state.Market.marketDisplay[0]["id"];
@@ -281,9 +287,7 @@ export default {
     },
     detectPaltform() {
       if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry /i.test(
-          navigator.userAgent
-        )
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry /i.test(navigator.userAgent)
       )
         return true;
       else return false;
@@ -406,23 +410,22 @@ $content-text-size-pc: 1.4vw;
   }
 }
 #navigate {
+  display: flex;
+  justify-content: space-around;
+
   &-lottie {
+    transform: translateX(2);
     position: absolute;
-    // background-color: chocolate;
-    //  z-index: 30;
     width: 30vw;
     height: 20vh;
     bottom: 2vh;
-    transform: translateX(50%);
-    right: 50vw;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
   }
 }
 .navigate {
-  * {
-    display: inline;
-    float: left;
-  }
-
   &-dialog {
     position: absolute;
     max-width: 50vw;
@@ -431,11 +434,21 @@ $content-text-size-pc: 1.4vw;
     bottom: 8vh;
     border-radius: 20px;
     background-color: aliceblue;
+    display: flex;
+    justify-content: space-around;
 
     &-lottie {
+      position: absolute;
       width: 40vw;
       height: 20vh;
+
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      * {
+      }
     }
+
     &-content {
       font-size: 5vh;
       @media screen and (min-width: 1024px) {
@@ -621,8 +634,6 @@ b {
   -ms-user-select: none;
 }
 
-
-
 #goBtn {
   z-index: 100;
   left: 0;
@@ -639,5 +650,25 @@ b {
     border-radius: 50px;
     transition: border-radius 0.3s;
   }
+}
+.mission {
+  position: fixed;
+  top: 5vh;
+  width: 15vw;
+  height: 5vh;
+  border-radius: 30px;
+  left: 50vw;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bolder;
+  font-size: large;
+  animation-duration: 1s;
+  background-color: #fea30b;
 }
 </style>
