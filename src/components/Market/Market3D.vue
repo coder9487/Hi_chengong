@@ -426,7 +426,8 @@ export default {
       this.mixer = new THREE.AnimationMixer(this.marketModel);
       this.boat = new Array();
       for (let i = 1; i <= 3; i++) {
-        let objTemp = this.marketModel.getObjectByName(`par_3d_boat0${i}`);
+        let objTemp = this.marketModel.getObjectByName(`3d_boat0${i}`);
+        console.log(objTemp)
         this.boat.push(objTemp);
       }
       this.passerbyList = new Array();
