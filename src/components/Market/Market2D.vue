@@ -414,7 +414,7 @@ $content-text-size-pc: 1.4vw;
   justify-content: space-around;
 
   &-lottie {
-    transform: translateX(2);
+     transform: scale(2);
     position: absolute;
     width: 30vw;
     height: 20vh;
