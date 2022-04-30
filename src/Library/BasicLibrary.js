@@ -19,8 +19,8 @@ export class GlobalScene {
     this.renderer.setPixelRatio(0.8);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = false; // 設定需渲染陰影效果
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // THREE.PCFSoftShadowMap
-    this.renderer.toneMapping = THREE.ReinhardToneMapping;
+    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // THREE.PCFSoftShadowMap
+     this.renderer.toneMapping = THREE.ReinhardToneMapping;
     this.renderer.gammaFactor = 3; //2.2
     this.renderer.outputEncoding = THREE.sRGBEncoding;
     this.renderer.gammaOutput = true;

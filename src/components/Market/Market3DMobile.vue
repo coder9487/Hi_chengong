@@ -1,10 +1,4 @@
 <template>
-  <div
-    v-if="1"
-    @touchstart.prevent.stop="touchFn('start')"
-    @touchend.prevent="touchFn('end')"
-    id="goBtn"
-  ></div>
   <div v-touch-pan.prevent="direciton" id="FullScreen">
     <canvas id="three"></canvas>
   </div>
@@ -41,12 +35,13 @@ export default {
   mounted() {
     this.Init_Three();
     this.AddEnentListener();
+
     this.Animation_Three();
   },
   onBeforeUnmount() {},
   data() {
     return {
-      PostProcessingEnable: true,
+      PostProcessingEnable: false,
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
       dbClickEvent: { eventName: "", eventObject: {} },
@@ -87,6 +82,10 @@ export default {
     },
   },
   methods: {
+    renderHandle() {
+      if (this.PostProcessingEnable) this.composer.render();
+      else this.renderer.render(this.scene, this.camera);
+    },
     touchFn(state) {
       switch (state) {
         case "start":
@@ -100,8 +99,11 @@ export default {
     direciton({ evt, ...newInfo }) {
       this.direc.hori = newInfo.delta.x.toFixed(0);
       this.direc.vert = newInfo.delta.y.toFixed(0);
-      console.log(this.direc);
-      this.onMouseMove()
+      this.direc.hori = Math.min(Math.max(parseInt(this.direc.hori), -5), 5);
+      this.direc.vert = Math.min(Math.max(parseInt(this.direc.vert), -5), 5);
+      // console.log(this.direc);
+
+      this.onMouseMove();
       this.$store.commit("setLookDir", {
         x: this.direc.hori,
         y: this.direc.vert,
@@ -128,9 +130,9 @@ export default {
       this.renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: true,
-        // alpha: true,
-        precision: "lowp",
-        powerPreference: "low-power",
+        alpha: true,
+        // precision: "lowp",
+        powerPreference: "high-performance",
       });
       this.renderer.setClearColor(new THREE.Color("#ffffff"), 0);
       window.renderer = this.renderer;
@@ -138,7 +140,7 @@ export default {
         50,
         window.innerWidth / window.innerHeight,
         0.1,
-        100
+        50
       );
       this.camera.position.set(20, 1.5, 0);
 
@@ -193,8 +195,9 @@ export default {
       this.handlePlayerState();
 
       this.controls.update();
-      // this.sea.moveWaves();
-      this.composer.render();
+      this.sea.moveWaves();
+      // if (this.PostProcessingEnable) this.composer.render();
+      // else this.renderer.render(this.scene, this.camera);
       this.updateAnimation();
 
       requestAnimationFrame(this.Animation_Three);
@@ -209,12 +212,14 @@ export default {
     async loadMarket() {
       console.clear();
       const loader = new THREE.ObjectLoader();
+      // const loader = new THREE.BufferGeometryLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market2-1.json",
+        "../models/market2-4.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
       );
+      console.log(this.marketModel);
 
       this.marketModel.scale.set(10, 10, 10);
       this.marketModel.position.set(0, 0, 0);
@@ -226,11 +231,10 @@ export default {
       this.setupAinmation();
       this.controls.colliders = this.marketModel;
       this.LoadMarketFinish = true;
-      console.log(this.marketModel);
     },
 
     createSea() {
-      let seaVertices = 100;
+      let seaVertices = 20;
       let seaAmp = 0.8;
 
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
@@ -241,46 +245,7 @@ export default {
       // this.sea.mesh.castShadow = true;
       // this.sea.mesh.receiveShadow = true;
     },
-    createCloudManual() {
-      const texture = new THREE.TextureLoader().load(
-        "../images/cloud/cloud_far01.png"
-      );
 
-      // immediately use the texture for material creation
-      const material = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        alphaTest: 0.001,
-      });
-
-      const geometry = new THREE.PlaneGeometry(30, 30);
-
-      const plane = new THREE.Mesh(geometry, material);
-      plane.name = "cloud001";
-      plane.position.set(-70, 30, -70);
-      this.scene.add(plane);
-
-      const t_cloud01 = new THREE.TextureLoader().load(
-        "../images/cloud/cloud01.png"
-      );
-      t_cloud01.wrapS = THREE.RepeatWrapping;
-      t_cloud01.wrapT = THREE.RepeatWrapping;
-      t_cloud01.repeat.set(10, 1);
-
-      const cloud01 = new THREE.CylinderGeometry(200, 200, 40, 32, 1, true);
-      const m_cloud01 = new THREE.MeshStandardMaterial({
-        map: t_cloud01,
-        alphaTest: 0,
-        side: THREE.DoubleSide,
-        transparent: true,
-        depthTest: true,
-        depthWrite: true,
-      });
-      this.cloud01 = new THREE.Mesh(cloud01, m_cloud01);
-      this.cloud01.position.set(-8, 3, -40);
-
-      this.scene.add(this.cloud01);
-    },
     createCloud() {
       this.cloudArray = new Array();
       this.cloudArray.push(this.marketModel.getObjectByName("cloud01"));
@@ -297,7 +262,7 @@ export default {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
     onDblclick() {
-      // console.log(
+      console.log("Scene polycount:", this.renderer.info);
       //   "Event:",
       //   this.dbClickEvent,
       //   " VuexDataPool",
@@ -305,7 +270,7 @@ export default {
       // );
       // alert(this.dbClickEvent.eventName
       // );
-
+      return;
       switch (this.dbClickEvent.eventName) {
         case "Moving":
           if (this.EnableControl == false) break;
@@ -360,6 +325,7 @@ export default {
 
     RaycasterHandler(raycasterList) {
       if (raycasterList == null) return;
+      return;
       this.raycaster.setFromCamera(this.pointer, this.camera);
       let lastestRay = this.raycaster.intersectObjects(raycasterList);
       if (lastestRay.length > 0) {
@@ -407,6 +373,7 @@ export default {
     },
 
     setupAinmation() {
+      return;
       this.createCloud();
       this.mixer = new THREE.AnimationMixer(this.marketModel);
       this.passerbyList = new Array();
@@ -443,7 +410,7 @@ export default {
         "arrow_monger3",
         "arrow_monger4",
       ];
-      let akonArrowNameList = ["yellow_arrow", "arrow_a_kon_swordfish"];
+      let akonArrowNameList = ["yellow_arrow"];
 
       fishmongerArrowNameList.forEach((elem) => {
         let arrowObjTemp = this.marketModel.getObjectByName(elem);
@@ -457,18 +424,20 @@ export default {
 
         this.fishmongerArrowList.push(arrowTemp);
       });
+
       akonArrowNameList.forEach((elem) => {
         let arrowObjTemp = this.marketModel.getObjectByName(elem);
         let arrowTemp = new AnimateObject(arrowObjTemp, 6, this.camera);
         const clip = THREE.AnimationClip.findByName(
           this.marketModel.animations,
-          "act_" + elem
+          elem
         );
         arrowTemp.AppendInfiniteAnimation(this.mixer.clipAction(clip));
         arrowTemp.PlayAnimation();
 
         this.akonArrowList.push(arrowTemp);
       });
+
       console.log("akonArrowNameList", this.akonArrowList);
 
       this.cuponList = new Array();
@@ -569,7 +538,8 @@ export default {
       if (this.LoadMarketFinish != true) return;
 
       this.controls.mobileMove();
-
+      this.renderHandle();
+      return;
       for (let j = 0; j < 2; j++) this.cloudArray[j].rotation.y += 0.0001;
 
       // this.akonArrowList[0].object.lookAt(this.camera.position)
@@ -726,6 +696,7 @@ export default {
     },
     onMouseMove() {
       if (this.LoadMarketFinish != true) return;
+      return;
       this.RaycasterHandler(this.casterList);
       for (let i = 0; i < this.fishmongerList.length; i++) {
         if (this.RaycasterPool.includes(`monger${i + 1}`)) {

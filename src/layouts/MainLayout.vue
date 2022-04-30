@@ -77,9 +77,13 @@ export default {
     };
   },
   methods: {
+
     ScreenOrientation() {
       {
         // alert(window.screen)
+        if(navigator.userAgent.indexOf("Safari") != -1)
+        return;
+
         const orientation = window.screen.orientation.type;
         if (orientation === "portrait-primary") {
           this.persistent = true;

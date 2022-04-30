@@ -3,7 +3,7 @@
     <div class="text">{{ missionContent[missionContentIndex] }}</div>
   </div>
   <div
-    v-if="0"
+    v-if="IS_MOBILE"
     @touchstart.prevent.stop="touchFn('start')"
     @touchend.prevent="touchFn('end')"
     id="goBtn"
@@ -122,6 +122,9 @@ export default {
   },
 
   setup() {
+        let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
     // {
     //     let count = 0;
     //     let imgs = [
@@ -145,7 +148,7 @@ export default {
     const info = ref(null);
     return {
       info,
-
+IS_MOBILE,
       handleHold({ evt, ...newInfo }) {
         info.value = newInfo;
 
@@ -414,7 +417,11 @@ $content-text-size-pc: 1.4vw;
   justify-content: space-around;
 
   &-lottie {
-     transform: scale(2);
+    @media screen and (min-width: 1024px)
+    {
+ transform: scale(2);
+    }
+
     position: absolute;
     width: 30vw;
     height: 20vh;
@@ -654,8 +661,8 @@ b {
 .mission {
   position: fixed;
   top: 5vh;
-  width: 15vw;
-  height: 5vh;
+  width: 20vw;
+  height: 10vh;
   border-radius: 30px;
   left: 50vw;
   transform: translateX(-50%);
@@ -666,9 +673,15 @@ b {
   align-items: center;
   justify-content: center;
   color: white;
+  font-size: small;
   font-weight: bolder;
-  font-size: large;
   animation-duration: 1s;
   background-color: #fea30b;
+   @media screen and (min-width: 1024px){
+  font-size: large;
+  width: 15vw;
+  height: 5vh;
+   }
+
 }
 </style>

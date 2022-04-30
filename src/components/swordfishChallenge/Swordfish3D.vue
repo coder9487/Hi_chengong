@@ -221,7 +221,7 @@ export default {
 
       this.spearAim = model.getObjectByName("spear_aiming");
       this.swordfishbody = model.getObjectByName("sailfish_Armature");
-      this.boat = model.getObjectByName("boat");
+      this.boat = model.getObjectByName("par_boat");
 
       this.swordfishbody.position.y = 5;
       this.spear = model.getObjectByName("spear");

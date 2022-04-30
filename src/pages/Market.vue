@@ -32,9 +32,16 @@
       id="Market3D-tag"
       @loadingProgress="loadingProgressPercentage"
       @scene="sceneRecieve"
-      v-if="1"
+      v-if="!IS_MOBILE"
       v-show="showingFlag"
     ></Market3D>
+    <Market3DMobileVue
+      id="Market3D-tag"
+      @loadingProgress="loadingProgressPercentage"
+      @scene="sceneRecieve"
+     v-else
+      v-show="showingFlag"
+    ></Market3DMobileVue>
     <Market2D id="Market2D-tag" v-if="showingFlag"></Market2D>
   </div>
 </template>
@@ -43,6 +50,7 @@
 import { defineComponent, ref, reactive } from "vue";
 import Market3D from "../components/Market/Market3D";
 import Market2D from "../components/Market/Market2D";
+import Market3DMobileVue from "../components/Market/Market3DMobile.vue";
 import gsap from "gsap";
 
 export default defineComponent({
@@ -50,6 +58,7 @@ export default defineComponent({
   components: {
     Market3D,
     Market2D,
+    Market3DMobileVue,
   },
   setup() {
     let IS_MOBILE = ref(
@@ -59,7 +68,7 @@ export default defineComponent({
     return {
       IS_MOBILE,
       ENABLE_FOR_MOBILE,
-      DEV_FOR_LOADING:0,
+      DEV_FOR_LOADING: 0,
     };
   },
   mounted() {
@@ -109,8 +118,9 @@ export default defineComponent({
         loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
       else loadingWave.style.bottom = this.loading * 0.3 + "%";
       if (
-        this.loading >= 90 &&
-        ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE) && !this.DEV_FOR_LOADING
+        this.loading >= 50 &&
+        ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE) &&
+        !this.DEV_FOR_LOADING
       ) {
         setTimeout(() => {
           this.showingFlag = true;

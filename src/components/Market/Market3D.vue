@@ -218,7 +218,7 @@ export default {
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market2-1.json",
+        "../models/market2-4.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
@@ -245,11 +245,11 @@ export default {
     },
 
     createSea() {
-      let seaVertices = 100;
+      let seaVertices = 10;
       let seaAmp = 0.8;
 
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
-      this.sea.init();
+      this.sea.initWideSea();
       this.sea.mesh.name = "Sea";
       this.scene.add(this.sea.mesh);
       this.sea.mesh.position.y = -3.5;
@@ -733,7 +733,7 @@ export default {
           Math.sin((performance.now()+i*1000) * 0.001 ) * 0.1 - 0.2;
       }
 
-      this.mixer.update(0.03);
+      this.mixer.update(0.016);
     },
     handlePlayerState() {
       switch (this.PlayerState) {

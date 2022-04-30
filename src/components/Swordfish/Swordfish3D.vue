@@ -98,7 +98,7 @@ export default {
       this.renderer.sortObjects = false;
 
       this.camera = new THREE.PerspectiveCamera(
-        90,
+        70,
         window.innerWidth / window.innerHeight,
         1,
         200
@@ -221,9 +221,10 @@ export default {
 
       this.spearAim = model.getObjectByName("spear_aiming");
       this.swordfishbody = model.getObjectByName("sailfish_Armature");
-      this.boat = model.getObjectByName("par_boat");
+      this.boat = model.getObjectByName("boat");
 
       this.swordfishbody.position.y = 5;
+      // this.swordfishbody.scale.set(0.7)
       this.spear = model.getObjectByName("spear");
       // console.log("Monger skeleton system ", this.mongerSkeleton);
       // console.log("Scene ", this.scene.children[2]);
@@ -366,7 +367,7 @@ export default {
           this.spearAim.getWorldPosition(spearWorldPos);
           let swordfishPos = new THREE.Vector3();
           this.swordfishbody.getWorldPosition(swordfishPos);
-          if (swordfishPos.distanceTo(spearWorldPos) < 2) {
+          if (swordfishPos.distanceTo(spearWorldPos) < 3) {
             this.$store.commit("Swordfish/ShootSwordfish");
             console.log(
               "this.$store.state.Swordfish.swordfish",
