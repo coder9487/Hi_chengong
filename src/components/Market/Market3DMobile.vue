@@ -214,7 +214,7 @@ export default {
       const loader = new THREE.ObjectLoader();
       // const loader = new THREE.BufferGeometryLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market2-4.json",
+        "../models/market2-1.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
@@ -270,7 +270,7 @@ export default {
       // );
       // alert(this.dbClickEvent.eventName
       // );
-      return;
+
       switch (this.dbClickEvent.eventName) {
         case "Moving":
           if (this.EnableControl == false) break;
@@ -325,7 +325,7 @@ export default {
 
     RaycasterHandler(raycasterList) {
       if (raycasterList == null) return;
-      return;
+
       this.raycaster.setFromCamera(this.pointer, this.camera);
       let lastestRay = this.raycaster.intersectObjects(raycasterList);
       if (lastestRay.length > 0) {
@@ -373,7 +373,7 @@ export default {
     },
 
     setupAinmation() {
-      return;
+
       this.createCloud();
       this.mixer = new THREE.AnimationMixer(this.marketModel);
       this.passerbyList = new Array();
@@ -430,11 +430,10 @@ export default {
         let arrowTemp = new AnimateObject(arrowObjTemp, 6, this.camera);
         const clip = THREE.AnimationClip.findByName(
           this.marketModel.animations,
-          elem
+          "act_"+elem
         );
         arrowTemp.AppendInfiniteAnimation(this.mixer.clipAction(clip));
         arrowTemp.PlayAnimation();
-
         this.akonArrowList.push(arrowTemp);
       });
 
@@ -474,14 +473,7 @@ export default {
           )
         )
       );
-      this.akonList[1].AppendInfiniteAnimation(
-        this.mixer.clipAction(
-          THREE.AnimationClip.findByName(
-            this.marketModel.animations,
-            "act_arrow_a_kon_swordfish"
-          )
-        )
-      );
+
 
       this.akonList[1].PlayAnimation();
 
@@ -539,7 +531,7 @@ export default {
 
       this.controls.mobileMove();
       this.renderHandle();
-      return;
+
       for (let j = 0; j < 2; j++) this.cloudArray[j].rotation.y += 0.0001;
 
       // this.akonArrowList[0].object.lookAt(this.camera.position)
@@ -696,7 +688,7 @@ export default {
     },
     onMouseMove() {
       if (this.LoadMarketFinish != true) return;
-      return;
+
       this.RaycasterHandler(this.casterList);
       for (let i = 0; i < this.fishmongerList.length; i++) {
         if (this.RaycasterPool.includes(`monger${i + 1}`)) {

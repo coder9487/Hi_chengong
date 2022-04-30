@@ -218,7 +218,7 @@ export default {
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market2-4.json",
+        "../models/market2-1.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
