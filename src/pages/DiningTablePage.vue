@@ -55,7 +55,7 @@ export default defineComponent({
     let IS_MOBILE = ref(
       /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
     );
-    let ENABLE_FOR_MOBILE = 0;
+    let ENABLE_FOR_MOBILE = 1;
     return {
       IS_MOBILE,
       ENABLE_FOR_MOBILE,

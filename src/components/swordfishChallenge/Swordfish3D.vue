@@ -221,7 +221,7 @@ export default {
 
       this.spearAim = model.getObjectByName("spear_aiming");
       this.swordfishbody = model.getObjectByName("sailfish_Armature");
-      this.boat = model.getObjectByName("par_boat");
+      this.boat = model.getObjectByName("boat");
 
       this.swordfishbody.position.y = 5;
       this.spear = model.getObjectByName("spear");
@@ -264,7 +264,7 @@ export default {
       let seaVertices = 100;
       let seaAmp = 1.2;
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.9, 0, 0);
-      this.sea.init();
+      this.sea.initWideSea();
       this.sea.mesh.name = "Sea";
       this.scene.add(this.sea.mesh);
       this.sea.mesh.position.y = -5;

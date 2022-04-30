@@ -265,7 +265,7 @@ export default {
       let seaVertices = 100;
       let seaAmp = 1.2;
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.9, 0, 0);
-      this.sea.init();
+      this.sea.initWideSea();
       this.sea.mesh.name = "Sea";
       this.scene.add(this.sea.mesh);
       this.sea.mesh.position.y = -5;
@@ -402,7 +402,7 @@ export default {
       this.lowersea.mesh.position.x += 0.5;
       this.mongerSkeleton.position.y = this.boat.position.y =
         Math.sin(Date.now() / 500) * 0.05;
-       this.boat.position.y += 0.1;
+       this.boat.position.y += 0.22;
     },
   },
 };
