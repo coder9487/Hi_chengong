@@ -433,7 +433,7 @@ $content-text-size-pc: 1.4vw;
 
   &-lottie {
     @media screen and (min-width: 1024px) {
-      // transform: scale(2);
+
     }
 
 transform: scale(1);
