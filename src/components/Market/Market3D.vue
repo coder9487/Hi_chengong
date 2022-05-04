@@ -218,7 +218,7 @@ export default {
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market2-1.json",
+        "../models/market_lastest.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
@@ -249,7 +249,7 @@ export default {
       let seaAmp = 0.8;
 
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
-      this.sea.initWideSea();
+      this.sea.init();
       this.sea.mesh.name = "Sea";
       this.scene.add(this.sea.mesh);
       this.sea.mesh.position.y = -3.5;
@@ -333,6 +333,8 @@ export default {
           });
           break;
         case "tutorial":
+          if( this.PlayerState >= 1)
+          break;
           // console.log("Enter tutorial");
           this.EnableControl = false;
           this.gsapTimeline
@@ -464,7 +466,7 @@ export default {
         "arrow_monger3",
         "arrow_monger4",
       ];
-      let akonArrowNameList = ["yellow_arrowAction"];
+      let akonArrowNameList = ["yellow_arrow"];
 
       fishmongerArrowNameList.forEach((elem) => {
         let arrowObjTemp = this.marketModel.getObjectByName(elem);
@@ -483,7 +485,7 @@ export default {
         let arrowTemp = new AnimateObject(arrowObjTemp, 6, this.camera);
         const clip = THREE.AnimationClip.findByName(
           this.marketModel.animations,
-          elem
+          "act_" + elem
         );
         console.log(this.marketModel.animations);
 
@@ -730,7 +732,7 @@ export default {
       }
       for (let i = 0; i < 3; i++) {
         this.boat[i].position.y =
-          Math.sin((performance.now()+i*1000) * 0.001 ) * 0.1 - 0.2;
+          Math.sin((performance.now()+i*1000) * 0.001 ) * 0.1 + 0.2;
       }
 
       this.mixer.update(0.016);

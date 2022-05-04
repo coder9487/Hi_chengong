@@ -46,7 +46,7 @@ import Pisirian2D from "../components/Pisirian/Pisirian2D";
 import gsap from "gsap";
 
 export default defineComponent({
-  name: "DiningTable",
+  name: "Pisirian",
   components: {
     Pisirian3D,
     Pisirian2D,
@@ -108,7 +108,7 @@ export default defineComponent({
         loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
       else loadingWave.style.bottom = this.loading * 0.2 + "%";
       if (
-        this.loading >= 95 &&
+        this.loading >= 88 &&
         ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE)
       ) {
         setTimeout(() => {
@@ -257,9 +257,7 @@ export default defineComponent({
   width: 100vw;
   height: 100vh;
 }
-#colorSlide {
-  background-color: black;
-}
+
 @media screen and (orientation: portrait) {
   .loadingPage {
     &-loading-video {

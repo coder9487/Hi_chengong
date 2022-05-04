@@ -122,7 +122,7 @@ export default {
   },
 
   setup() {
-        let IS_MOBILE = ref(
+    let IS_MOBILE = ref(
       /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
     );
     // {
@@ -148,7 +148,7 @@ export default {
     const info = ref(null);
     return {
       info,
-IS_MOBILE,
+      IS_MOBILE,
       handleHold({ evt, ...newInfo }) {
         info.value = newInfo;
 
@@ -163,6 +163,12 @@ IS_MOBILE,
   data() {
     return {
       lottie_conetnt: ["", "mouse_drag", "click_move", "double_click"],
+      lottie_mobile_conetnt: [
+        "",
+        "mobile_rotation",
+        "mobile_move",
+        "mobile_click",
+      ],
       missionContent: ["找找阿公在哪裡?", "選擇一張體驗卷"],
       missionContentIndex: 0,
       A_kon_dialogContent: [
@@ -296,9 +302,18 @@ IS_MOBILE,
       else return false;
     },
     lottieShowEnableFunc(passIn) {
-      if (passIn == this.lottie_counter && this.lottieShowEnable == true)
-        return true;
-      else return false;
+      if (!this.IS_MOBILE) {
+        if (passIn == this.lottie_counter && this.lottieShowEnable == true)
+          return true;
+        else return false;
+      } else {
+        if (
+          passIn == this.lottie_mobile_conetnt &&
+          this.lottieShowEnable == true
+        )
+          return true;
+        else return false;
+      }
     },
     A_kon_chatbox_handle(passInStr) {
       this.navigate_dialog_content_index++;
@@ -417,11 +432,11 @@ $content-text-size-pc: 1.4vw;
   justify-content: space-around;
 
   &-lottie {
-    @media screen and (min-width: 1024px)
-    {
- transform: scale(2);
+    @media screen and (min-width: 1024px) {
+      // transform: scale(2);
     }
 
+transform: scale(1);
     position: absolute;
     width: 30vw;
     height: 20vh;
@@ -677,11 +692,10 @@ b {
   font-weight: bolder;
   animation-duration: 1s;
   background-color: #fea30b;
-   @media screen and (min-width: 1024px){
-  font-size: large;
-  width: 15vw;
-  height: 5vh;
-   }
-
+  @media screen and (min-width: 1024px) {
+    font-size: large;
+    width: 15vw;
+    height: 5vh;
+  }
 }
 </style>

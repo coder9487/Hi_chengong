@@ -52,14 +52,37 @@ import * as tuneCard from "../components/tuneCard.vue";
 export default {
   //  components: {tuneCard},
   mounted() {
-    this.ScreenOrientation();
-    window.addEventListener("orientationchange", this.ScreenOrientation);
+    {
+      if (window.innerWidth > window.innerHeight) {
+        this.persistent = false;
+      }
+
+      if (window.innerWidth < window.innerHeight) {
+        if (this.IS_MOBILE) this.persistent = true;
+      }
+    };
+    // window.addEventListener("orientationchange", this.ScreenOrientation);
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > window.innerHeight) {
+        this.persistent = false;
+      }
+
+      if (window.innerWidth < window.innerHeight) {
+        if (this.IS_MOBILE) this.persistent = true;
+      }
+    });
 
     // this.dragElement(document.getElementById("mydiv"));
   },
 
   setup() {
+    let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
     // dragElement(document.getElementById("mydiv"));
+    return {
+      IS_MOBILE,
+    };
   },
   computed: {
     scene() {
@@ -77,12 +100,10 @@ export default {
     };
   },
   methods: {
-
     ScreenOrientation() {
       {
         // alert(window.screen)
-        if(navigator.userAgent.indexOf("Safari") != -1)
-        return;
+        if (navigator.userAgent.indexOf("Safari") != -1) return;
 
         const orientation = window.screen.orientation.type;
         if (orientation === "portrait-primary") {

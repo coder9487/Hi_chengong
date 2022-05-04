@@ -1,32 +1,30 @@
 <template>
-  <div>
+  <div v-touch-pan.prevent="direciton" id="FullScreen_Pisirian">
     <canvas id="three"></canvas>
   </div>
 </template>
 <script>
 import * as THREE from "three/build/three.module.js";
 import { Sea } from "../../Library/Sea";
-import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
+import { GlobalScene } from "../../Library/BasicLibrary";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { marketSetting, collectObject } from "../../Library/LoadObject";
+import { marketSetting } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import gsap from "gsap";
-import {
-  PasserBy,
-  FishMonger,
-  AnimateObject,
-  HoverCharacter,
-  Akon,
-} from "../../Library/AnimationLibrary";
-import { reactive } from "vue";
+import { PasserBy, AnimateObject } from "../../Library/AnimationLibrary";
+import { reactive,ref } from "vue";
 export default {
   name: "Pisirian3D",
   setup() {
     const Document = document;
     const Window = window;
     let EnableControl = true;
+        let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
     return {
+      IS_MOBILE,
       Document,
       EnableControl,
     };
@@ -51,8 +49,8 @@ export default {
     };
   },
   watch: {
-     direc: {
-      handler(newVal) {
+    direc: {
+      handler() {
         this.$store.commit("setLookDir", {
           x: this.direc.hori,
           y: this.direc.vert,
@@ -60,13 +58,17 @@ export default {
         console.log(this.$store.state.CameraDirect);
       },
       deep: true,
-    },},
+    },
+  },
   computed: {
     detectSowrdfish() {
       return this.$store.state.Pisirian.toggledPasserby;
     },
   },
   methods: {
+    testlog() {
+      console.log("Test log");
+    },
     direciton({ evt, ...newInfo }) {
       this.direc.hori = newInfo.delta.x.toFixed(0);
       this.direc.vert = newInfo.delta.y.toFixed(0);
@@ -101,7 +103,7 @@ export default {
         50,
         window.innerWidth / window.innerHeight,
         0.1,
-        800
+        100
       );
       this.camera.position.set(54.87, 31.5, -1.5);
       //this.camera.position.set(54.78, 30, 2.02);
@@ -166,9 +168,9 @@ export default {
     },
     AddEnentListener() {
       this.Window = window;
-      this.Window.addEventListener("pointermove", this.onPointerMove);
+      // this.Window.addEventListener("pointermove", this.onPointerMove);
       this.Window.addEventListener("resize", this.onWindowResize);
-      this.Window.addEventListener("dblclick", this.onClick);
+      this.Window.addEventListener("click", this.onClick);
       this.Window.addEventListener("mousemove", this.onMouseMove);
     },
 
@@ -176,9 +178,12 @@ export default {
       console.clear();
       const loader = new GLTFLoader().setPath("models/");
       this.islandModel = new Object();
-      this.gltf_islandModel = await loader.loadAsync("pisirian.gltf", (xhr) => {
-        this.loading_callbacks(xhr);
-      });
+      this.gltf_islandModel = await loader.loadAsync(
+        "pisirian_lastest.gltf",
+        (xhr) => {
+          this.loading_callbacks(xhr);
+        }
+      );
 
       this.islandModel = this.gltf_islandModel.scene;
 
@@ -246,7 +251,7 @@ export default {
       // this.sea.mesh.castShadow = true;
       // this.sea.mesh.receiveShadow = true;
     },
-    onPointerMove(event) {
+    onMouseMove(event) {
       if (this.LoadMarketFinish != true) return;
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -261,6 +266,8 @@ export default {
     updateAnimation() {
       if (this.LoadMarketFinish != true) return;
       this.mixer.update(0.016);
+      if(this.IS_MOBILE)
+        this.controls.mobileMove()
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
         this.passerbyList[i].watchMe();
@@ -293,7 +300,7 @@ export default {
       const geometry = new THREE.PlaneGeometry(0.7, 0.7);
       const plane = new THREE.Mesh(geometry, material);
       plane.position.y += 0.35;
-      plane.position.set(54.87, 31.5, -1.5)
+      plane.position.set(54.87, 31.5, -1.5);
       this.scene.add(plane);
       plane.name = "pin_pointer";
       return plane;
@@ -374,7 +381,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#three #touch{
+#three {
   /* background-color: #65e9fa; */
   width: 100vw;
   height: 100h;
@@ -383,7 +390,14 @@ export default {
   left: 0;
   top: 0;
 }
-#touch{
-  z-index:10
+
+#FullScreen_Pisirian {
+  z-index: 7;
+  background-color: black;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="Akon">
+  <div class="Akon" v-if="showAkon">
     <div>
       <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
     </div>
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <div class="PasserbydialogArea" id="PasserbydialogArea">
+  <div class="PasserbydialogArea" v-if="showDialog" id="PasserbydialogArea">
     <div
       class="PasserbydialogArea-dialog"
       v-html="contentList.content[contentListIndex]"
@@ -52,9 +52,12 @@ export default {
         let area = document.getElementById("PasserbydialogArea")
         area.style.bottom = "-100vh"
         this.$store.commit("setFozzyFram", true);
+        this.showAkon = true;
         gsap.fromTo(
           ".Akon",
-          { opacity: 0 },
+          {
+            opacity: 0 ,
+            },
           {
             opacity: 1,
             duration: 0.5,
@@ -65,7 +68,8 @@ export default {
   },
   data() {
     return {
-      showDialog: false,
+      showAkon:ref(false),
+      showDialog: ref(false),
       umount: (true),
       contentListIndex: 0,
       contentList: {

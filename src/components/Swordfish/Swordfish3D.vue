@@ -93,12 +93,12 @@ export default {
         antialias: true,
         alpha: true,
         precision: "lowp",
-        powerPreference: "low-power",
+        powerPreference: "high-performance",
       });
       this.renderer.sortObjects = false;
 
       this.camera = new THREE.PerspectiveCamera(
-        70,
+        90,
         window.innerWidth / window.innerHeight,
         1,
         200
@@ -175,7 +175,7 @@ export default {
       let threewindow = document.getElementById("three");
 
       if (!this.IS_MOBILE) {
-        this.Window.addEventListener("mousemove", this.onMouseMove);
+        window.addEventListener("mousemove", this.onMouseMove);
         this.Window.addEventListener("click", this.onDblclick);
       } else {
         threewindow.addEventListener("touchmove", this.direciton);
@@ -188,7 +188,7 @@ export default {
       // console.clear();
       if (GLTF_LOADER) {
         const loader = new GLTFLoader().setPath("models/");
-        this.swordfish = await loader.loadAsync("swordfish_old.gltf", (xhr) => {
+        this.swordfish = await loader.loadAsync("swordfish.gltf", (xhr) => {
           this.loading_callbacks(xhr);
         });
       } else {
@@ -292,7 +292,11 @@ export default {
       this.scene.add(plane);
     },
     onMouseMove(event) {
-      if (this.spear_direct_vector.state != "stop") return;
+      if (this.spear_direct_vector.state != "stop")
+      {
+        console.log("Stop due to flying spear.")
+        return;
+      }
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
       this.raycaster.setFromCamera(this.pointer, this.camera);

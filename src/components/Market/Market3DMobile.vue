@@ -38,7 +38,14 @@ export default {
 
     this.Animation_Three();
   },
-  onBeforeUnmount() {},
+  onBeforeUnmount() {
+    this.Window.removeEventListener("resize", this.onWindowResize);
+    this.Window.removeEventListener("click", this.onDblclick);
+    this.scene = null;
+    this.camera = null;
+    this.controls = null;
+    this.renderer = null;
+  },
   data() {
     return {
       PostProcessingEnable: false,
@@ -131,7 +138,7 @@ export default {
         canvas,
         antialias: true,
         alpha: true,
-        // precision: "lowp",
+        precision: "lowp",
         powerPreference: "high-performance",
       });
       this.renderer.setClearColor(new THREE.Color("#ffffff"), 0);
@@ -206,6 +213,7 @@ export default {
       this.Window = window;
       this.Window.addEventListener("resize", this.onWindowResize);
       this.Window.addEventListener("click", this.onDblclick);
+      this.Window.addEventListener("mousemove", this.onMouseMove);
       // this.Window.addEventListener("touchmove", this.onMouseMove);
     },
 
@@ -214,7 +222,7 @@ export default {
       const loader = new THREE.ObjectLoader();
       // const loader = new THREE.BufferGeometryLoader();
       this.marketModel = await loader.loadAsync(
-        "../models/market2-1.json",
+        "../models/market_lastest.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
@@ -262,7 +270,7 @@ export default {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
     onDblclick() {
-      console.log("Scene polycount:", this.renderer.info);
+      // console.log("Scene polycount:", this.renderer.info);
       //   "Event:",
       //   this.dbClickEvent,
       //   " VuexDataPool",
@@ -373,7 +381,6 @@ export default {
     },
 
     setupAinmation() {
-
       this.createCloud();
       this.mixer = new THREE.AnimationMixer(this.marketModel);
       this.passerbyList = new Array();
@@ -430,7 +437,7 @@ export default {
         let arrowTemp = new AnimateObject(arrowObjTemp, 6, this.camera);
         const clip = THREE.AnimationClip.findByName(
           this.marketModel.animations,
-          "act_"+elem
+          "act_" + elem
         );
         arrowTemp.AppendInfiniteAnimation(this.mixer.clipAction(clip));
         arrowTemp.PlayAnimation();
@@ -473,7 +480,6 @@ export default {
           )
         )
       );
-
 
       this.akonList[1].PlayAnimation();
 
@@ -687,6 +693,7 @@ export default {
       }
     },
     onMouseMove() {
+
       if (this.LoadMarketFinish != true) return;
 
       this.RaycasterHandler(this.casterList);
