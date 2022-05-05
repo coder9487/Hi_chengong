@@ -1,5 +1,5 @@
 <template>
-  <div class="Akon" v-if="showAkon">
+  <div class="Akon" >
     <div>
       <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
     </div>
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <div class="PasserbydialogArea" v-if="showDialog" id="PasserbydialogArea">
+  <div class="PasserbydialogArea"  id="PasserbydialogArea" >
     <div
       class="PasserbydialogArea-dialog"
       v-html="contentList.content[contentListIndex]"
@@ -44,6 +44,7 @@ export default {
   watch: {
     toggleDialog: function () {
       this.contentListIndex = this.toggleDialog;
+      this.showDialog = true;
       this.dialogHandler(true);
       console.log(this.contentListIndex);
     },
@@ -57,10 +58,12 @@ export default {
           ".Akon",
           {
             opacity: 0 ,
+            zIndex:-100,
             },
           {
             opacity: 1,
             duration: 0.5,
+            zIndex:10,
           }
         );
       }
@@ -86,23 +89,32 @@ export default {
   methods: {
     dialogHandler(state) {
       if (state == true) {
-        this.showDialog = true;
+
         gsap.fromTo(
           ".PasserbydialogArea",
-          { opacity: 0 },
+          { opacity: 0,
+          zIndex:-100, },
           {
             opacity: 1,
             duration: 0.5,
+            zIndex:10,
+
           }
         );
       } else {
-        this.showDialog = false;
+
         gsap.fromTo(
           ".PasserbydialogArea",
-          { opacity: 1 },
+          { opacity: 1 ,
+          zIndex:10,},
           {
             opacity: 0,
             duration: 0.5,
+            zIndex:-100,
+            onComplete:()=>{
+              this.showDialog = false;
+
+            }
           }
         );
       }
@@ -114,6 +126,7 @@ export default {
 $content-text-size-pc: 1.4vw;
 
 .Akon {
+  z-index: -100;
 
   opacity: 0;
   &-charactor {

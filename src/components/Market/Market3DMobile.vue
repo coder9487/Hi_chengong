@@ -214,7 +214,7 @@ export default {
       this.Window.addEventListener("resize", this.onWindowResize);
       this.Window.addEventListener("click", this.onDblclick);
       this.Window.addEventListener("mousemove", this.onMouseMove);
-      // this.Window.addEventListener("touchmove", this.onMouseMove);
+      this.Window.addEventListener("pointermove", this.onPointerMove);
     },
 
     async loadMarket() {
@@ -263,6 +263,7 @@ export default {
     onPointerMove(event) {
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      console.log(this.pointer);
     },
     onWindowResize() {
       this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -692,9 +693,13 @@ export default {
           break;
       }
     },
-    onMouseMove() {
-
+    onMouseMove(event) {
       if (this.LoadMarketFinish != true) return;
+      if(event != null)
+      {
+      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      }
 
       this.RaycasterHandler(this.casterList);
       for (let i = 0; i < this.fishmongerList.length; i++) {
