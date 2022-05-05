@@ -203,7 +203,7 @@ export default {
     AddEnentListener() {
       this.Window = window;
       if (!this.detectPaltform()) {
-        // this.Window.addEventListener("pointermove", this.onPointerMove);
+       this.Window.addEventListener("pointermove", this.onPointerMove);
         this.Window.addEventListener("resize", this.onWindowResize);
         this.Window.addEventListener("dblclick", this.onDblclick);
         this.Window.addEventListener("mousemove", this.onMouseMove);
@@ -753,7 +753,7 @@ export default {
           break;
       }
     },
-    onMouseMove(event) {
+    onMouseMove() {
 
       if (this.LoadMarketFinish != true) return;
       this.RaycasterHandler(this.casterList);

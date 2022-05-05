@@ -174,6 +174,8 @@ export class FirstPersonCameraControl {
     }
   }
   mobileMove() {
+    if(!this._isEnabled)
+    return;
     let moveForward = store.state.Forward;
     let CameraDirect = store.state.CameraDirect;
     this.rotateX(CameraDirect.x);

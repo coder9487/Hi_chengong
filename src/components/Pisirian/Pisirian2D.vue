@@ -1,5 +1,12 @@
 <template>
-  <div class="Akon" >
+  <img
+    v-if="IS_MOBILE"
+    @touchstart.prevent.stop="touchFn('start')"
+    @touchend.prevent="touchFn('end')"
+    id="goBtn"
+    src="../../../public/images/walk.png"
+  >
+  <div class="Akon">
     <div>
       <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
     </div>
@@ -12,11 +19,13 @@
         恭喜你離成功更近一步，記錄你的<b>成功之旅</b>或對自己的<b>成功期許</b>，讓阿公幫你<b>成功寄出</b>吧！一定很漂亮!
       </div>
       <div class="dialogArea-group">
-        <div @click.stop="this.$router.push('/')" class="button color-orange">下次成功見!</div>
+        <div @click.stop="this.$router.push('/')" class="button color-orange">
+          下次成功見!
+        </div>
       </div>
     </div>
   </div>
-  <div class="PasserbydialogArea"  id="PasserbydialogArea" >
+  <div class="PasserbydialogArea" id="PasserbydialogArea" v-if="showDialog">
     <div
       class="PasserbydialogArea-dialog"
       v-html="contentList.content[contentListIndex]"
@@ -29,10 +38,16 @@
   </div>
 </template>
 <script>
+
 import gsap from "gsap";
 import { ref } from "vue";
 export default {
-  setup() {},
+  setup() {    let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
+    return{
+      IS_MOBILE,
+    }},
   computed: {
     toggleDialog() {
       return this.$store.state.Pisirian.toggledPasserby;
@@ -50,20 +65,18 @@ export default {
     },
     endDialog: function () {
       if (this.endDialog == true) {
-        let area = document.getElementById("PasserbydialogArea")
-        area.style.bottom = "-100vh"
+        let area = document.getElementById("PasserbydialogArea");
         this.$store.commit("setFozzyFram", true);
         this.showAkon = true;
         gsap.fromTo(
           ".Akon",
           {
-            opacity: 0 ,
-            zIndex:-100,
-            },
+            opacity: 0,
+          },
           {
+            display:'block',
             opacity: 1,
             duration: 0.5,
-            zIndex:10,
           }
         );
       }
@@ -71,9 +84,9 @@ export default {
   },
   data() {
     return {
-      showAkon:ref(false),
+      showAkon: ref(false),
       showDialog: ref(false),
-      umount: (true),
+      umount: true,
       contentListIndex: 0,
       contentList: {
         content: [
@@ -86,49 +99,54 @@ export default {
       },
     };
   },
-  methods: {
+  methods: {    touchFn(state) {
+      switch (state) {
+        case "start":
+          this.$store.commit("setForward", true);
+          break;
+        case "end":
+          this.$store.commit("setForward", false);
+          break;
+      }
+    },
     dialogHandler(state) {
       if (state == true) {
-
-        gsap.fromTo(
-          ".PasserbydialogArea",
-          { opacity: 0,
-          zIndex:-100, },
-          {
-            opacity: 1,
-            duration: 0.5,
-            zIndex:10,
-
-          }
-        );
+        this.showDialog = true;
+        // gsap.fromTo(
+        //   ".PasserbydialogArea",
+        //   { opacity: 0 },
+        //   {
+        //     opacity: 1,
+        //     duration: 0.5,
+        //   }
+        // );
       } else {
+        this.showDialog = false;
+        // gsap.fromTo(
+        //   ".PasserbydialogArea",
+        //   { opacity: 1 },
+        //   {
+        //     opacity: 0,
+        //     duration: 0.5,
 
-        gsap.fromTo(
-          ".PasserbydialogArea",
-          { opacity: 1 ,
-          zIndex:10,},
-          {
-            opacity: 0,
-            duration: 0.5,
-            zIndex:-100,
-            onComplete:()=>{
-              this.showDialog = false;
+        //     onComplete: () => {
+        //       this.showDialog = false;
+        //     },
+        //   }
+        // );
 
-            }
-          }
-        );
       }
     },
   },
 };
 </script>
 <style lang="scss" scoped>
+@import url('../dialoglayout.scss');
 $content-text-size-pc: 1.4vw;
 
 .Akon {
-  z-index: -100;
-
   opacity: 0;
+  display:none;
   &-charactor {
     // width: 40vw;
     z-index: 10;
@@ -139,138 +157,9 @@ $content-text-size-pc: 1.4vw;
   }
 }
 
-.dialogArea {
-  // background-color: aqua;
-  position: fixed;
-  width: 60vw;
-  height: 60vh;
-  left: 15vw;
-  bottom: 20vh;
-  & * {
-    pointer-events: all;
-  }
-  &-photo {
-    position: relative;
-    width: 45vw;
-    left: 7.5vw;
-    top: -3%;
-  }
-  &-dialog {
-    position: relative;
-    width: 45vw;
-    height: 20vh;
-    left: 7.5vw;
-    background-color: aliceblue;
-    border-radius: 30px;
-    padding: 2.2vw;
-    font-size: 1.5vw;
-    color: #276a70;
-    @media screen and (min-width: 1024px) {
-      font-size: $content-text-size-pc;
-      line-height: $content-text-size-pc * 1.8;
-      letter-spacing: $content-text-size-pc * 0.2;
-    }
 
-    & > b {
-      color: #fea30b;
-      font-weight: bolder;
-    }
-  }
-  &-group {
-    position: relative;
-    width: 45vw;
-    height: 10vh;
-    // background-color: aquamarine;
-    left: 7.5vw;
-    top: -5%;
-    display: flex;
-    justify-content: space-around;
-  }
-}
 
-.PasserbydialogArea {
-  opacity: 0;
-  position: absolute;
-  width: 60vw;
-  height: 20vh;
-  left: 15vw;
-  bottom: 10vh;
-  & * {
-    pointer-events: all;
-  }
-  &-photo {
-    position: relative;
-    width: 45vw;
-    left: 7.5vw;
-    top: -3%;
-  }
-  &-dialog {
-    position: relative;
-    width: 45vw;
-    height: 20vh;
-    left: 7.5vw;
-    background-color: aliceblue;
 
-    border-radius: 30px;
-    padding: 2.5vw;
-    font-size: 1.5vw;
-    color: #276a70;
-    @media screen and (min-width: 1024px) {
-      font-size: $content-text-size-pc;
-      line-height: $content-text-size-pc * 1.8;
-      letter-spacing: $content-text-size-pc * 0.2;
-    }
-    ::v-deep b {
-      color: #fea30b;
-      font-weight: bolder;
-    }
-  }
-  &-group {
-    position: relative;
-    width: 45vw;
-    height: 10vh;
-    // background-color: aquamarine;
-    left: 7.5vw;
-    top: -10%;
-    display: flex;
-    justify-content: space-around;
-  }
-}
-b {
-  color: #fea30b;
-  font-weight: bolder;
-}
-.button {
-  z-index: 11;
-  width: 10vw;
-  height: 7vh;
-  // background-color: cornflowerblue;
-  border-radius: 20px;
-  padding: 2%;
-  display: flex;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  font-size: larger;
-  color: white;
-  font-weight: bolder;
-}
-
-.color {
-  &-orange {
-    background-color: #fea30b;
-    &:hover {
-      background-color: #ff7a00;
-    }
-  }
-
-  &-cyan {
-    background-color: #1ab5c1;
-    &:hover {
-      background-color: #0098a4;
-    }
-  }
-}
 
 * {
   user-drag: none;
@@ -280,4 +169,5 @@ b {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
 </style>

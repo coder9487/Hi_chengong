@@ -323,6 +323,11 @@ export default {
     },
     imagesrc(index) {
       let array = ["cupon.jpg", "table.png"];
+
+      if(index == 0)
+      {
+       return  `../../images/swordfish/cupon${Math.floor(Math.random()*3)}.jpg`
+      }
       return `../../images/swordfish/${array[index]}`;
     },
     changeLottie(str) {

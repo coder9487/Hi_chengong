@@ -96,14 +96,14 @@ export default {
         antialias: true,
         alpha: true,
         precision: "lowp",
-        powerPreference: "low-power",
+        powerPreference: "high-performance",
       });
 
       this.camera = new THREE.PerspectiveCamera(
         50,
         window.innerWidth / window.innerHeight,
         0.1,
-        100
+        400
       );
       this.camera.position.set(54.87, 31.5, -1.5);
       //this.camera.position.set(54.78, 30, 2.02);

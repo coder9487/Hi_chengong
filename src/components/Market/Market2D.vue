@@ -2,12 +2,13 @@
   <div v-show="missionContentIndex < missionContent.length" class="mission">
     <div class="text">{{ missionContent[missionContentIndex] }}</div>
   </div>
-  <div
+  <img
     v-if="IS_MOBILE"
     @touchstart.prevent.stop="touchFn('start')"
     @touchend.prevent="touchFn('end')"
     id="goBtn"
-  ></div>
+    src="../../../public/images/walk.png"
+  />
 
   <div class="navigate">
     <div id="navigate">
@@ -403,6 +404,7 @@ export default {
 };
 </script>
 <style lang="scss">
+@import url('../dialoglayout.scss');
 $content-text-size-pc: 1.4vw;
 .controlPannel {
   // // background-color: antiquewhite;
@@ -433,10 +435,9 @@ $content-text-size-pc: 1.4vw;
 
   &-lottie {
     @media screen and (min-width: 1024px) {
-
     }
 
-transform: scale(1);
+    transform: scale(1);
     position: absolute;
     width: 30vw;
     height: 20vh;
@@ -564,89 +565,7 @@ transform: scale(1);
   }
 }
 
-.PasserbydialogArea {
-  opacity: 1;
-  position: absolute;
-  width: 60vw;
-  height: 20vh;
-  left: 20vw;
-  bottom: 10vh;
-  & * {
-    pointer-events: all;
-  }
-  &-photo {
-    position: relative;
-    width: 45vw;
-    left: 7.5vw;
-    top: -3%;
-  }
-  &-dialog {
-    position: relative;
-    width: 45vw;
-    height: 20vh;
-    left: 7.5vw;
-    background-color: aliceblue;
 
-    border-radius: 30px;
-    padding: 2.5vw;
-    font-size: 1.5vw;
-    color: #276a70;
-    @media screen and (min-width: 1024px) {
-      font-size: $content-text-size-pc;
-      line-height: $content-text-size-pc * 1.8;
-      letter-spacing: $content-text-size-pc * 0.2;
-    }
-    ::v-deep b {
-      color: #fea30b;
-      font-weight: bolder;
-    }
-  }
-  &-group {
-    position: relative;
-    width: 45vw;
-    height: 10vh;
-    // background-color: aquamarine;
-    left: 7.5vw;
-    top: -20%;
-    display: flex;
-    justify-content: space-around;
-  }
-}
-b {
-  color: #fea30b;
-  font-weight: bolder;
-}
-.button {
-  z-index: 11;
-  width: 10vw;
-  height: 7vh;
-  // background-color: cornflowerblue;
-  border-radius: 20px;
-  padding: 2%;
-  display: flex;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  font-size: larger;
-  color: white;
-  font-weight: bolder;
-}
-
-.color {
-  &-orange {
-    background-color: #fea30b;
-    &:hover {
-      background-color: #ff7a00;
-    }
-  }
-
-  &-cyan {
-    background-color: #1ab5c1;
-    &:hover {
-      background-color: #0098a4;
-    }
-  }
-}
 * {
   user-drag: none;
   -webkit-user-drag: none;
@@ -656,46 +575,5 @@ b {
   -ms-user-select: none;
 }
 
-#goBtn {
-  z-index: 100;
-  left: 0;
-  bottom: 0;
-  width: 100px;
-  height: 100px;
-  position: fixed;
-  border-radius: 20px;
-  background-color: #ff7a00;
-  opacity: 0.5;
-  transition: border-radius 0.3s;
 
-  &:active {
-    border-radius: 50px;
-    transition: border-radius 0.3s;
-  }
-}
-.mission {
-  position: fixed;
-  top: 5vh;
-  width: 20vw;
-  height: 10vh;
-  border-radius: 30px;
-  left: 50vw;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: small;
-  font-weight: bolder;
-  animation-duration: 1s;
-  background-color: #fea30b;
-  @media screen and (min-width: 1024px) {
-    font-size: large;
-    width: 15vw;
-    height: 5vh;
-  }
-}
 </style>

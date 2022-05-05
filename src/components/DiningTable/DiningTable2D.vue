@@ -140,14 +140,14 @@ export default {
           duration: 0.5,
         }
       );
-          //       gsap.fromTo(
-          //   ".Akon",
-          //   { opacity: 1 },
-          //   {
-          //     opacity: 0,
-          //     duration: 0.5,
-          //   }
-          // );
+      //       gsap.fromTo(
+      //   ".Akon",
+      //   { opacity: 1 },
+      //   {
+      //     opacity: 0,
+      //     duration: 0.5,
+      //   }
+      // );
       // gsap.fromTo(
       //   ".Akon-charactor",
       //   { opacity: 1 },
@@ -178,14 +178,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import url("../dialoglayout.scss");
+
 .introduceBox {
   opacity: 0;
   &-photo {
     position: absolute;
     // z-index: 300;
-    top: 17vh;
+    top: 13vh;
     left: 13vw;
     width: 73vw;
+    @media screen and (min-width: 1024px)
+    {
+      top: 17vh;
+    }
     // height: 66vh;
     // background-color: bisque;
   }
@@ -261,104 +267,7 @@ $content-text-size-pc: 1.5vw;
     justify-content: space-around;
   }
 }
-.PasserbydialogArea {
-  opacity: 1;
-  position: absolute;
-  width: 60vw;
-  height: 20vh;
-  left: 20vw;
-  bottom: 10vh;
-  & * {
-    pointer-events: all;
-  }
-  &-photo {
-    position: relative;
-    width: 45vw;
-    left: 7.5vw;
-    top: -3%;
-  }
-  &-dialog {
-    position: relative;
-    width: 45vw;
-    height: 20vh;
-    left: 7.5vw;
-    background-color: aliceblue;
 
-    border-radius: 30px;
-    padding: 2.5vw;
-    font-size: 1.5vw;
-    color: #276a70;
-    @media screen and (min-width: 1024px) {
-      font-size: $content-text-size-pc;
-      line-height: $content-text-size-pc * 1.8;
-      letter-spacing: $content-text-size-pc * 0.2;
-    }
-    ::v-deep b {
-      color: #fea30b;
-      font-weight: bolder;
-    }
-  }
-  &-group {
-    position: relative;
-    width: 45vw;
-    height: 10vh;
-    // background-color: aquamarine;
-    left: 7.5vw;
-    top: -20%;
-    display: flex;
-    justify-content: space-around;
-  }
-}
-.button {
-  z-index: 11;
-  width: 10vw;
-  height: 7vh;
-  // background-color: cornflowerblue;
-  border-radius: 20px;
-  padding: 2%;
-  display: flex;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  font-size: larger;
-  color: white;
-  font-weight: bolder;
-}
 
-.color {
-  &-orange {
-    background-color: #fea30b;
-    &:hover {
-      background-color: #ff7a00;
-    }
-  }
 
-  &-cyan {
-    background-color: #1ab5c1;
-    &:hover {
-      background-color: #0098a4;
-    }
-  }
-}
-
-.mission {
-  position: fixed;
-  top: 5vh;
-  width: 15vw;
-  height: 5vh;
-  border-radius: 30px;
-  left: 50vw;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bolder;
-  font-size: large;
-  animation-duration: 1s;
-  background-color: #fea30b;
-}
 </style>
