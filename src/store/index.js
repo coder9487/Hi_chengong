@@ -32,17 +32,17 @@ const Swordfish = {
     swordfish: 0,
     gameEnable: false,
     Fozzy3D: false,
-    hit:false,
+    hit: false,
   }),
   mutations: {
-    Reset(state){
+    Reset(state) {
       state.swordfish = 0;
       state.gameEnable = false;
       state.Fozzy3D = false;
       state.hit = false;
     },
-    Hit(state){
-        state.hit = !state.hit;
+    Hit(state) {
+      state.hit = !state.hit;
     },
     setFozzyFram(state, available) {
       state.Fozzy3D = available;
@@ -121,10 +121,14 @@ const Pisirian = {
 export default createStore({
   state: {
     Fozzy3D: false,
-    Forward:false,
+    Forward: false,
+    gameStart: false,
     CameraDirect: { x: 0, y: 0 },
   },
   mutations: {
+    gameStart(state) {
+      state.gameStart = true;
+    },
     setFozzyFram(state, available) {
       state.Fozzy3D = available;
     },
@@ -132,9 +136,9 @@ export default createStore({
       state.CameraDirect.x = objects.x;
       state.CameraDirect.y = objects.y;
     },
-    setForward(state,statment){
-      state.Forward = statment
-    }
+    setForward(state, statment) {
+      state.Forward = statment;
+    },
   },
   modules: {
     Market: Market,

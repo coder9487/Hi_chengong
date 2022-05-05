@@ -55,7 +55,7 @@ export default {
           x: this.direc.hori,
           y: this.direc.vert,
         });
-        console.log(this.$store.state.CameraDirect);
+        // console.log(this.$store.state.CameraDirect);
       },
       deep: true,
     },
@@ -67,12 +67,12 @@ export default {
   },
   methods: {
     testlog() {
-      console.log("Test log");
+      // console.log("Test log");
     },
     direciton({ evt, ...newInfo }) {
       this.direc.hori = newInfo.delta.x.toFixed(0);
       this.direc.vert = newInfo.delta.y.toFixed(0);
-      console.log(this.direc);
+      // console.log(this.direc);
       if (newInfo.isFirst) {
       } else if (newInfo.isFinal) {
         this.direc.hori = 0;
@@ -80,7 +80,7 @@ export default {
       }
     },
     loading_callbacks(val) {
-      console.log("Pass into callbacks ", (val.loaded / 65211482).toFixed(2));
+      // console.log("Pass into callbacks ", (val.loaded / 65211482).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 65211482).toFixed(2));
     },
     Init_Three() {
@@ -116,7 +116,7 @@ export default {
        */
       switch (this.controllerMode) {
         case "0":
-          console.log(this.Document);
+          // console.log(this.Document);
           this.controls = new FirstPersonCameraControl(
             this.camera,
             this.Document.body
@@ -155,7 +155,7 @@ export default {
       this.createSea();
       this.loadTable();
 
-      console.log(this.scene);
+      // console.log(this.scene);
     },
     Animation_Three() {
       this.controls.update();
@@ -171,11 +171,13 @@ export default {
       // this.Window.addEventListener("pointermove", this.onPointerMove);
       this.Window.addEventListener("resize", this.onWindowResize);
       this.Window.addEventListener("click", this.onClick);
+      if(!this.IS_MOBILE)
       this.Window.addEventListener("mousemove", this.onMouseMove);
     },
 
     async loadTable() {
-      console.clear();
+      // console.clear();
+      this.createSound();
       const loader = new GLTFLoader().setPath("models/");
       this.islandModel = new Object();
       this.gltf_islandModel = await loader.loadAsync(
@@ -214,7 +216,7 @@ export default {
       this.raycasterList.push(this.islandModel.getObjectByName("ground"));
       this.raycasterList.push(this.islandModel.getObjectByName("end_wall"));
 
-      console.log("raycasterList", this.raycasterList);
+      // console.log("raycasterList", this.raycasterList);
 
       this.mixer = new THREE.AnimationMixer(this.islandModel);
       for (let i = 0; i < 2; i++) {
@@ -235,9 +237,26 @@ export default {
       );
       this.swordfishJump.AppendAnimation(this.mixer.clipAction(clip));
 
-      console.log(this.swordfishJump);
+      // console.log(this.swordfishJump);
 
       this.LoadMarketFinish = true;
+
+    },
+        createSound() {
+      const listener = new THREE.AudioListener();
+      this.camera.add(listener);
+
+      // create a global audio source
+      const sound = new THREE.Audio(listener);
+
+      // load a sound and set it as the Audio object's buffer
+      const audioLoader = new THREE.AudioLoader();
+      audioLoader.load("sound/sea_wave.mp3", function (buffer) {
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(1);
+        sound.play();
+      });
     },
     createSea() {
       let seaVertices = 50;
@@ -267,7 +286,10 @@ export default {
       if (this.LoadMarketFinish != true) return;
       this.mixer.update(0.016);
       if(this.IS_MOBILE)
+      {
         this.controls.mobileMove()
+        this.handleDistance()
+      }
       for (let i = 0; i < this.passerbyList.length; i++) {
         this.passerbyList[i].Filp();
         this.passerbyList[i].watchMe();
@@ -288,6 +310,8 @@ export default {
       }
     },
     createPointer() {
+      if(this.IS_MOBILE)
+      return;
       const texture = new THREE.TextureLoader().load("../images/pin.png");
 
       // immediately use the texture for material creation
@@ -305,14 +329,9 @@ export default {
       plane.name = "pin_pointer";
       return plane;
     },
-    onClick() {
-      gsap.to(this.camera.position, {
-        duration: 1.5,
-        repeat: 0,
-        x: this.pin.position.x,
-        z: this.pin.position.z,
-        onComplete: () => {
-          console.log(this.camera.position, this.camera.quaternion);
+    handleDistance(){
+        {
+          // console.log(this.camera.position, this.camera.quaternion);
 
           if (this.AkonObject.isApproach()) {
             gsap.to(this.camera.position, {
@@ -374,7 +393,15 @@ export default {
                 this.swordfishJump.ResetAnimation();
               }
             }
-        },
+        }
+    },
+    onClick() {
+      gsap.to(this.camera.position, {
+        duration: 1.5,
+        repeat: 0,
+        x: this.pin.position.x,
+        z: this.pin.position.z,
+        onComplete: () => {this.handleDistance()}
       });
     },
   },

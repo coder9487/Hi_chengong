@@ -38,6 +38,7 @@ export default defineComponent({
   methods: {
     videoFinish() {
       this.clickEnable = true;
+      this.$store.commit("gameStart")
       this.$router.push("Market");
     },
     videoDblcilck() {},

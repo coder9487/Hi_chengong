@@ -144,6 +144,7 @@ export default {
       this.camera.position.set(20, 1.5, 0);
 
       this.camera.lookAt(20, 1.5, 1);
+      this.createSound();
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
 
       /**
@@ -188,6 +189,7 @@ export default {
       this.loadMarket();
       this.createSea();
 
+
       this.pin = this.createPointer();
     },
     Animation_Three() {
@@ -203,9 +205,9 @@ export default {
     AddEnentListener() {
       this.Window = window;
       if (!this.detectPaltform()) {
-       this.Window.addEventListener("pointermove", this.onPointerMove);
+        this.Window.addEventListener("pointermove", this.onPointerMove);
         this.Window.addEventListener("resize", this.onWindowResize);
-        this.Window.addEventListener("dblclick", this.onDblclick);
+        this.Window.addEventListener("click", this.onDblclick);
         this.Window.addEventListener("mousemove", this.onMouseMove);
       } else {
         // this.Window.addEventListener("touchstart", this.touch.handleTouchStart);
@@ -215,6 +217,7 @@ export default {
     },
 
     async loadMarket() {
+
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
@@ -241,7 +244,24 @@ export default {
       });
       window.scene = this.scene;
 
+
       //  console.log(this.scene.background.texture.minFilter = THREE.LinearFilter)
+    },
+    createSound() {
+      const listener = new THREE.AudioListener();
+      this.camera.add(listener);
+
+      // create a global audio source
+      const sound = new THREE.Audio(listener);
+
+      // load a sound and set it as the Audio object's buffer
+      const audioLoader = new THREE.AudioLoader();
+      audioLoader.load("sound/market_bgm.mp3", function (buffer) {
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(1);
+        sound.play();
+      });
     },
 
     createSea() {
@@ -333,8 +353,7 @@ export default {
           });
           break;
         case "tutorial":
-          if( this.PlayerState >= 1)
-          break;
+          if (this.PlayerState >= 1) break;
           // console.log("Enter tutorial");
           this.EnableControl = false;
           this.gsapTimeline
@@ -429,7 +448,7 @@ export default {
       this.boat = new Array();
       for (let i = 1; i <= 3; i++) {
         let objTemp = this.marketModel.getObjectByName(`3d_boat0${i}`);
-        console.log(objTemp)
+        console.log(objTemp);
         this.boat.push(objTemp);
       }
       this.passerbyList = new Array();
@@ -732,7 +751,7 @@ export default {
       }
       for (let i = 0; i < 3; i++) {
         this.boat[i].position.y =
-          Math.sin((performance.now()+i*1000) * 0.001 ) * 0.1 + 0.2;
+          Math.sin((performance.now() + i * 1000) * 0.001) * 0.1 + 0.2;
       }
 
       this.mixer.update(0.016);
@@ -754,7 +773,6 @@ export default {
       }
     },
     onMouseMove() {
-
       if (this.LoadMarketFinish != true) return;
       this.RaycasterHandler(this.casterList);
       for (let i = 0; i < this.fishmongerList.length; i++) {

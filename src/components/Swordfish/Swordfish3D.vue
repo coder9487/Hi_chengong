@@ -79,6 +79,22 @@ export default {
       // console.log("Pass into callbacks ", (val.loaded / 3246875).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 3246875).toFixed(2));
     },
+        createSound() {
+      const listener = new THREE.AudioListener();
+      this.camera.add(listener);
+
+      // create a global audio source
+      const sound = new THREE.Audio(listener);
+
+      // load a sound and set it as the Audio object's buffer
+      const audioLoader = new THREE.AudioLoader();
+      audioLoader.load("sound/sea_wave.mp3", function (buffer) {
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(1);
+        sound.play();
+      });
+    },
     Init_Three() {
       this.BoneSystem = {};
       this.raycaster = new THREE.Raycaster();
@@ -155,6 +171,7 @@ export default {
 
       this.createSea();
       this.loadTable();
+
       // this.createSurface()
 
       // this.pin = this.createPointer();w
@@ -184,7 +201,7 @@ export default {
 
     async loadTable() {
       let GLTF_LOADER = 1;
-
+this.createSound();
       // console.clear();
       if (GLTF_LOADER) {
         const loader = new GLTFLoader().setPath("models/");

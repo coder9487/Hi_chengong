@@ -5,7 +5,7 @@
     @touchend.prevent="touchFn('end')"
     id="goBtn"
     src="../../../public/images/walk.png"
-  >
+  />
   <div class="Akon">
     <div>
       <img class="Akon-charactor" src="../../../public/images/a_kon_hi.png" />
@@ -13,13 +13,13 @@
     <div class="dialogArea">
       <img
         class="dialogArea-photo"
-        src="../../../public/images/pisirian/pastcard.png"
+        src="../../../public/images/pisirian/pastcard.jpeg"
       />
       <div class="dialogArea-dialog">
         恭喜你離成功更近一步，記錄你的<b>成功之旅</b>或對自己的<b>成功期許</b>，讓阿公幫你<b>成功寄出</b>吧！一定很漂亮!
       </div>
       <div class="dialogArea-group">
-        <div @click.stop="this.$router.push('/')" class="button color-orange">
+        <div @click.stop="this.$router.push('/Final')" class="button color-orange">
           下次成功見!
         </div>
       </div>
@@ -38,16 +38,17 @@
   </div>
 </template>
 <script>
-
 import gsap from "gsap";
 import { ref } from "vue";
 export default {
-  setup() {    let IS_MOBILE = ref(
+  setup() {
+    let IS_MOBILE = ref(
       /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
     );
-    return{
+    return {
       IS_MOBILE,
-    }},
+    };
+  },
   computed: {
     toggleDialog() {
       return this.$store.state.Pisirian.toggledPasserby;
@@ -74,7 +75,7 @@ export default {
             opacity: 0,
           },
           {
-            display:'block',
+            display: "block",
             opacity: 1,
             duration: 0.5,
           }
@@ -99,7 +100,8 @@ export default {
       },
     };
   },
-  methods: {    touchFn(state) {
+  methods: {
+    touchFn(state) {
       switch (state) {
         case "start":
           this.$store.commit("setForward", true);
@@ -134,19 +136,18 @@ export default {
         //     },
         //   }
         // );
-
       }
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-@import url('../dialoglayout.scss');
+@import url("../dialoglayout.scss");
 $content-text-size-pc: 1.4vw;
 
 .Akon {
   opacity: 0;
-  display:none;
+  display: none;
   &-charactor {
     // width: 40vw;
     z-index: 10;
@@ -157,10 +158,6 @@ $content-text-size-pc: 1.4vw;
   }
 }
 
-
-
-
-
 * {
   user-drag: none;
   -webkit-user-drag: none;
@@ -169,5 +166,4 @@ $content-text-size-pc: 1.4vw;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-
 </style>

@@ -27,6 +27,7 @@
       </q-card>
     </q-dialog>
     <div id="systemIcon_group">
+      <!-- <img src="icons/volume.png" class="systemIcon" /> -->
       <!-- <p>
         <q-icon class="text-dark systemIcon" :size="systemIconSize">
           <img src="icons/meum_icon.png" />
@@ -39,7 +40,7 @@
       </p>
       <p>
         <q-icon class="text-dark systemIcon" :size="systemIconSize">
-          <img src="icons/volume.png" />
+          <img src="icons/volume.png" class="systemIcon" />
         </q-icon>
       </p> -->
     </div>
@@ -60,7 +61,7 @@ export default {
       if (window.innerWidth < window.innerHeight) {
         if (this.IS_MOBILE) this.persistent = true;
       }
-    };
+    }
     // window.addEventListener("orientationchange", this.ScreenOrientation);
     window.addEventListener("resize", () => {
       if (window.innerWidth > window.innerHeight) {
@@ -88,9 +89,17 @@ export default {
     scene() {
       return this.$store.state.scene;
     },
+    gameStart() {
+      return this.$store.state.gameStart;
+    },
   },
   watch: {
     screenOrientation: function () {},
+    gameStart() {
+      let audio = new Audio("/sound/driven_to_success.mp3");
+      audio.loop = true;
+      // audio.play();
+    },
   },
   data() {
     return {
@@ -128,7 +137,10 @@ export default {
   position: fixed;
   justify-content: center;
   bottom: 5%;
-  left: 3%;
+  right: 3%;
+}
+.systemIcon {
+  width: 10vh;
 }
 
 .systemIcon_group * {
