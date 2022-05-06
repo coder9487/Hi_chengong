@@ -319,7 +319,12 @@ export default {
     A_kon_chatbox_handle(passInStr) {
       this.navigate_dialog_content_index++;
       if (this.navigate_dialog_content_index == 10)
-        this.$router.push("/Swordfish");
+      {
+        this.$store.commit("Market/distoryScene");
+
+this.$router.push("/Swordfish");
+
+      }
 
       console.log(this.navigate_dialog_content_index);
       if (this.A_kon_dialogContent[this.navigate_dialog_content_index] == "") {

@@ -37,7 +37,14 @@ export default {
     this.AddEnentListener();
     this.Animation_Three();
   },
-  onBeforeUnmount() {},
+  onBeforeUnmount() {
+
+alert("")
+   while(this.scene.children.length > 0){
+    this.scene.remove(this.scene.children[0]);
+}
+
+  },
   data() {
     return {
       PostProcessingEnable: true,
@@ -50,6 +57,12 @@ export default {
     };
   },
   watch: {
+    distoryScene:function(){
+      while(this.scene.children.length > 0){
+    this.scene.remove(this.scene.children[0]);
+}
+
+    },
     direc: {
       handler() {
         this.$store.commit("setLookDir", {
@@ -79,6 +92,9 @@ export default {
     tutorialIndex() {
       return this.$store.state.Market.tutorialIndex;
     },
+    distoryScene(){
+      return this.$store.state.Market.distoryScene;
+    }
   },
   methods: {
     detectPaltform() {

@@ -1,3 +1,4 @@
+
 import { createStore } from "vuex";
 
 const Market = {
@@ -6,9 +7,13 @@ const Market = {
   state: () => ({
     marketDisplay: [{ id: "None", display: false }],
     tutorialIndex: 0,
+    distoryScene:false,
     Fozzy3D: false,
   }),
   mutations: {
+    distoryScene(state){
+        state.distoryScene = true
+    },
     setFozzyFram(state, available) {
       state.Fozzy3D = available;
     },

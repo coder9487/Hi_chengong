@@ -79,7 +79,7 @@ export default {
       // console.log("Pass into callbacks ", (val.loaded / 3246875).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 3246875).toFixed(2));
     },
-        createSound() {
+    createSound() {
       const listener = new THREE.AudioListener();
       this.camera.add(listener);
 
@@ -175,6 +175,7 @@ export default {
       // this.createSurface()
 
       // this.pin = this.createPointer();w
+      window.pointer = this.pointer;
     },
     Animation_Three() {
       if (this.controllerMode <= "1") this.controls.update();
@@ -193,15 +194,15 @@ export default {
 
       if (!this.IS_MOBILE) {
         window.addEventListener("mousemove", this.onMouseMove);
-        this.Window.addEventListener("click", this.onDblclick);
+       window.addEventListener("click", this.onDblclick);
       } else {
-        threewindow.addEventListener("touchmove", this.direciton);
+        window.addEventListener("touchmove", this.direciton);
       }
     },
 
     async loadTable() {
       let GLTF_LOADER = 1;
-this.createSound();
+      this.createSound();
       // console.clear();
       if (GLTF_LOADER) {
         const loader = new GLTFLoader().setPath("models/");
@@ -248,8 +249,9 @@ this.createSound();
       this.raycasterList = [];
       this.backOriginSpear = new THREE.Vector3();
 
-      this.raycasterList.push(this.scene.children[2]);
-      // console.log(this.scene);
+      this.raycasterList.push(this.scene.children[1]);
+       this.raycasterList.push(this.scene.children[2]);
+       console.log("this.scene",this.scene);
 
       this.mixer = new THREE.AnimationMixer(model);
       for (let i = 0; i <= 2; i++) {
@@ -309,17 +311,19 @@ this.createSound();
       this.scene.add(plane);
     },
     onMouseMove(event) {
-      if (this.spear_direct_vector.state != "stop")
-      {
-        console.log("Stop due to flying spear.")
+      if (this.spear_direct_vector.state != "stop") {
+        console.log("Stop due to flying spear.");
         return;
       }
+
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
       this.raycaster.setFromCamera(this.pointer, this.camera);
       this.castToSea = false;
       const intersects = this.raycaster.intersectObjects(this.raycasterList);
-      if (intersects[0] != undefined) {
+      if (intersects.length > 0) {
+
         this.castToSea = true;
         this.spear.lookAt(intersects[0].point);
 
@@ -336,6 +340,9 @@ this.createSound();
         this.TargetPosition = intersects[0].point;
 
         this.spear.rotateX(Math.PI);
+      }
+      else{
+        console.log(this.raycasterList)
       }
     },
     onDblclick() {
@@ -423,7 +430,7 @@ this.createSound();
       this.lowersea.mesh.position.x += 0.5;
       this.mongerSkeleton.position.y = this.boat.position.y =
         Math.sin(Date.now() / 500) * 0.05;
-       this.boat.position.y += 0.22;
+      this.boat.position.y += 0.22;
     },
   },
 };
