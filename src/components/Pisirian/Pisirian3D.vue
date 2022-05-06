@@ -170,7 +170,7 @@ export default {
       this.Window = window;
       // this.Window.addEventListener("pointermove", this.onPointerMove);
       this.Window.addEventListener("resize", this.onWindowResize);
-      this.Window.addEventListener("click", this.onClick);
+      this.Window.addEventListener("dblclick", this.onClick);
       if(!this.IS_MOBILE)
       this.Window.addEventListener("mousemove", this.onMouseMove);
     },

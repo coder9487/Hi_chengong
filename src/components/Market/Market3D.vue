@@ -207,7 +207,7 @@ export default {
       if (!this.detectPaltform()) {
         this.Window.addEventListener("pointermove", this.onPointerMove);
         this.Window.addEventListener("resize", this.onWindowResize);
-        this.Window.addEventListener("click", this.onDblclick);
+        this.Window.addEventListener("dblclick", this.onDblclick);
         this.Window.addEventListener("mousemove", this.onMouseMove);
       } else {
         // this.Window.addEventListener("touchstart", this.touch.handleTouchStart);
@@ -759,9 +759,9 @@ export default {
     handlePlayerState() {
       switch (this.PlayerState) {
         case 1:
-          // this.akonArrowList[0].object.visible = false;
-          // let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
-          // yellow_arrow.visible = false;
+          this.akonArrowList[0].object.visible = false;
+          let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
+          yellow_arrow.visible = false;
           if (this.$store.state.Market.tutorialIndex == 1)
             this.$store.commit("Market/IncreaseTutorialDialog");
           break;
