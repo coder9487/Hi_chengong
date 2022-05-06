@@ -31,6 +31,7 @@ $content-text-size-pc: 1.4vw;
       font-size: $content-text-size-pc;
       line-height: $content-text-size-pc * 1.8;
       letter-spacing: $content-text-size-pc * 0.2;
+      border-radius: 30px;
     }
     ::v-deep b {
       color: #fea30b;
