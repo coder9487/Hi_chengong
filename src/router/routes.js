@@ -15,7 +15,9 @@ const routes = [
       {path: '/Final', component: () => import('src/pages/Final.vue')},
       {path: '/swordfishChallenge', component: () => import('src/pages/swordfishChallenge.vue')},
       {path: '/Challenge', component: () => import('src/pages/swordfish_Index.vue')},
-
+      {path: '/Member', component: () => import('src/pages/Member.vue')},
+      {path: '/MarketVR', component: () => import('src/pages/MarketVR.vue')},
+      {path: '/Sensor', component: () => import('src/pages/Sensor.vue')},
 
 
 

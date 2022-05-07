@@ -38,12 +38,10 @@ export default {
     this.Animation_Three();
   },
   onBeforeUnmount() {
-
-alert("")
-   while(this.scene.children.length > 0){
-    this.scene.remove(this.scene.children[0]);
-}
-
+    alert("");
+    while (this.scene.children.length > 0) {
+      this.scene.remove(this.scene.children[0]);
+    }
   },
   data() {
     return {
@@ -57,11 +55,10 @@ alert("")
     };
   },
   watch: {
-    distoryScene:function(){
-      while(this.scene.children.length > 0){
-    this.scene.remove(this.scene.children[0]);
-}
-
+    distoryScene: function () {
+      while (this.scene.children.length > 0) {
+        this.scene.remove(this.scene.children[0]);
+      }
     },
     direc: {
       handler() {
@@ -92,9 +89,9 @@ alert("")
     tutorialIndex() {
       return this.$store.state.Market.tutorialIndex;
     },
-    distoryScene(){
+    distoryScene() {
       return this.$store.state.Market.distoryScene;
-    }
+    },
   },
   methods: {
     detectPaltform() {
@@ -205,7 +202,6 @@ alert("")
       this.loadMarket();
       this.createSea();
 
-
       this.pin = this.createPointer();
     },
     Animation_Three() {
@@ -233,7 +229,6 @@ alert("")
     },
 
     async loadMarket() {
-
       console.clear();
       const loader = new THREE.ObjectLoader();
       this.marketModel = await loader.loadAsync(
@@ -259,7 +254,6 @@ alert("")
         console.log("this.ConfigFile", this.ConfigFile);
       });
       window.scene = this.scene;
-
 
       //  console.log(this.scene.background.texture.minFilter = THREE.LinearFilter)
     },
@@ -375,9 +369,8 @@ alert("")
           this.gsapTimeline
             .to(this.camera.position, {
               duration: 1,
-              x: 18.631,
-              y: 1.5,
-              z: -1.21,
+              x: 17.97,
+              z: -3,
               onComplete: () => {
                 this.gsapTimeline;
               },

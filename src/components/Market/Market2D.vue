@@ -170,6 +170,7 @@ export default {
         "mobile_move",
         "mobile_click",
       ],
+
       missionContent: ["找找阿公在哪裡?", "選擇一張體驗卷"],
       missionContentIndex: 0,
       A_kon_dialogContent: [
@@ -258,8 +259,15 @@ export default {
     tutorialIndex() {
       return this.$store.state.Market.tutorialIndex;
     },
-    lottiePath() {
-      return `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
+    lottiePath: function () {
+      let returnStr=""
+      if (!this.IS_MOBILE)
+        returnStr =  `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
+      else
+        returnStr =  `../../lottie/${
+          this.lottie_mobile_conetnt[this.lottie_counter]
+        }.json`;
+        return returnStr;
     },
     fuzzyavailable() {
       return this.fishmonger_dialog_content_show_available;
@@ -309,7 +317,7 @@ export default {
         else return false;
       } else {
         if (
-          passIn == this.lottie_mobile_conetnt &&
+          passIn == this.lottie_counter &&
           this.lottieShowEnable == true
         )
           return true;
@@ -318,12 +326,10 @@ export default {
     },
     A_kon_chatbox_handle(passInStr) {
       this.navigate_dialog_content_index++;
-      if (this.navigate_dialog_content_index == 10)
-      {
+      if (this.navigate_dialog_content_index == 10) {
         this.$store.commit("Market/distoryScene");
 
-this.$router.push("/Swordfish");
-
+        this.$router.push("/Swordfish");
       }
 
       console.log(this.navigate_dialog_content_index);
@@ -409,7 +415,7 @@ this.$router.push("/Swordfish");
 };
 </script>
 <style lang="scss">
-@import url('../dialoglayout.scss');
+@import url("../dialoglayout.scss");
 $content-text-size-pc: 1.4vw;
 .controlPannel {
   // // background-color: antiquewhite;
@@ -439,9 +445,6 @@ $content-text-size-pc: 1.4vw;
   justify-content: space-around;
 
   &-lottie {
-    @media screen and (min-width: 1024px) {
-    }
-
     transform: scale(1);
     position: absolute;
     width: 30vw;
@@ -451,6 +454,10 @@ $content-text-size-pc: 1.4vw;
     align-content: center;
     align-items: center;
     justify-content: center;
+        @media screen and (min-width: 1024px) {
+    transform: scale(1.4);
+
+    }
   }
 }
 .navigate {
@@ -465,17 +472,7 @@ $content-text-size-pc: 1.4vw;
     display: flex;
     justify-content: space-around;
 
-    &-lottie {
-      position: absolute;
-      width: 40vw;
-      height: 20vh;
 
-      align-content: center;
-      align-items: center;
-      justify-content: center;
-      * {
-      }
-    }
 
     &-content {
       font-size: 5vh;
@@ -570,7 +567,6 @@ $content-text-size-pc: 1.4vw;
   }
 }
 
-
 * {
   user-drag: none;
   -webkit-user-drag: none;
@@ -579,6 +575,4 @@ $content-text-size-pc: 1.4vw;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-
-
 </style>

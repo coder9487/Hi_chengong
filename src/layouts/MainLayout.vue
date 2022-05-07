@@ -4,7 +4,7 @@
     </q-header>
 
     <q-page-container>
-      <router-view />
+        <router-view />
     </q-page-container>
     <q-dialog
       v-model="persistent"
@@ -18,7 +18,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          為達到最佳體驗效果，建議使用瀏覽器進行體驗，並將手機轉為橫向操作，祝您成功！
+          為達到最佳體驗效果，建議使用"預設"瀏覽器進行體驗，並將手機轉為橫向操作，祝您成功！
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-teal">
@@ -48,7 +48,7 @@
 </template>
 <script>
 import { ref, reactive } from "vue";
-import * as tuneCard from "../components/tuneCard.vue";
+
 
 export default {
   //  components: {tuneCard},

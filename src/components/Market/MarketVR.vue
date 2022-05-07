@@ -1,15 +1,16 @@
 <template>
-  <div v-touch-pan.prevent="direciton" id="FullScreen">
-    <canvas id="three"></canvas>
+  <div>
+    <canvas id="three" @click="permission"></canvas>
   </div>
 </template>
 <script>
 import * as THREE from "three";
+import { StereoEffect } from "three/examples/jsm/effects/StereoEffect.js";
 import { Sea } from "../../Library/Sea";
-import { GlobalScene } from "../../Library/BasicLibrary";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
 import { marketSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
+ import { DeviceOrientationControls } from "../../Library/DeviceOrientationControls";
 import gsap from "gsap";
 import { ref, reactive } from "vue";
 import {
@@ -36,15 +37,15 @@ export default {
     this.Init_Three();
     this.AddEnentListener();
 
+    // this.permission();
+
     this.Animation_Three();
   },
   onBeforeUnmount() {
-    this.Window.removeEventListener("resize", this.onWindowResize);
-    this.Window.removeEventListener("click", this.onDblclick);
-    this.scene = null;
-    this.camera = null;
-    this.controls = null;
-    this.renderer = null;
+    alert("");
+    while (this.scene.children.length > 0) {
+      this.scene.remove(this.scene.children[0]);
+    }
   },
   data() {
     return {
@@ -52,14 +53,19 @@ export default {
       RaycasterPool: "",
       VuexDataPool: { id: "", display: "" },
       dbClickEvent: { eventName: "", eventObject: {} },
-      controllerMode: "0",
+      controllerMode: "1",
       PlayerState: 0,
       /** firstperson control will be apply if controllerMode is 0,otherwise ,orbit control will be apply */
     };
   },
   watch: {
+    distoryScene: function () {
+      while (this.scene.children.length > 0) {
+        this.scene.remove(this.scene.children[0]);
+      }
+    },
     direc: {
-      handler: function () {
+      handler() {
         this.$store.commit("setLookDir", {
           x: this.direc.hori,
           y: this.direc.vert,
@@ -87,45 +93,62 @@ export default {
     tutorialIndex() {
       return this.$store.state.Market.tutorialIndex;
     },
+    distoryScene() {
+      return this.$store.state.Market.distoryScene;
+    },
   },
   methods: {
-    renderHandle() {
-      if (this.PostProcessingEnable) this.composer.render();
-      else this.renderer.render(this.scene, this.camera);
-    },
-    touchFn(state) {
-      switch (state) {
-        case "start":
-          this.$store.commit("setForward", true);
-          break;
-        case "end":
-          this.$store.commit("setForward", false);
-          break;
-      }
+    detectPaltform() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      )
+        return true;
+      else return false;
     },
     direciton({ evt, ...newInfo }) {
       this.direc.hori = newInfo.delta.x.toFixed(0);
       this.direc.vert = newInfo.delta.y.toFixed(0);
-      this.direc.hori = Math.min(Math.max(parseInt(this.direc.hori), -5), 5);
-      this.direc.vert = Math.min(Math.max(parseInt(this.direc.vert), -5), 5);
-      // console.log(this.direc);
 
-      this.onMouseMove();
-      this.$store.commit("setLookDir", {
-        x: this.direc.hori,
-        y: this.direc.vert,
-      });
+      if (newInfo.isFirst) {
+      } else if (newInfo.isFinal) {
+        this.direc.hori = 0;
+        this.direc.vert = 0;
+      }
     },
-    setAllCulled(obj, culled) {
-      obj.frustumCulled = culled;
-      obj.children.forEach((child) => setAllCulled(child, culled));
+    readTextFile(file, callback) {
+      let rawFile = new XMLHttpRequest();
+      rawFile.overrideMimeType("application/json");
+      rawFile.open("GET", file, true);
+      rawFile.onreadystatechange = function () {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+          callback(rawFile.responseText);
+        } else {
+          alert(rawFile.readyState);
+        }
+      };
     },
 
     loading_callbacks(val) {
       console.log("Pass into callbacks ", (val.loaded / 166225800).toFixed(2));
       this.$emit("loadingProgress", (val.loaded / 166225800).toFixed(2));
     },
+    permission() {
+    if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+      window.DeviceOrientationEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', () => {});
+          }
+        })
+        .catch(console.error);
+    } else {
+      // handle regular non iOS 13+ devices
+    }
+    },
     Init_Three() {
+      this.gsapTimeline = gsap.timeline();
       this.raycaster = new THREE.Raycaster();
       this.raycaster.far = 10;
       this.pointer = new THREE.Vector2();
@@ -137,23 +160,24 @@ export default {
       this.renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: true,
-        alpha: true,
+        // alpha: true,
         precision: "lowp",
         powerPreference: "high-performance",
       });
       this.renderer.setClearColor(new THREE.Color("#ffffff"), 0);
-      window.renderer = this.renderer;
       this.camera = new THREE.PerspectiveCamera(
         50,
         window.innerWidth / window.innerHeight,
         0.1,
-        50
+        600
       );
-      this.camera.position.set(20, 1.5, 0);
+      this.camera.position.set(-3.53, 1.5, -2.69);
 
       this.camera.lookAt(20, 1.5, 1);
+      this.createSound();
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
-
+      this.effect = new StereoEffect(this.renderer);
+      this.effect.setSize(window.innerWidth, window.innerHeight);
       /**
        * Create controller
        */
@@ -171,10 +195,8 @@ export default {
 
           break;
         case "1":
-          this.controls = new OrbitControls(
-            this.camera,
-            this.renderer.domElement
-          );
+          this.controls = new THREE.DeviceOrientationControls(this.camera);
+          this.controls.connect();
           break;
       }
 
@@ -203,31 +225,37 @@ export default {
 
       this.controls.update();
       this.sea.moveWaves();
-      // if (this.PostProcessingEnable) this.composer.render();
-      // else this.renderer.render(this.scene, this.camera);
+      this.effect.render(this.scene, this.camera);
       this.updateAnimation();
 
       requestAnimationFrame(this.Animation_Three);
     },
     AddEnentListener() {
       this.Window = window;
-      this.Window.addEventListener("resize", this.onWindowResize);
-      this.Window.addEventListener("click", this.onDblclick);
-      this.Window.addEventListener("mousemove", this.onMouseMove);
-      this.Window.addEventListener("pointermove", this.onPointerMove);
+      if (!this.detectPaltform()) {
+        this.Window.addEventListener("pointermove", this.onPointerMove);
+        this.Window.addEventListener("resize", this.onWindowResize);
+        this.Window.addEventListener("dblclick", this.onDblclick);
+        this.Window.addEventListener("mousemove", this.onMouseMove);
+        this.Window.addEventListener("deviceorientation", (event) => {
+          console.log(event);
+        });
+      } else {
+        // this.Window.addEventListener("touchstart", this.touch.handleTouchStart);
+        // this.Window.addEventListener("touchmove", this.touch.handleTouchMove);
+        // this.Window.addEventListener("touchend", this.touch.handleTouchEnd);
+      }
     },
 
     async loadMarket() {
       console.clear();
       const loader = new THREE.ObjectLoader();
-      // const loader = new THREE.BufferGeometryLoader();
       this.marketModel = await loader.loadAsync(
         "../models/market_lastest.json",
         (xhr) => {
           this.loading_callbacks(xhr);
         }
       );
-      console.log(this.marketModel);
 
       this.marketModel.scale.set(10, 10, 10);
       this.marketModel.position.set(0, 0, 0);
@@ -239,10 +267,33 @@ export default {
       this.setupAinmation();
       this.controls.colliders = this.marketModel;
       this.LoadMarketFinish = true;
+      this.readTextFile("./3dconfig.json", (text) => {
+        this.ConfigFile = JSON.parse(text);
+        console.clear();
+        console.log("this.ConfigFile", this.ConfigFile);
+      });
+
+      //  console.log(this.scene.background.texture.minFilter = THREE.LinearFilter)
+    },
+    createSound() {
+      const listener = new THREE.AudioListener();
+      this.camera.add(listener);
+
+      // create a global audio source
+      const sound = new THREE.Audio(listener);
+
+      // load a sound and set it as the Audio object's buffer
+      const audioLoader = new THREE.AudioLoader();
+      audioLoader.load("sound/market_bgm.mp3", function (buffer) {
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(1);
+        sound.play();
+      });
     },
 
     createSea() {
-      let seaVertices = 20;
+      let seaVertices = 10;
       let seaAmp = 0.8;
 
       this.sea = new Sea(seaAmp, seaVertices, seaVertices, 0.8, 0, 0);
@@ -253,7 +304,46 @@ export default {
       // this.sea.mesh.castShadow = true;
       // this.sea.mesh.receiveShadow = true;
     },
+    createCloudManual() {
+      const texture = new THREE.TextureLoader().load(
+        "../images/cloud/cloud_far01.png"
+      );
 
+      // immediately use the texture for material creation
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        alphaTest: 0.001,
+      });
+
+      const geometry = new THREE.PlaneGeometry(30, 30);
+
+      const plane = new THREE.Mesh(geometry, material);
+      plane.name = "cloud001";
+      plane.position.set(-70, 30, -70);
+      this.scene.add(plane);
+
+      const t_cloud01 = new THREE.TextureLoader().load(
+        "../images/cloud/cloud01.png"
+      );
+      t_cloud01.wrapS = THREE.RepeatWrapping;
+      t_cloud01.wrapT = THREE.RepeatWrapping;
+      t_cloud01.repeat.set(10, 1);
+
+      const cloud01 = new THREE.CylinderGeometry(200, 200, 40, 32, 1, true);
+      const m_cloud01 = new THREE.MeshStandardMaterial({
+        map: t_cloud01,
+        alphaTest: 0,
+        side: THREE.DoubleSide,
+        transparent: true,
+        depthTest: true,
+        depthWrite: true,
+      });
+      this.cloud01 = new THREE.Mesh(cloud01, m_cloud01);
+      this.cloud01.position.set(-8, 3, -40);
+
+      this.scene.add(this.cloud01);
+    },
     createCloud() {
       this.cloudArray = new Array();
       this.cloudArray.push(this.marketModel.getObjectByName("cloud01"));
@@ -263,28 +353,33 @@ export default {
     onPointerMove(event) {
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      console.log(this.pointer);
     },
     onWindowResize() {
+      // this.camera.aspect = window.innerWidth / window.innerHeight;
+      // this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.windowHalfX = window.innerWidth / 2;
+      this.windowHalfY = window.innerHeight / 2;
+
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+      this.effect.setSize(window.innerWidth, window.innerHeight);
     },
     onDblclick() {
-      // console.log("Scene polycount:", this.renderer.info);
+      return;
+      // console.log(
       //   "Event:",
       //   this.dbClickEvent,
       //   " VuexDataPool",
       //   this.VuexDataPool
       // );
-      // alert(this.dbClickEvent.eventName
-      // );
+      console.log(this.camera.quaternion);
 
       switch (this.dbClickEvent.eventName) {
         case "Moving":
           if (this.EnableControl == false) break;
           console.log("Point to ", this.pin.position);
-          gsap.to(this.camera.position, {
+          this.gsapTimeline.to(this.camera.position, {
             duration: 1.5,
             repeat: 0,
             x: this.pin.position.x,
@@ -293,29 +388,30 @@ export default {
           });
           break;
         case "tutorial":
+          if (this.PlayerState >= 1) break;
           // console.log("Enter tutorial");
           this.EnableControl = false;
-          gsap.to(this.camera.position, {
-            duration: 1,
-            x: 18.631,
-            y: 1.5,
-            z: -1.21,
-            onComplete: () => {
-              this.walkingGsap = gsap.to(this.camera.quaternion, {
-                duration: 2,
-                x: 0.09786719758176317,
-                y: -0.19650288234430477,
-                z: -0.0197160522638617,
-                w: -0.9754075589982892,
-                //_x: 0.09786719758176317, _y: -0.19650288234430477, _z: -0.0197160522638617, _w: -0.9754075589982892
-                onComplete: () => {
-                  this.EnableControl = true;
-                  this.PlayerState = 1;
-                  console.log(this.walkingGsap);
-                },
-              });
-            },
-          });
+          this.gsapTimeline
+            .to(this.camera.position, {
+              duration: 1,
+              x: 17.97,
+              z: -3,
+              onComplete: () => {
+                this.gsapTimeline;
+              },
+            })
+            .to(this.camera.quaternion, {
+              duration: 2,
+              x: 0.09786719758176317,
+              y: -0.19650288234430477,
+              z: -0.0197160522638617,
+              w: -0.9754075589982892,
+              //_x: 0.09786719758176317, _y: -0.19650288234430477, _z: -0.0197160522638617, _w: -0.9754075589982892
+              onComplete: () => {
+                this.EnableControl = true;
+                this.PlayerState = 1;
+              },
+            });
           break;
         case "fishmonger":
           this.$store.commit("Market/marketChangeState", {
@@ -333,12 +429,12 @@ export default {
     },
 
     RaycasterHandler(raycasterList) {
+      return;
       if (raycasterList == null) return;
-
       this.raycaster.setFromCamera(this.pointer, this.camera);
       let lastestRay = this.raycaster.intersectObjects(raycasterList);
       if (lastestRay.length > 0) {
-        if (lastestRay[0].object.name == "ground") {
+        if (lastestRay[0].object.name.includes("ground")) {
           this.pin.visible = true;
           this.dbClickEvent.eventObject = { distance: lastestRay[0].distance };
           this.dbClickEvent.eventName = "Moving";
@@ -384,6 +480,12 @@ export default {
     setupAinmation() {
       this.createCloud();
       this.mixer = new THREE.AnimationMixer(this.marketModel);
+      this.boat = new Array();
+      for (let i = 1; i <= 3; i++) {
+        let objTemp = this.marketModel.getObjectByName(`3d_boat0${i}`);
+        console.log(objTemp);
+        this.boat.push(objTemp);
+      }
       this.passerbyList = new Array();
       for (let i = 1; i <= 4; i++) {
         let objTemp = this.marketModel.getObjectByName(`par_passerby0${i}`);
@@ -432,7 +534,6 @@ export default {
 
         this.fishmongerArrowList.push(arrowTemp);
       });
-
       akonArrowNameList.forEach((elem) => {
         let arrowObjTemp = this.marketModel.getObjectByName(elem);
         let arrowTemp = new AnimateObject(arrowObjTemp, 6, this.camera);
@@ -440,11 +541,13 @@ export default {
           this.marketModel.animations,
           "act_" + elem
         );
+        console.log(this.marketModel.animations);
+
         arrowTemp.AppendInfiniteAnimation(this.mixer.clipAction(clip));
         arrowTemp.PlayAnimation();
+
         this.akonArrowList.push(arrowTemp);
       });
-
       console.log("akonArrowNameList", this.akonArrowList);
 
       this.cuponList = new Array();
@@ -465,7 +568,7 @@ export default {
         new PasserBy(
           this.camera,
           this.marketModel.getObjectByName("par_a_kon_start"),
-          3
+          6
         )
       );
 
@@ -481,6 +584,14 @@ export default {
           )
         )
       );
+      // this.akonList[1].AppendInfiniteAnimation(
+      //   this.mixer.clipAction(
+      //     THREE.AnimationClip.findByName(
+      //       this.marketModel.animations,
+      //       "act_arrow_a_kon_swordfish"
+      //     )
+      //   )
+      // );
 
       this.akonList[1].PlayAnimation();
 
@@ -535,126 +646,9 @@ export default {
 
     updateAnimation() {
       if (this.LoadMarketFinish != true) return;
-
-      this.controls.mobileMove();
-      this.renderHandle();
-
+      // if (this.detectPaltform()) this.controls.mobileMove();
       for (let j = 0; j < 2; j++) this.cloudArray[j].rotation.y += 0.0001;
-
-      // this.akonArrowList[0].object.lookAt(this.camera.position)
       /** passerby will filp if camera approach them */
-      for (let i = 0; i < this.passerbyList.length; i++) {
-        this.passerbyList[i].Filp();
-        this.passerbyList[i].watchMe();
-      }
-      /** fishmonger hover effect and arrow action */
-      for (let i = 0; i < this.fishmongerList.length; i++) {
-        this.fishmongerList[i].watchMe();
-
-        if (this.fishmongerList[i].isApproach()) {
-          this.fishmongerArrowList[i].object.visible = true;
-
-          // console.log("arrow  ", this.fishmongerArrowList[i]);
-        } else {
-          this.fishmongerArrowList[i].object.visible = false;
-        }
-      }
-      // this.DragLady.axuobj.object.lookAt(this.camera.position);
-
-      //this.akonList[0].watchMyCrossVector(new THREE.Vector3(17.9, 2.35, -4.03));
-      this.akonList[0].watchMe();
-      if (this.akonList[0].DoOnce == false) {
-        if (this.akonList[0].isApproach()) {
-          // alert()
-          this.akonList[0].DoOnce = true;
-          this.PlayerState = 1;
-        }
-      }
-
-      if (
-        this.camera.position.distanceTo(new THREE.Vector3(-44.4, 1.65, -4.12)) <
-        this.akonList[1].toggleDistance
-      ) {
-        // this.walkingGsap.pause();
-        // console.log(this.camera.quaternion);
-        this.akonList[1].toggleDistance = 1000;
-        gsap.to(this.camera.position, {
-          duration: 2,
-          x: -41.87,
-          z: -3.85,
-          onComplete: () => {
-            gsap.to(this.camera.quaternion, {
-              duration: 0.5,
-              x: 0.039719355081779,
-              y: -0.7478140956181748,
-              z: -0.04492276599848267,
-              w: -0.6611946735430532,
-              onComplete: () => {
-                this.PlayerState = 3;
-                if (this.$store.state.Market.tutorialIndex == 4)
-                  this.$store.commit("Market/IncreaseTutorialDialog");
-              },
-            });
-
-            // const scrollTop = Math.round(tween.target.y)
-          },
-        });
-      }
-
-      /** */
-      if (this.KickMan.isApproach()) {
-        if (this.KickMan.DoOnce == true) {
-          this.KickMan.DoOnce = false;
-          let currentQuaternion = this.camera.position.clone();
-          // this.walkingGsap.pause();
-          gsap.to(this.camera.position, {
-            duration: 1,
-            repeat: 0,
-            x: 6.241002770590721,
-            y: 1.5,
-            z: -2.8831586237151945,
-          });
-          console.log(currentQuaternion);
-
-          gsap.to(this.camera.rotation, {
-            duration: 1,
-            repeat: 0,
-            y: Math.PI / 2,
-          });
-
-          setTimeout(this.KickMan.PlayAnimation(), 2500);
-        }
-      }
-
-      if (this.SwordFish.isApproach()) {
-        if (this.SwordFish.DoOnce) {
-          this.SwordFish.DoOnce = false;
-          gsap.to(this.camera.position, {
-            duration: 0.5,
-            repeat: 0,
-            x: -25.481761805844634,
-            y: 1.5,
-            z: -4.4241223574449045,
-          });
-
-          gsap.to(this.camera.quaternion, {
-            duration: 1,
-            repeat: 0,
-            w: 0.9241902014275073,
-            x: 0.07037400092097702,
-            y: 0.37430947590170366,
-            z: -0.028502417966723204,
-          });
-          // console.log(camera.position);
-          setTimeout(this.SwordFish.PlayAnimation(), 1900);
-        }
-      }
-
-      if (this.DragLady.isApproach()) {
-        this.DragLady.PlayAnimation();
-        this.DragLady.object.position.z += 0.005;
-        this.DragLady.object.position.x += 0.001;
-      }
 
       if (this.CarAnimation.isApproach() || this.CarAnimation.doOnce) {
         this.CarAnimation.doOnce = true;
@@ -674,15 +668,136 @@ export default {
           }
         }
       }
+      for (let i = 0; i < 3; i++) {
+        this.boat[i].position.y =
+          Math.sin((performance.now() + i * 1000) * 0.001) * 0.1 + 0.2;
+      }
 
-      this.mixer.update(0.03);
+      this.mixer.update(0.016);
+
+      for (let i = 0; i < this.passerbyList.length; i++) {
+        this.passerbyList[i].Filp();
+        this.passerbyList[i].watchMe();
+      }
+      /** fishmonger hover effect and arrow action */
+      for (let i = 0; i < this.fishmongerList.length; i++) {
+        this.fishmongerList[i].watchMe();
+        if (this.fishmongerList[i].isApproach()) {
+          this.fishmongerArrowList[i].object.visible = true;
+        } else {
+          this.fishmongerArrowList[i].object.visible = false;
+        }
+      }
+      // this.DragLady.axuobj.object.lookAt(this.camera.position);
+      this.akonList[0].watchMe();
+
+      if (
+        this.camera.position.distanceTo(new THREE.Vector3(-44.4, 1.65, -4.12)) <
+        this.akonList[1].toggleDistance
+      ) {
+        this.dbClickEvent.eventName = "";
+        // this.walkingGsap.pause();
+        // console.log(this.camera.quaternion);
+        this.akonList[1].toggleDistance = 1000;
+        this.controls.enabled = false;
+        this.gsapTimeline
+          .to(this.camera.position, {
+            duration: 2,
+            x: -41.87,
+            z: -3.85,
+          })
+          .to(this.camera.quaternion, {
+            duration: 0.5,
+            x: -0.025688131840607836,
+            y: 0.7657777937572651,
+            z: 0.03064745880541916,
+            w: 0.641860751050853,
+            onComplete: () => {
+              this.PlayerState = 3;
+              if (this.$store.state.Market.tutorialIndex == 4)
+                this.$store.commit("Market/IncreaseTutorialDialog");
+            },
+          });
+      }
+
+      /** */
+      if (this.KickMan.isApproach() && 0) {
+        if (this.KickMan.DoOnce == true) {
+          this.dbClickEvent.eventName = "";
+          this.KickMan.DoOnce = false;
+          let currentQuaternion = this.camera.position.clone();
+          // this.walkingthis.gsapTimeline.pause();
+          this.controls.enabled = false;
+
+          this.gsapTimeline
+            .to(this.camera.position, {
+              duration: 1,
+              repeat: 0,
+              x: 6.241002770590721,
+              y: 1.5,
+              z: -2.8831586237151945,
+            })
+            .to(this.camera.rotation, {
+              duration: 1,
+              repeat: 0,
+              y: Math.PI / 2,
+              onComplete: () => {
+                this.KickMan.PlayAnimation();
+                this.controls.enabled = true;
+              },
+            });
+
+          // setTimeout(, 2500);
+        }
+      }
+
+      if (this.SwordFish.isApproach()) {
+        if (this.SwordFish.DoOnce) {
+          this.controls.enabled = false;
+          this.dbClickEvent.eventName = "";
+          this.SwordFish.DoOnce = false;
+          this.gsapTimeline
+            .to(this.camera.position, {
+              duration: 0.5,
+              repeat: 0,
+              x: -25.481761805844634,
+              y: 1.5,
+              z: -4.4241223574449045,
+            })
+            .to(this.camera.quaternion, {
+              duration: 1,
+              repeat: 0,
+              w: 0.9241902014275073,
+              x: 0.07037400092097702,
+              y: 0.37430947590170366,
+              z: -0.028502417966723204,
+              onComplete: () => {
+                this.SwordFish.PlayAnimation();
+                this.controls.enabled = true;
+              },
+            });
+
+          // this.controls._euler = new THREE.Euler().setFromQuaternion(
+          //   this.camera.quaternion,
+          //   "XYZ"
+          // );
+          // console.log(camera.position);
+          // setTimeout(, 1900);
+        }
+      }
+
+      if (this.DragLady.isApproach()) {
+        this.DragLady.PlayAnimation();
+        this.DragLady.object.position.z += 0.005;
+        this.DragLady.object.position.x += 0.001;
+      }
     },
     handlePlayerState() {
       switch (this.PlayerState) {
         case 1:
           this.akonArrowList[0].object.visible = false;
-          // let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
-          // yellow_arrow.visible = false;
+          let yellow_arrow = this.marketModel.getObjectByName("tutorial_click");
+          yellow_arrow.visible = false;
           if (this.$store.state.Market.tutorialIndex == 1)
             this.$store.commit("Market/IncreaseTutorialDialog");
           break;
@@ -693,14 +808,9 @@ export default {
           break;
       }
     },
-    onMouseMove(event) {
+    onMouseMove() {
+      return;
       if (this.LoadMarketFinish != true) return;
-      if(event != null)
-      {
-      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      }
-
       this.RaycasterHandler(this.casterList);
       for (let i = 0; i < this.fishmongerList.length; i++) {
         if (this.RaycasterPool.includes(`monger${i + 1}`)) {
@@ -737,26 +847,5 @@ export default {
   z-index: 6;
   left: 0;
   top: 0;
-}
-#FullScreen {
-  width: 100vw;
-  height: 100vh;
-}
-#goBtn {
-  z-index: 100;
-  left: 0;
-  bottom: 0;
-  width: 100px;
-  height: 100px;
-  position: fixed;
-  border-radius: 20px;
-  background-color: #ff7a00;
-  opacity: 0.5;
-  transition: border-radius 0.3s;
-
-  &:active {
-    border-radius: 50px;
-    transition: border-radius 0.3s;
-  }
 }
 </style>

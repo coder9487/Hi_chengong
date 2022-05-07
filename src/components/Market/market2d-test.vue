@@ -140,6 +140,7 @@ export default {
   data() {
     return {
       lottie_conetnt: ["", "mouse_drag", "click_move", "double_click"],
+      lottie_mobile_conetnt: ["", "mobile_rotation", "mobile_move", "mobile_click"],
       A_kon_dialogContent: [
         "lottie",
         "lottie",
@@ -215,7 +216,8 @@ export default {
     tutorialIndex() {
       return this.$store.state.Market.tutorialIndex;
     },
-    lottiePath() {
+    lottiePath:function() {
+
       return `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
     },
     fuzzyavailable() {
@@ -352,21 +354,112 @@ export default {
 };
 </script>
 <style lang="scss">
+@import url('../dialoglayout.scss');
 $content-text-size-pc: 1.4vw;
+.controlPannel {
+  // // background-color: antiquewhite;
 
+  &-movement {
+    // background-color: orange;
+    opacity: 0.3;
+    width: 20vw;
+    height: 33vh;
+    position: fixed;
+    left: 0px;
+    z-index: 200;
+    bottom: 33vh;
+  }
+  &-direction {
+    z-index: 101;
+    // background-color: orange;
+    opacity: 0.3;
+    width: 20vw;
+    height: 100vh;
+    position: fixed;
+    right: 0px;
+  }
+}
 #navigate {
+  display: flex;
+  justify-content: space-around;
+
   &-lottie {
+    @media screen and (min-width: 1024px) {
+    }
+
+    transform: scale(1);
     position: absolute;
-    // background-color: chocolate;
-    //  z-index: 30;
     width: 30vw;
     height: 20vh;
     bottom: 2vh;
-    transform: translateX(50%);
-    right: 50vw;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
   }
 }
+.navigate {
+  &-dialog {
+    position: absolute;
+    max-width: 50vw;
+    height: 20vh;
+    left: 25%;
+    bottom: 8vh;
+    border-radius: 20px;
+    background-color: aliceblue;
+    display: flex;
+    justify-content: space-around;
 
+    &-lottie {
+      position: absolute;
+      width: 40vw;
+      height: 20vh;
+
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      * {
+      }
+    }
+
+    &-content {
+      font-size: 5vh;
+      @media screen and (min-width: 1024px) {
+        font-size: 2.5vh;
+        line-height: 50px;
+      }
+      $content-border-gap: 20px;
+
+      // margin-left: 7%;
+      // margin-right: 7%;
+      // margin-top: 6%;
+      // margin-bottom: 7%;
+      margin: 5%;
+
+      color: rgb(18, 89, 74);
+      &-b {
+        color: orange;
+      }
+    }
+    &-button {
+      bottom: 2vh;
+      position: relative;
+      border-radius: 20px;
+      margin-left: 60%;
+      top: 10px;
+      width: 40%;
+      @media screen and (min-width: 1024px) {
+        margin-left: 38%;
+        width: 110px;
+      }
+    }
+    &-button * {
+      // margin: 10%;
+      padding: 5%;
+      font-size: 2vh;
+    }
+  }
+}
 
 .fishmonger {
   * {
@@ -391,18 +484,15 @@ $content-text-size-pc: 1.4vw;
       max-width: 60vw;
     }
     &-button-group {
-       background-color: cornflowerblue;
+      // background-color: cornflowerblue;
       display: flex;
       top: -20px;
-      justify-content: space-around;
-      // left: -10vw;
+      justify-content: space-between;
+      left: -12vw;
       width: 50vw;
       position: relative;
-      transform: translateX(-25%);
-
-
       @media screen and (min-width: 1024px) {
-        left: 0vw; //trial and error
+        left: -3vw; //trial and error
       }
     }
     &-button {
@@ -425,89 +515,7 @@ $content-text-size-pc: 1.4vw;
   }
 }
 
-.PasserbydialogArea {
-  opacity: 1;
-  position: absolute;
-  width: 60vw;
-  height: 20vh;
-  left: 20vw;
-  bottom: 10vh;
-  & * {
-    pointer-events: all;
-  }
-  &-photo {
-    position: relative;
-    width: 45vw;
-    left: 7.5vw;
-    top: -3%;
-  }
-  &-dialog {
-    position: relative;
-    width: 45vw;
-    height: 20vh;
-    left: 7.5vw;
-    background-color: aliceblue;
 
-    border-radius: 30px;
-    padding: 2.5vw;
-    font-size: 1.5vw;
-    color: #276a70;
-    @media screen and (min-width: 1024px) {
-      font-size: $content-text-size-pc;
-      line-height: $content-text-size-pc * 1.8;
-      letter-spacing: $content-text-size-pc * 0.2;
-    }
-    ::v-deep b {
-      color: #fea30b;
-      font-weight: bolder;
-    }
-  }
-  &-group {
-    position: relative;
-    width: 45vw;
-    height: 10vh;
-    // background-color: aquamarine;
-    left: 7.5vw;
-    top: -20%;
-    display: flex;
-    justify-content: space-around;
-  }
-}
-b {
-  color: #fea30b;
-  font-weight: bolder;
-}
-.button {
-  z-index: 11;
-  width: 10vw;
-  height: 7vh;
-  // background-color: cornflowerblue;
-  border-radius: 20px;
-  padding: 2%;
-  display: flex;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  font-size: larger;
-  color: white;
-  font-weight: bolder;
-}
-
-.color {
-  &-orange {
-    background-color: #fea30b;
-    &:hover {
-      background-color: #ff7a00;
-    }
-  }
-
-  &-cyan {
-    background-color: #1ab5c1;
-    &:hover {
-      background-color: #0098a4;
-    }
-  }
-}
 * {
   user-drag: none;
   -webkit-user-drag: none;
@@ -518,22 +526,4 @@ b {
 }
 
 
-
-#goBtn {
-  z-index: 100;
-  left: 0;
-  bottom: 0;
-  width: 100px;
-  height: 100px;
-  position: fixed;
-  border-radius: 20px;
-  background-color: #ff7a00;
-  opacity: 0.5;
-  transition: border-radius 0.3s;
-
-  &:active {
-    border-radius: 50px;
-    transition: border-radius 0.3s;
-  }
-}
 </style>
