@@ -1,9 +1,9 @@
 <template>
   <div>
     <div>ScreenOrientation:{{ ScreenOrientation }}</div>
-    <div>DeviceOrientation{{ DeviceOrientation.alpha }}</div>
-    <div>DeviceOrientation{{ DeviceOrientation.beta }}</div>
-    <div>DeviceOrientation{{ DeviceOrientation.gamma }}</div>
+    <div>DeviceOrientation{{ DeviceOrientation.x }}</div>
+    <div>DeviceOrientation{{ DeviceOrientation.y }}</div>
+    <div>DeviceOrientation{{ DeviceOrientation.z }}</div>
     <div id="alpha"></div>
     <div id="beta"></div>
     <div id="gamma"></div>
@@ -22,19 +22,15 @@ export default {
   },
   mounted() {
 
-    window.addEventListener('deviceorientation', function(event) {
-  var a = document.getElementById('alpha'),
-          b = document.getElementById('beta'),
-          g = document.getElementById('gamma'),
-          alpha = event.alpha,
-          beta = event.beta,
-              gamma = event.gamma;
+let magSensor = new Magnetometer({frequency: 60});
 
-  a.innerHTML = Math.round(alpha);
-  b.innerHTML = Math.round(beta);
-  g.innerHTML = Math.round(gamma);
+magSensor.addEventListener('reading', e => {
+  this.DeviceOrientation = magSensor
+  console.log("Magnetic field along the X-axis " + magSensor.x);
+  console.log("Magnetic field along the Y-axis " + magSensor.y);
+  console.log("Magnetic field along the Z-axis " + magSensor.z);
+});
 
-    }, false);
 
 
     window.addEventListener(

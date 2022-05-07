@@ -204,7 +204,7 @@ export default {
       }
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
-      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.setPixelRatio(3);
 
       globalScene.AddLight();
       // this.scene.background = new THREE.CubeTextureLoader()
