@@ -10,7 +10,7 @@ import { Sea } from "../../Library/Sea";
 import { GlobalScene, ArrowHelper } from "../../Library/BasicLibrary";
 import { marketSetting, collectObject } from "../../Library/LoadObject";
 import { FirstPersonCameraControl } from "../../Library/FirstPersonCameraControls";
- import { DeviceOrientationControls } from "../../Library/DeviceOrientationControls";
+import { DeviceOrientationControls } from "../../Library/DeviceOrientationControls";
 import gsap from "gsap";
 import { ref, reactive } from "vue";
 import {
@@ -135,17 +135,19 @@ export default {
       this.$emit("loadingProgress", (val.loaded / 166225800).toFixed(2));
     },
     permission() {
-    if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
-      window.DeviceOrientationEvent.requestPermission()
-        .then(permissionState => {
-          if (permissionState === 'granted') {
-            window.addEventListener('deviceorientation', () => {});
-          }
-        })
-        .catch(console.error);
-    } else {
-      // handle regular non iOS 13+ devices
-    }
+      if (
+        typeof window.DeviceOrientationEvent.requestPermission === "function"
+      ) {
+        window.DeviceOrientationEvent.requestPermission()
+          .then((permissionState) => {
+            if (permissionState === "granted") {
+              window.addEventListener("deviceorientation", () => {});
+            }
+          })
+          .catch(console.error);
+      } else {
+        // handle regular non iOS 13+ devices
+      }
     },
     Init_Three() {
       this.gsapTimeline = gsap.timeline();
@@ -178,6 +180,7 @@ export default {
       let globalScene = new GlobalScene(this.scene, this.camera, this.renderer);
       this.effect = new StereoEffect(this.renderer);
       this.effect.setSize(window.innerWidth, window.innerHeight);
+
       /**
        * Create controller
        */
@@ -201,6 +204,8 @@ export default {
       }
 
       this.composer = globalScene.TuneRender(this.PostProcessingEnable);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+
       globalScene.AddLight();
       // this.scene.background = new THREE.CubeTextureLoader()
       //   .setPath("../")
