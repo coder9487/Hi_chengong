@@ -675,7 +675,7 @@ export default {
       for (let j = 0; j < 2; j++) this.cloudArray[j].rotation.y += 0.0001;
       /** passerby will filp if camera approach them */
 
-      if (this.CarAnimation.isApproach() || this.CarAnimation.doOnce) {
+      if (1 || this.CarAnimation.doOnce) {
         this.CarAnimation.doOnce = true;
         this.CarAnimation.PlayAnimation();
 
