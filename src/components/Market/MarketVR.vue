@@ -148,6 +148,23 @@ export default {
       } else {
         // handle regular non iOS 13+ devices
       }
+            if (
+        typeof window.AbsoluteOrientationSensor.requestPermission === "function"
+      ) {alert("Ya")}
+
+      // if (
+      //   typeof window.AbsoluteOrientationSensor.requestPermission === "function"
+      // ) {
+      //   window.DeviceOrientationEvent.requestPermission()
+      //     .then((permissionState) => {
+      //       if (permissionState === "granted") {
+      //         window.addEventListener("deviceorientationabsolute", () => {});
+      //       }
+      //     })
+      //     .catch(console.error);
+      // }
+
+      //deviceorientationabsolute
     },
     Init_Three() {
       this.gsapTimeline = gsap.timeline();
