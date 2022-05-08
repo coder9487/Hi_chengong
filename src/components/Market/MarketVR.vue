@@ -151,6 +151,9 @@ export default {
             if (
         typeof window.AbsoluteOrientationSensor.requestPermission === "function"
       ) {alert("Ya")}
+      else{
+        alert(window.AbsoluteOrientationSensor)
+      }
 
       // if (
       //   typeof window.AbsoluteOrientationSensor.requestPermission === "function"
