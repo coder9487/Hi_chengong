@@ -1,9 +1,7 @@
 <template>
   <div>
     <div>ScreenOrientation:{{ ScreenOrientation }}</div>
-    <div>DeviceOrientation{{ DeviceOrientation.x }}</div>
-    <div>DeviceOrientation{{ DeviceOrientation.y }}</div>
-    <div>DeviceOrientation{{ DeviceOrientation.z }}</div>
+
     <div id="alpha"></div>
     <div id="beta"></div>
     <div id="gamma"></div>
@@ -21,16 +19,6 @@ export default {
     };
   },
   mounted() {
-
-let magSensor = new Magnetometer({frequency: 60});
-
-magSensor.addEventListener('reading', e => {
-  this.DeviceOrientation = magSensor
-  console.log("Magnetic field along the X-axis " + magSensor.x);
-  console.log("Magnetic field along the Y-axis " + magSensor.y);
-  console.log("Magnetic field along the Z-axis " + magSensor.z);
-});
-
 
 
     window.addEventListener(

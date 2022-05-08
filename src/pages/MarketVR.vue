@@ -108,7 +108,7 @@ export default defineComponent({
         loadingWave.style.bottom = this.loading * 0.3 - 70 + "%";
       else loadingWave.style.bottom = this.loading * 0.3 + "%";
       if (
-        this.loading >= 50 &&
+        this.loading >= 30 &&
         ((this.ENABLE_FOR_MOBILE && this.IS_MOBILE) || !this.IS_MOBILE) &&
         !this.DEV_FOR_LOADING
       ) {
