@@ -16,7 +16,7 @@ export class GlobalScene {
   }
   TuneRender(post_processing) {
     // this.renderer.setClearColor(0x000000, 1);
-    this.renderer.setPixelRatio(0.8);
+    this.renderer.setPixelRatio(1);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = false; // 設定需渲染陰影效果
     // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // THREE.PCFSoftShadowMap

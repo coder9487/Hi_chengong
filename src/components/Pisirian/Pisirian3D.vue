@@ -205,7 +205,8 @@ export default {
 
       this.raycasterList = new Array();
       this.raycasterList.push(this.islandModel.getObjectByName("ground"));
-      this.raycasterList.push(this.islandModel.getObjectByName("end_wall"));
+
+        this.raycasterList.push(this.islandModel.getObjectByName("wall_floor"));
 
       // console.log("raycasterList", this.raycasterList);
 
@@ -288,11 +289,12 @@ export default {
     },
     RaycasterHandler() {
       this.raycaster.setFromCamera(this.pointer, this.camera);
-
+      console.log(this.raycasterList)
       const intersects = this.raycaster.intersectObjects(this.raycasterList);
 
       if (intersects.length > 0) {
-        if (intersects[0].object.name == "ground") {
+
+        if (intersects[0].object.name.includes( "ground")) {
           this.pin.position.x = intersects[0].point.x;
           this.pin.position.z = intersects[0].point.z;
           this.pin.position.y = intersects[0].point.y + 0.3;

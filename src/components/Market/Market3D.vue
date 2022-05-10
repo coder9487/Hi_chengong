@@ -442,11 +442,12 @@ export default {
       const texture = new THREE.TextureLoader().load("../images/pin.png");
 
       // immediately use the texture for material creation
-      const material = new THREE.MeshBasicMaterial({
+      const material = new THREE.MeshStandardMaterial({
         map: texture,
         side: THREE.DoubleSide,
         transparent: true,
         alphaTest: 0.1,
+        color:0xffffff,
       });
       const geometry = new THREE.PlaneGeometry(0.7, 0.7);
       const plane = new THREE.Mesh(geometry, material);
