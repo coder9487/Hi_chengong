@@ -1,7 +1,7 @@
-import Market from 'src/pages/Market'
-import DiningTablePage from 'src/pages/DiningTablePage'
-import Swordfish from 'src/pages/Swordfish'
-import Pisirian from 'src/pages/Pisirian'
+// import Market from 'src/pages/Market'
+// import DiningTablePage from 'src/pages/DiningTablePage'
+// import Swordfish from 'src/pages/Swordfish'
+// import Pisirian from 'src/pages/Pisirian'
 
 const routes = [
   {
