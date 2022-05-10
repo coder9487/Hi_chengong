@@ -49,7 +49,7 @@
 <script>
 import { defineComponent, ref, reactive } from "vue";
 import Market3D from "../components/Market/Market3D";
-import Market2D from "../components/Market/Market2D";
+import Market2D from "../components/Market/Market2D.vue";
 import Market3DMobileVue from "../components/Market/Market3DMobile.vue";
 import gsap from "gsap";
 

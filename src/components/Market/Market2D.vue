@@ -54,7 +54,7 @@
       class="fishmonger-dialog"
       v-show="fishmonger_dialog_content_show_available"
     >
-      <q-img :src="fishMonger_image_path.dialogBox" preload> </q-img>
+      <!-- <q-img :src="fishMonger_image_path.dialogBox" preload> </q-img>
       <div class="fishmonger-dialog-button-group">
         <q-btn
           class="fishmonger-dialog-button"
@@ -72,7 +72,28 @@
           @click="FishMonger_handler('end')"
           >了解，謝謝</q-btn
         >
+      </div> -->
+
+      <img :src="fishMonger_image_path.dialogBox" class="fishmonger-dialog-photo"/>
+      <div class="fishmonger-dialog-button-group">
+        <div
+          class="fishmonger-dialog-button button color-orange"
+          id="escapeIntroduceBox"
+          @click="FishMonger_handler('next')"
+        >
+          繼續說
+        </div>
+        <div
+          class="fishmonger-dialog-button button color-cyan"
+          id="nextIntroduceBox"
+          @click="FishMonger_handler('end')"
+        >
+          了解，謝謝
+        </div>
       </div>
+
+
+
     </div>
   </div>
 </template>
@@ -531,9 +552,18 @@ $content-text-size-pc: 1.4vw;
     right: 30vw;
     // background-color: aquamarine;
     top: 10vh;
+    left:10vw;
+
     @media screen and (min-width: 1024px) {
-      top: 20vh;
+      top: 10vh;
       max-width: 60vw;
+      left:15vw;
+    }
+
+    &-photo{
+      width: 70vw;
+
+      height: auto;
     }
     &-button-group {
       // background-color: cornflowerblue;
@@ -544,7 +574,7 @@ $content-text-size-pc: 1.4vw;
       width: 50vw;
       position: relative;
       @media screen and (min-width: 1024px) {
-        left: -3vw; //trial and error
+        left: -10vw; //trial and error
       }
     }
     &-button {

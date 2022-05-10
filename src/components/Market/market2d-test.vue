@@ -1,5 +1,13 @@
 <template>
   <div class="navigate">
+    <img
+      v-if="IS_MOBILE"
+      @touchstart.prevent.stop="touchFn('start')"
+      @touchend.prevent="touchFn('end')"
+      id="goBtn"
+      src="../../../public/images/walk.png"
+    />
+
     <div id="navigate-lottie" v-for="n in 3" :key="n">
       <div
         :id="`loading-video-container_${n}`"
@@ -38,20 +46,22 @@
     </div>
     <!-- v-show="fishmonger_dialog_content_show_available" -->
     <div class="fishmonger-dialog" v-show="1">
-      <img :src="fishMonger_image_path.dialogBox" >
+      <img :src="fishMonger_image_path.dialogBox" />
       <div class="fishmonger-dialog-button-group">
         <div
           class="fishmonger-dialog-button button color-orange"
           id="escapeIntroduceBox"
           @click="FishMonger_handler('next')"
-          >繼續說</div
         >
+          繼續說
+        </div>
         <div
           class="fishmonger-dialog-button button color-cyan"
           id="nextIntroduceBox"
           @click="FishMonger_handler('end')"
-          >了解，謝謝</div
         >
+          了解，謝謝
+        </div>
       </div>
     </div>
   </div>
@@ -102,6 +112,9 @@ export default {
   },
 
   setup() {
+    let IS_MOBILE = ref(
+      /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    );
     // {
     //     let count = 0;
     //     let imgs = [
@@ -125,7 +138,7 @@ export default {
     const info = ref(null);
     return {
       info,
-
+      IS_MOBILE,
       handleHold({ evt, ...newInfo }) {
         info.value = newInfo;
 
@@ -140,7 +153,12 @@ export default {
   data() {
     return {
       lottie_conetnt: ["", "mouse_drag", "click_move", "double_click"],
-      lottie_mobile_conetnt: ["", "mobile_rotation", "mobile_move", "mobile_click"],
+      lottie_mobile_conetnt: [
+        "",
+        "mobile_rotation",
+        "mobile_move",
+        "mobile_click",
+      ],
       A_kon_dialogContent: [
         "lottie",
         "lottie",
@@ -216,8 +234,7 @@ export default {
     tutorialIndex() {
       return this.$store.state.Market.tutorialIndex;
     },
-    lottiePath:function() {
-
+    lottiePath: function () {
       return `../../lottie/${this.lottie_conetnt[this.lottie_counter]}.json`;
     },
     fuzzyavailable() {
@@ -354,7 +371,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import url('../dialoglayout.scss');
+@import url("../dialoglayout.scss");
 $content-text-size-pc: 1.4vw;
 .controlPannel {
   // // background-color: antiquewhite;
@@ -515,7 +532,6 @@ $content-text-size-pc: 1.4vw;
   }
 }
 
-
 * {
   user-drag: none;
   -webkit-user-drag: none;
@@ -524,6 +540,4 @@ $content-text-size-pc: 1.4vw;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-
-
 </style>

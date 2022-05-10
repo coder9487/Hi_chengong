@@ -38,7 +38,7 @@
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
-import Swordfish3D from "../components/swordfishChallenge/Swordfish3D";
+import Swordfish3D from "../components/Swordfish/Swordfish3D";
 import Swordfish2D from "../components/swordfishChallenge/Swordfish2D";
 import gsap from "gsap";
 

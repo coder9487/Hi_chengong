@@ -34,7 +34,7 @@ export default {
   },
   mounted() {
     this.Init_Three();
-    this.AddEnentListener();
+    this.AddEventListener();
     this.Animation_Three();
   },
   onBeforeUnmount() {
@@ -214,17 +214,22 @@ export default {
 
       requestAnimationFrame(this.Animation_Three);
     },
-    AddEnentListener() {
+    AddEventListener() {
       this.Window = window;
       if (!this.detectPaltform()) {
         this.Window.addEventListener("pointermove", this.onPointerMove);
         this.Window.addEventListener("resize", this.onWindowResize);
         this.Window.addEventListener("dblclick", this.onDblclick);
         this.Window.addEventListener("mousemove", this.onMouseMove);
-      } else {
-        // this.Window.addEventListener("touchstart", this.touch.handleTouchStart);
-        // this.Window.addEventListener("touchmove", this.touch.handleTouchMove);
-        // this.Window.addEventListener("touchend", this.touch.handleTouchEnd);
+      }
+    },
+    RemoveEventListener() {
+
+      if (!this.detectPaltform()) {
+        this.Window.addEventListener("pointermove", this.onPointerMove);
+        this.Window.addEventListener("resize", this.onWindowResize);
+        this.Window.addEventListener("dblclick", this.onDblclick);
+        this.Window.addEventListener("mousemove", this.onMouseMove);
       }
     },
 
@@ -676,6 +681,7 @@ export default {
           let currentQuaternion = this.camera.position.clone();
           // this.walkingthis.gsapTimeline.pause();
           this.controls.enabled = false;
+          this.RemoveEventListener();
 
           this.gsapTimeline
             .to(this.camera.position, {
@@ -692,6 +698,7 @@ export default {
               onComplete: () => {
                 this.KickMan.PlayAnimation();
                 this.controls.enabled = true;
+                this.AddEventListener();
               },
             });
 
@@ -701,6 +708,7 @@ export default {
 
       if (this.SwordFish.isApproach()) {
         if (this.SwordFish.DoOnce) {
+          this.RemoveEventListener();
           this.controls.enabled = false;
           this.dbClickEvent.eventName = "";
           this.SwordFish.DoOnce = false;
@@ -722,6 +730,7 @@ export default {
               onComplete: () => {
                 this.SwordFish.PlayAnimation();
                 this.controls.enabled = true;
+                this.AddEventListener()
               },
             });
 
